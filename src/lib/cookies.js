@@ -108,7 +108,7 @@ function atualizarConsentMode(escolhaAtual) {
 
 /** Carrega o Google Tag (GA4 / Ads) uma única vez. */
 export function carregarGoogleTag() {
-  const id = config.tracking.googleTagId;
+  const id = config.tracking?.googleTagId;
   if (!id || jaInjetou.google) return false;
 
   jaInjetou.google = true;
@@ -126,7 +126,7 @@ export function carregarGoogleTag() {
 
 /** Carrega o Meta Pixel uma única vez. */
 export function carregarMetaPixel() {
-  const id = config.tracking.metaPixelId;
+  const id = config.tracking?.metaPixelId;
   if (!id || jaInjetou.meta) return false;
 
   jaInjetou.meta = true;
@@ -172,9 +172,9 @@ function aplicarTags() {
 
 /** O banner só faz sentido se houver tag configurada (ou se você forçar). */
 function precisaDeBanner() {
-  if (!config.lgpd.bannerAtivo) return false;
-  if (config.lgpd.forcarBanner) return true;
-  return !!(config.tracking.metaPixelId || config.tracking.googleTagId);
+  if (!config.lgpd?.bannerAtivo) return false;
+  if (config.lgpd?.forcarBanner) return true;
+  return !!(config.tracking?.metaPixelId || config.tracking?.googleTagId);
 }
 
 export function montarBanner() {

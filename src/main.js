@@ -123,40 +123,56 @@ function arrancar() {
 }
 
 function arrancarInterno() {
-  iniciarSeo();
-  iniciarCookies();
-
-  aplicarTextos();
+  try { iniciarSeo(); } catch (e) { console.warn('[pd] seo:', e); }
+  try { iniciarCookies(); } catch (e) { console.warn('[pd] cookies:', e); }
+  try { aplicarTextos(); } catch (e) { console.warn('[pd] textos:', e); }
 
   // (a) Motor de scroll mestre
-  const { ambiente } = iniciarScroll();
+  let ambiente = { mobile: window.innerWidth < 768, largura: window.innerWidth, altura: window.innerHeight };
+  try {
+    const sc = iniciarScroll();
+    if (sc?.ambiente) ambiente = sc.ambiente;
+  } catch (e) {
+    console.warn('[pd] scroll:', e);
+  }
 
   // (b) Palco visual & Fundo procedural
-  const controlePalco = palco.iniciarPalco(ambiente);
-  const canvas = document.getElementById('fundo-canvas');
-  const controleFundo = canvas ? fundo.iniciarFundo(canvas, ambiente) : null;
+  let controlePalco = null;
+  try { controlePalco = palco.iniciarPalco(ambiente); } catch (e) { console.warn('[pd] palco:', e); }
+  let controleFundo = null;
+  try {
+    const canvas = document.getElementById('fundo-canvas');
+    if (canvas) controleFundo = fundo.iniciarFundo(canvas, ambiente);
+  } catch (e) { console.warn('[pd] fundo:', e); }
 
-  // (c) Montagem das seções mestres (3 a 13)
-  const secoes = montarSecoesMestre();
+  // (c) Montagem das seções mestres (3 a 13) — CRÍTICO: nunca pode falhar
+  let secoes = null;
+  try {
+    secoes = montarSecoesMestre();
+  } catch (e) {
+    console.error('[pd] ERRO FATAL EM SECOES:', e);
+  }
 
   // (c2) Canvas e animações de scroll
-  const controleHeroScroll = heroScroll.iniciarHeroScroll();
-  const controleSessao2Scroll = sessao2Scroll.iniciarSessao2Scroll();
+  let controleHeroScroll = null;
+  try { controleHeroScroll = heroScroll.iniciarHeroScroll(); } catch (e) { console.warn('[pd] heroScroll:', e); }
+  let controleSessao2Scroll = null;
+  try { controleSessao2Scroll = sessao2Scroll.iniciarSessao2Scroll(); } catch (e) { console.warn('[pd] sessao2Scroll:', e); }
 
   // (c3) Portal 3D de abertura central cinematográfica (Sessão 2)
-  portal3d.iniciarPortal3d();
+  try { portal3d.iniciarPortal3d(); } catch (e) { console.warn('[pd] portal3d:', e); }
 
-  aplicarVariaveisCarrossel();
-  carrossel.iniciarCarrossel();
+  try { aplicarVariaveisCarrossel(); } catch (e) { console.warn('[pd] var-carrossel:', e); }
+  try { carrossel.iniciarCarrossel(); } catch (e) { console.warn('[pd] carrossel:', e); }
 
   // (d) UI e Interações
-  progresso.iniciarProgresso();
-  dica.iniciarDica();
-  hero.iniciarHero();
-  iniciarWhatsAppFlutuante();
-  ligarCtasInternos();
-  ligarPausaPorVisibilidade();
-  ligarEventosDeScroll();
+  try { progresso.iniciarProgresso(); } catch (e) { console.warn('[pd] progresso:', e); }
+  try { dica.iniciarDica(); } catch (e) { console.warn('[pd] dica:', e); }
+  try { hero.iniciarHero(); } catch (e) { console.warn('[pd] hero:', e); }
+  try { iniciarWhatsAppFlutuante(); } catch (e) { console.warn('[pd] wa-flutuante:', e); }
+  try { ligarCtasInternos(); } catch (e) { console.warn('[pd] ctas:', e); }
+  try { ligarPausaPorVisibilidade(); } catch (e) { console.warn('[pd] pausa:', e); }
+  try { ligarEventosDeScroll(); } catch (e) { console.warn('[pd] eventos-scroll:', e); }
 
   /* ------------------------------------------------------------------------
    * (e) Assinatura única de progresso de scroll

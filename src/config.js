@@ -363,6 +363,11 @@ export const seo = {
   palavrasChave: 'chácara à venda São José dos Campos, chácara com lago, terreno 2 hectares SJC, chácara água mineral, represa jaguari jetski'
 };
 
+export const tracking = {
+  googleTagId: '',
+  metaPixelId: ''
+};
+
 export const lgpd = {
   bannerAtivo: true,
   chaveStorage: 'pd-consent-v2',
@@ -373,5 +378,5 @@ export const lgpd = {
 export default {
   whatsapp, scroll, hero, sessao2, efeitoParaiso, propriedades, infraestrutura,
   possibilidades, autossuficiencia, compartilhar, saoJose, aquisicao,
-  localizacao, contato, faq, rodape, seo, lgpd
+  localizacao, contato, faq, rodape, seo, lgpd, tracking
 };
