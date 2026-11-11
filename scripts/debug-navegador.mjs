@@ -16,7 +16,7 @@ await new Promise(r => setTimeout(r, 1500));
 try {
   const versionRes = await fetch('http://127.0.0.1:9222/json/list');
   const targets = await versionRes.json();
-  const pageTarget = targets.find(t => t.type === 'page');
+  const pageTarget = targets.find(t => t.type === 'page' && !t.url.startsWith('chrome-extension://'));
   const ws = new WebSocket(pageTarget.webSocketDebuggerUrl);
 
   let msgId = 1;
@@ -74,10 +74,18 @@ try {
   }
 
   const scripts = await send('Runtime.evaluate', {
-    expression: `Array.from(document.querySelectorAll('script')).map(s => ({ src: s.src, type: s.type }))`,
+    expression: `JSON.stringify({
+      pdOk: document.documentElement.dataset.pdOk,
+      pdErro: document.documentElement.dataset.pdErro,
+      bodyClass: document.body.className,
+      secoesLen: document.getElementById('secoes')?.children.length,
+      secoesHtmlLen: document.getElementById('secoes')?.innerHTML.length,
+      docHeight: document.documentElement.scrollHeight,
+      scripts: Array.from(document.querySelectorAll('script')).map(s => s.src || s.type)
+    })`,
     returnByValue: true
   });
-  console.log('SCRIPTS IN DOM:', scripts.result.value);
+  console.log('EVAL VALUE:', scripts.result?.result?.value);
 
   ws.close();
 } catch (e) {
