@@ -68,8 +68,8 @@ server.listen(4175, async () => {
     let indexContent = fs.readFileSync(indexPath, 'utf-8');
 
     // Replace <div class="secoes" id="secoes">...</div>
-    const secoesRegex = /<div class="secoes" id="secoes">[\s\S]*?<\/div>\s*<!-- =* 13\. RODAPÉ/i;
-    const newSecoesBlock = `<div class="secoes" id="secoes">\n${secoesHtml.result.value}\n  </div>\n\n  <!-- =====================================================================\n       13. RODAPÉ`;
+    const secoesRegex = /<div class="secoes" id="secoes">[\s\S]*?<\/div>(?=\s*<!--[\s\S]*?13\. RODAPÉ)/i;
+    const newSecoesBlock = `<div class="secoes" id="secoes">\n${secoesHtml.result.value}\n  </div>`;
     indexContent = indexContent.replace(secoesRegex, newSecoesBlock);
 
     // Replace <footer class="rodape" id="rodape">...</footer>

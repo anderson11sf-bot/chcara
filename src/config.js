@@ -82,8 +82,8 @@ export const hero = {
  * 4. SESSÃO 2: O NOVO LUXO & ABERTURA CINEMATOGRÁFICA DO VÍDEO 3D
  * -------------------------------------------------------------------------*/
 export const sessao2 = {
-  rotulo: 'Sessão 02 • O Conceito',
-  framesTotal: 104,
+  rotulo: 'O Novo Luxo',
+  framesTotal: 92,
   cards: [
     {
       rotulo: 'Mudança de Perspectiva',
@@ -110,14 +110,14 @@ export const sessao2 = {
  * 5. SESSÃO 3: VSL & O EFEITO PARAÍSO DAS ÁGUAS
  * -------------------------------------------------------------------------*/
 export const efeitoParaiso = {
-  rotulo: 'Sessão 03 • Apresentação Oficial',
-  titulo: 'O Efeito Paraíso das Águas',
-  subtitulo: 'Apenas 20 minutos separam a agitação da cidade do silêncio do seu refúgio particular.',
+  rotulo: 'Conheça o Paraíso',
+  titulo: 'Mais do que um terreno. <span class="destaque-ouro">Um novo jeito de viver</span>',
+  subtitulo: 'Descubra a grandiosidade de um refúgio exclusivo que une a exuberância da natureza ao conforto de uma infraestrutura sem igual. Um espaço planejado para proporcionar liberdade, segurança e a verdadeira essência de viver bem.',
   texto: 'Assista à apresentação completa do empreendimento. O Paraíso das Águas foi planejado para quem busca grande dimensão de terra com a tranquilidade da água abundante e acesso totalmente pavimentado.',
   video: {
     src: '/media/video/vsl-oficial.mp4',
     poster: '/media/img/vsl-oficial-poster.webp',
-    legenda: 'Apresentação em vídeo do Paraíso das Águas'
+    legenda: 'Apresentação oficial do Paraíso das Águas'
   },
   comparativos: [
     { ritmo: 'O Ritmo da Cidade', desc: 'Trânsito cansativo, ruído contínuo, espaço confinado e rotina acelerada.' },
@@ -129,10 +129,10 @@ export const efeitoParaiso = {
  * 6. SESSÃO 4: AS PROPRIEDADES (VISÃO GERAL 2 HECTARES)
  * -------------------------------------------------------------------------*/
 export const propriedades = {
-  rotulo: 'Sessão 04 • As Propriedades',
-  titulo: 'Visão Geral: 7 Propriedades de ~2 Hectares',
-  subtitulo: 'Áreas de 20.000 m² a 22.300 m² com documentação regularizada.',
-  texto: 'Cada propriedade conta com aproximadamente 2 hectares (dimensão ideal para garantir privacidade total e viabilizar projeto rural ou de lazer). Um grande lago se localiza no coração da comunidade, com parte pertencente à maioria das chácaras. Na parte alta brota a mina de água mineral que abastece a região.',
+  rotulo: 'As Sete Glebas',
+  titulo: 'Encontre a propriedade ideal para você',
+  subtitulo: 'Explore as 7 opções exclusivas de glebas, de 20.000m² a 30.000m², integradas à natureza e prontas para o seu projeto de vida.',
+  texto: 'Cada propriedade conta com aproximadamente 2 hectares (dimensão ideal para garantir privacidade total e viabilizar projeto rural ou de lazer). Um grande lago se localiza no coração da comunidade, com margens divididas entre os terrenos. Na parte alta brota a mina de água mineral que abastece a região.',
   mapaImagem: '/media/img/mapa-oficial-terreno.webp',
   mapaVideo: {
     src: '/media/video/mapa-sobrevoo.mp4',
@@ -140,7 +140,7 @@ export const propriedades = {
     legenda: 'Sobrevoo da demarcação e topografia'
   },
   destaques: [
-    { icone: 'area', titulo: '20.000 m² a 22.300 m²', texto: 'Propriedades rurais amplas com matrícula e demarcação individualizada.' },
+    { icone: 'area', titulo: '20.000 m² a 23.830 m²', texto: 'Glebas A a G com matrícula individualizada e áreas demarcadas com precisão.' },
     { icone: 'lago', titulo: 'Grande Lago Central', texto: 'Um espelho d\'água principal no coração da terra, com margem para a maioria das chácaras.' },
     { icone: 'nascente', titulo: 'Minas d\'Água Mineral', texto: 'Nascentes perenes de água mineral na parte alta (mesmo aquífero da Cristágua).' },
     { icone: 'montanha', titulo: 'Platôs Naturais', texto: 'Topografia com áreas suaves ideais para construção de sede, chalé e área de lazer.' }
@@ -152,18 +152,18 @@ export const propriedades = {
  * 7. SESSÃO 5: INFRAESTRUTURA COMPLETA
  * -------------------------------------------------------------------------*/
 export const infraestrutura = {
-  rotulo: 'Sessão 05 • Estrutura Pronta & Em Implantação',
-  titulo: 'Infraestrutura Completa: A Vida no Campo com Conforto Urbano',
-  subtitulo: 'Tudo pronto para moradia permanente ou lazer de fim de semana, com alta tecnologia e segurança.',
+  rotulo: 'Infraestrutura',
+  titulo: 'Estrutura para viver <span class="destaque-ouro">com mais tranquilidade</span>',
+  subtitulo: 'Infraestrutura planejada para garantir o máximo de conforto, segurança e qualidade de vida.',
   cards: [
-    { icone: 'estrada', titulo: 'Asfalto até a Portaria', texto: 'Acesso rápido e 100% asfaltado em qualquer época do ano, sem trechos intransitáveis de barro.' },
-    { icone: 'chave', titulo: 'Portaria & Monitoramento', texto: 'Entrada com portaria, câmeras de segurança e grupo de apoio e vigilância entre vizinhos.' },
-    { icone: 'raio', titulo: 'Energia Elétrica Trifásica', texto: 'Rede elétrica trifásica com carga potente para motores, bombas, iluminação e grandes projetos residenciais.' },
-    { icone: 'wifi', titulo: 'Fibra Óptica de Alta Velocidade', texto: 'Internet rápida para trabalho remoto, streaming e comunicação sem falhas.' },
-    { icone: 'lago', titulo: 'Um Grande Lago Central', texto: 'Lago no coração da comunidade com peixes e acesso para a maioria das glebas.' },
-    { icone: 'nascente', titulo: 'Água Mineral de Nascente', texto: 'Mina perene de água pura na parte alta, com abundância de recursos hídricos.' },
-    { icone: 'arvores', titulo: 'APP & Natureza Preservada', texto: 'Área de Preservação Permanente respeitada, com riacho e mata nativa abundante.' },
-    { icone: 'pin', titulo: '20 Min do Centro • 2 km da Represa', texto: 'Próximo ao comércio de SJC e a apenas 2 km da Represa Jaguari (polo náutico de jetski e lancha).' }
+    { icone: 'estrada', titulo: 'Acesso Pavimentado', texto: 'Vias de asfalto modernas até o empreendimento, transitável em qualquer época do ano.' },
+    { icone: 'chave', titulo: 'Portaria & Segurança', texto: 'Monitoramento e controle de acesso 24 horas para total tranquilidade da sua família.' },
+    { icone: 'wifi', titulo: 'Fibra Óptica de Alta Velocidade', texto: 'Internet de alta velocidade para home office, entretenimento e comunicação no campo.' },
+    { icone: 'lago', titulo: 'Grande Lago Central', texto: 'Paisagens naturais exuberantes para contemplação, pesca esportiva e lazer náutico leve.' },
+    { icone: 'raio', titulo: 'Energia Trifásica', texto: 'Infraestrutura elétrica robusta de alta capacidade e estabilidade para todo tipo de projeto.' },
+    { icone: 'nascente', titulo: 'Água Mineral em Abundância', texto: 'Fontes naturais com abastecimento garantido direto do aquífero da serra.' },
+    { icone: 'arvores', titulo: 'Natureza Preservada', texto: 'Extensa área verde com fauna e flora nativas, ar puro e silêncio reconfortante.' },
+    { icone: 'pin', titulo: 'Estradas Cascalhadas', texto: 'Vias internas integradas, bem estruturadas e de fácil tráfego interno entre as glebas.' }
   ]
 };
 
@@ -171,8 +171,8 @@ export const infraestrutura = {
  * 8. SESSÃO 6: POSSIBILIDADES (PROJETOS ILUSTRATIVOS)
  * -------------------------------------------------------------------------*/
 export const possibilidades = {
-  rotulo: 'Sessão 06 • Inspirações Arquitetônicas',
-  titulo: 'Uma Terra, Inúmeras Possibilidades',
+  rotulo: 'Projetos & Inspirações',
+  titulo: 'Uma terra, inúmeras possibilidades',
   subtitulo: 'Sugestões ilustrativas do que você pode construir em seus 20.000 m² de terreno.',
   avisoLegal: '*PROJETO ILUSTRATIVO — As fotos e vídeos desta seção são propostas conceituais e artísticas para demonstrar o potencial da área. Cada proprietário desenvolve seu projeto de forma particular, conforme seu desejo e as regras aplicáveis. As benfeitorias não estão inclusas no valor da terra nua.',
   galeria: [
@@ -219,22 +219,49 @@ export const possibilidades = {
 };
 
 /* ---------------------------------------------------------------------------
- * 9. SESSÃO 7: VIDA AUTOSSUSTENTÁVEL (O QUINTAL PRODUTIVO)
+ * 9. SESSÃO 7: VIDA AUTOSSUSTENTÁVEL (O QUINTAL PRODUTIVO — NOVO QUADRO DESIGNER)
  * -------------------------------------------------------------------------*/
 export const autossuficiencia = {
-  rotulo: 'Sessão 07 • Autonomia & Saúde Familiar',
-  titulo: 'Vida Autossustentável: O Quintal Produtivo',
-  subtitulo: 'Produza parte dos próprios alimentos e viva em contato com a terra fértil.',
-  fotosReais: [
-    { src: '/media/img/nova-335807931_1791516204451162.webp', legenda: 'Mata nativa e nascentes de água mineral' },
-    { src: '/media/img/nova-589744048_1791513842984375.webp', legenda: 'Platô natural com solo de altíssima fertilidade' },
-    { src: '/media/img/nova-619243340_1791516252137560.webp', legenda: 'Vista aberta para o horizonte da serra' }
+  rotulo: 'Vida Autossuficiente',
+  titulo: 'Um novo jeito de produzir. <span class="destaque-verde">Um novo jeito de viver.</span>',
+  subtitulo: 'Viva com total independência e harmonia com a natureza. No Paraíso das Águas, você tem a liberdade de cultivar seu próprio alimento, gerar sua própria energia e experimentar o verdadeiro significado de uma vida autossustentável em seus 2 hectares.',
+  quadroMidias: [
+    {
+      id: 'horta',
+      src: '/media/img/autossuficiencia/horta-produtiva.webp',
+      rotulo: 'Horta Produtiva',
+      descricao: 'Canteiros férteis com irrigação natural'
+    },
+    {
+      id: 'pomar',
+      src: '/media/img/autossuficiencia/pomar-arvores.webp',
+      rotulo: 'Pomar',
+      descricao: 'Frutas frescas colhidas no pé'
+    },
+    {
+      id: 'criacao',
+      src: '/media/img/autossuficiencia/criacao-natural.webp',
+      rotulo: 'Criação Natural',
+      descricao: 'Galinheiro caipira e piquetes para animais'
+    },
+    {
+      id: 'solar',
+      src: '/media/img/autossuficiencia/energia-solar.webp',
+      rotulo: 'Energia Solar',
+      descricao: 'Independência energética sustentável'
+    },
+    {
+      id: 'varanda',
+      src: '/media/img/autossuficiencia/varanda-rural.webp',
+      rotulo: 'Varanda Rural',
+      descricao: 'Convivência integrada à natureza'
+    }
   ],
-  pilares: [
-    { icone: 'arvores', titulo: 'Horta & Pomar Orgânico', texto: 'Solo fértil com água mineral abundante para cultivar verduras frescas, legumes e árvores frutíferas sem agrotóxicos.' },
-    { icone: 'cavalos', titulo: 'Criação de Animais & Piquetes', texto: 'Área com 20.000 m² permite piquetes para cavalos, galinheiro com ovos caipiras e animais de estimação com espaço livre.' },
-    { icone: 'nascente', titulo: 'Água Mineral Direto da Fonte', texto: 'Água pura e límpida de nascente da serra, com vazão permanente durante todo o ano.' },
-    { icone: 'raio', titulo: 'Espaço para Energia Solar', texto: 'Insolação plena para instalação de painéis fotovoltaicos, proporcionando independência energética.' }
+  indicadores: [
+    { rotulo: 'Horta e Pomar', icone: 'arvores' },
+    { rotulo: 'Energia Solar', icone: 'raio' },
+    { rotulo: 'Criação Natural', icone: 'cavalos' },
+    { rotulo: 'Captação de Água', icone: 'nascente' }
   ]
 };
 
@@ -242,10 +269,11 @@ export const autossuficiencia = {
  * 10. SESSÃO 8: UMA PROPRIEDADE PARA COMPARTILHAR
  * -------------------------------------------------------------------------*/
 export const compartilhar = {
-  rotulo: 'Sessão 08 • Multi-geracional ou Sociedade',
-  titulo: 'Uma Propriedade para Compartilhar em Família',
-  subtitulo: '20.000 m² oferecem metragem suficiente para acolher mais de uma casa com privacidade total.',
-  texto: 'Adquirir a propriedade em parceria entre pais e filhos, irmãos ou amigos de confiança é uma opção econômica e vantajosa. O investimento e a manutenção são divididos, enquanto cada família desfruta de mais de 10.000 m² de terreno particular.',
+  rotulo: 'Patrimônio para Compartilhar',
+  titulo: 'Um lugar para compartilhar. <span class="destaque-ouro">Um patrimônio para construir.</span>',
+  subtitulo: 'Um planejamento conjunto para o futuro da sua família. O Paraíso das Águas é o cenário ideal para viver momentos inesquecíveis, cercados de segurança, liberdade e a exuberância da natureza, consolidando um legado que atravessará gerações.',
+  imagemPrincipal: '/media/img/familia-novo-luxo.webp',
+  imagemDeck: '/media/img/familia-veranda-lago.webp',
   beneficios: [
     { titulo: 'Investimento Acessível', texto: 'Divida o valor de aquisição e desfrute de uma grande propriedade rural pagando metade.' },
     { titulo: 'Privacidade Entre Casas', texto: 'Distâncias generosas de mais de 80 a 100 metros entre construções garantem privacidade total.' },
@@ -255,21 +283,21 @@ export const compartilhar = {
 };
 
 /* ---------------------------------------------------------------------------
- * 11. SESSÃO 9: SÃO JOSÉ DOS CAMPOS & REPRESA JAGUARI
+ * 11. SESSÃO 9: SÃO JOSÉ DOS CAMPOS & REPRESA JAGUARI (VÍDEO VERTICAL EM PÉ)
  * -------------------------------------------------------------------------*/
 export const saoJose = {
-  rotulo: 'Sessão 09 • Cidade ao Lado & Lazer Náutico',
-  titulo: 'São José dos Campos & Represa Jaguari',
-  subtitulo: 'A conveniência da maior cidade do Vale do Paraíba a 20 min e os esportes náuticos a 2 km.',
+  rotulo: 'Localização Privilegiada',
+  titulo: 'A tranquilidade do campo. <span class="destaque-ouro">A conveniência da cidade.</span>',
+  subtitulo: 'A perfeita integração entre a paz do interior e a facilidade de acesso a São José dos Campos. Viva cercado pela natureza sem abrir mão da infraestrutura urbana.',
   texto: 'O Paraíso das Águas reúne o melhor dos dois mundos: tranquilidade rural com asfalto até a porta, a apenas 2 km da Represa Jaguari — ponto privilegiado para lanchas, jetski e passeios náuticos — e a 20 minutos de São José dos Campos, cidade de referência em saúde, educação e serviços.',
-  video: {
-    src: '/media/video/sao-jose-campos.mp4',
-    poster: '/media/img/sao-jose-campos-poster.webp',
-    legenda: 'São José dos Campos: qualidade de vida e proximidade'
+  videoVertical: {
+    src: '/media/video/sao-jose-vertical.mp4',
+    poster: '/media/img/sao-jose-vertical-poster.webp',
+    legenda: 'São José dos Campos & Represa Jaguari • Vídeo Vertical'
   },
   destaques: [
-    { valor: '2 km', titulo: 'Represa Jaguari (Jetski & Náutica)', texto: 'Ideal para esportes aquáticos, passeios de barco e pescaria esportiva a 5 minutos.' },
     { valor: '20 min', titulo: 'Centro de São José dos Campos', texto: 'Comércio, gastronomia, centros médicos e serviços a curta distância pavimentada.' },
+    { valor: '2 km', titulo: 'Represa Jaguari (Jetski & Náutica)', texto: 'Ideal para esportes aquáticos, passeios de barco e pescaria esportiva a 5 minutos.' },
     { valor: '6 km', titulo: 'Parque da Cidade (Burle Marx)', texto: 'Área verde tradicional de SJC para caminhadas, passeios culturais e eventos.' },
     { valor: '~1h', titulo: 'São Paulo (Dutra / Carvalho Pinto)', texto: 'Ligação direta e rápida com a capital paulista e o Aeroporto de Guarulhos.' }
   ]
@@ -279,25 +307,29 @@ export const saoJose = {
  * 12. SESSÃO 10: CONDIÇÕES DE AQUISIÇÃO & SEGURANÇA JURÍDICA
  * -------------------------------------------------------------------------*/
 export const aquisicao = {
-  rotulo: 'Sessão 10 • Negociação Direta & Documentação',
-  titulo: 'Condições de Aquisição & Segurança Jurídica',
-  subtitulo: 'Negociação transparente e direta com o proprietário.',
-  acordeoes: [
+  rotulo: 'Condições de Compra',
+  titulo: 'Segurança para <span class="destaque-verde">iniciar um novo capítulo.</span>',
+  subtitulo: 'Garantimos um processo de aquisição transparente, seguro e planejado para você realizar o seu sonho com total tranquilidade.',
+  cards: [
     {
-      titulo: 'Documentação 100% em Ordem & Escritura Pública',
-      conteudo: 'As propriedades possuem histórico dominial regular, matrícula e documentação jurídica apta para transferência definitiva via escritura pública.'
+      icone: 'chave',
+      titulo: 'Documentação em dia',
+      texto: 'Matrículas individuais, licenças ambientais e toda a documentação 100% regularizada para sua total segurança.'
     },
     {
-      titulo: 'Financiamento Direto com o Proprietário',
-      conteudo: 'Possibilidade de parcelamento direto com o dono mediante entrada facilitada, sem burocracia de aprovação bancária.'
+      icone: 'apertoMao',
+      titulo: 'Financiamento direto',
+      texto: 'Condições facilitadas de parcelamento direto com o proprietário/incorporadora, sem burocracia ou intermediários.'
     },
     {
-      titulo: 'Aceita Imóvel e Veículo na Negociação',
-      conteudo: 'Estuda-se a inclusão de imóveis (terrenos, casas ou apartamentos) em São José dos Campos e região ou veículos como parte do pagamento, após avaliação.'
+      icone: 'troca',
+      titulo: 'Imóvel na troca',
+      texto: 'Análise e aceitação de imóvel ou veículo como parte de pagamento para facilitar o fechamento do seu negócio.'
     },
     {
-      titulo: 'Atendimento Personalizado e Visita Agendada',
-      conteudo: 'Você é recebido no local com exclusividade para caminhar pela terra, conferir a nascente de água mineral, o grande lago e tirar todas as dúvidas técnicas.'
+      icone: 'area',
+      titulo: 'Atendimento personalizado',
+      texto: 'Nossa equipe jurídica e comercial está à disposição para orientar você com clareza em todas as etapas.'
     }
   ]
 };
@@ -306,9 +338,9 @@ export const aquisicao = {
  * 13. SESSÃO 11: LOCALIZAÇÃO & GOOGLE MAPS
  * -------------------------------------------------------------------------*/
 export const localizacao = {
-  rotulo: 'Sessão 11 • Localização Exata',
-  titulo: 'Localização Privilegiada em São José dos Campos',
-  subtitulo: 'Fácil de chegar por asfalto até a portaria, com rotas rápidas e sinalizadas.',
+  rotulo: 'Localização',
+  titulo: 'A tranquilidade do campo. <span class="destaque-ouro">A conveniência da cidade.</span>',
+  subtitulo: 'A perfeita integração entre a paz do interior e a facilidade de acesso a São José dos Campos. Viva cercado pela natureza sem abrir mão da infraestrutura urbana.',
   distancias: [
     { destino: 'Represa Jaguari (Polo Náutico & Marina)', valor: '~2 km (5 min)' },
     { destino: 'Centro de São José dos Campos', valor: '~20 min' },
@@ -318,18 +350,18 @@ export const localizacao = {
     { destino: 'São Paulo Capital (Dutra / Carvalho Pinto)', valor: '~1 hora' }
   ],
   mapaLink: 'https://maps.app.goo.gl/kVdV28pwVikpB3oJ6',
-  legendaMapa: 'Abrir rota no Google Maps →'
+  legendaMapa: 'Abrir no Google Maps →'
 };
 
 /* ---------------------------------------------------------------------------
  * 14. SESSÃO 12: CONTATO & AGENDAMENTO VIP
  * -------------------------------------------------------------------------*/
 export const contato = {
-  rotulo: 'Sessão 12 • Agende Sua Visita',
-  titulo: 'Venha Conhecer de Perto o Seu Próximo Refúgio',
-  subtitulo: 'Visitas exclusivas com horário marcado para garantir total atenção à sua família.',
-  texto: 'Caminhe na beira do grande lago, beba água direto da nascente da serra e sinta a tranquilidade dos 2 hectares. Escolha o melhor dia e fale direto com o proprietário no WhatsApp.',
-  ctaBotao: 'Agendar Visita no WhatsApp'
+  rotulo: '• Últimas Unidades',
+  titulo: 'A roça é o <span class="destaque-ouro">novo luxo.</span>',
+  subtitulo: 'O resgate da simplicidade, segurança e liberdade que sua família merece, a apenas 20 minutos do centro de São José dos Campos. Viva cercado pela natureza.',
+  texto: 'Caminhe na beira do grande lago, beba água direto da nascente da serra e sinta a tranquilidade dos 2 hectares. Fale com um especialista e garanta sua visita VIP.',
+  ctaBotao: 'Quero Agendar uma Visita 📅'
 };
 
 /* ---------------------------------------------------------------------------

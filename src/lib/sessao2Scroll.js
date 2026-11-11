@@ -7,7 +7,7 @@
 
 import { clamp } from './utils.js';
 
-const TOTAL_FRAMES = 104;
+const TOTAL_FRAMES = 92;
 const PREFIXO = '/media/frames/sessao2/s2_';
 const EXTENSAO = '.webp';
 

@@ -160,6 +160,152 @@ body.prova-sem-fade .palco__fundo {
   /* A barra é movida por transform: 60fps garantidos, sem reflow */
 }
 
+/* ---------- BARRA DE NAVEGAÇÃO TOPO (LUXURY NAVBAR) --------------------- */
+
+.barra-topo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-nav, 55);
+  background: rgba(4, 25, 31, 0.76);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(212, 163, 89, 0.16);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.barra-topo__container {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.barra-topo__marca {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.barra-topo__emblema {
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 8px rgba(212, 163, 89, 0.35));
+}
+
+.barra-topo__titulos {
+  display: flex;
+  flex-direction: column;
+}
+
+.barra-topo__nome {
+  font-family: var(--fonte-titulos, 'Cormorant Garamond', serif);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #D4A359;
+  line-height: 1.1;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+.barra-topo__sub {
+  font-family: var(--fonte-corpo, 'Outfit', sans-serif);
+  font-size: 0.62rem;
+  letter-spacing: 0.22em;
+  color: rgba(220, 235, 230, 0.7);
+  font-weight: 500;
+}
+
+.barra-topo__menu {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.barra-topo__link {
+  font-family: var(--fonte-corpo, 'Outfit', sans-serif);
+  font-size: 0.86rem;
+  font-weight: 400;
+  color: rgba(230, 245, 240, 0.88);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  transition: color 0.2s ease;
+  position: relative;
+  padding: 4px 0;
+}
+
+.barra-topo__link:hover {
+  color: #D4A359;
+}
+
+.barra-topo__link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #D4A359;
+  transition: width 0.2s ease;
+}
+
+.barra-topo__link:hover::after {
+  width: 100%;
+}
+
+.btn-nav-agendar {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: 9999px;
+  font-family: var(--fonte-corpo, 'Outfit', sans-serif);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #04191F;
+  background: linear-gradient(135deg, #ECC880 0%, #D4A359 50%, #B88338 100%);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 4px 14px rgba(212, 163, 89, 0.28);
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-nav-agendar:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(212, 163, 89, 0.45);
+  filter: brightness(1.08);
+}
+
+@media (max-width: 960px) {
+  .barra-topo__menu {
+    display: none;
+  }
+  .barra-topo__container {
+    padding: 8px 16px;
+  }
+  .barra-topo__nome {
+    font-size: 1rem;
+  }
+  .barra-topo__sub {
+    font-size: 0.55rem;
+    letter-spacing: 0.16em;
+  }
+  .btn-nav-agendar {
+    padding: 6px 12px;
+    font-size: 0.72rem;
+    gap: 5px;
+  }
+}
+
 /* ---------- DICA "DESLIZE PARA BAIXO" ---------------------------------- */
 
 .dica {

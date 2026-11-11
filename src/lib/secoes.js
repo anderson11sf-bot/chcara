@@ -1,20 +1,32 @@
 /* ============================================================================
- * secoes.js — MONTAGEM DAS SEÇÕES 3 A 13 CONFORME ESPECIFICAÇÃO MESTRE
+ * secoes.js — MONTAGEM DAS SEÇÕES CONFORME IDENTIDADE VISUAL DO DESIGNER
  * ----------------------------------------------------------------------------
- * Renderização dinâmica, semântica e limpa das 11 seções de conteúdo denso.
- * Todas as mídias novas mapeadas: VSL, mapa oficial, sobrevoo, projetos 3D e fotos reais.
+ * Segue estritamente a identidade visual de "DESIGNER DO SITE" e mídias de "lago drone".
+ * Títulos e headlines com tipografia serif de luxo, sem prefixos mecânicos de seção.
+ * Sessão 07 totalmente reestruturada com quadro de imagens na esquerda e títulos na direita.
+ * Vídeo de São José em formato vertical 9:16 (em pé).
  * ==========================================================================*/
 
 import config from '../config.js';
 import { criar, $ } from './utils.js';
 import { icone } from './icones.js';
 
-/** Cabeçalho de seção padrão */
+/** Cabeçalho de seção de alto padrão */
 function cabecalho({ rotulo, titulo, texto }) {
   const frag = document.createDocumentFragment();
-  if (rotulo) frag.appendChild(criar('span', { classe: 'rotulo-secao', texto: rotulo }));
-  if (titulo) frag.appendChild(criar('h2', { texto: titulo }));
-  if (texto) frag.appendChild(criar('p', { classe: 'secao__apoio', texto }));
+  if (rotulo) {
+    frag.appendChild(criar('span', { classe: 'rotulo-secao', texto: rotulo }));
+  }
+  if (titulo) {
+    const h2 = criar('h2', { classe: 'secao__titulo' });
+    h2.innerHTML = titulo;
+    frag.appendChild(h2);
+  }
+  if (texto) {
+    const p = criar('p', { classe: 'secao__apoio secao__apoio--destaque' });
+    p.innerHTML = texto;
+    frag.appendChild(p);
+  }
   return frag;
 }
 
@@ -29,7 +41,7 @@ function botaoWhatsApp(origem, texto, variante = 'ouro') {
   });
 }
 
-/** Elemento de vídeo responsivo com poster */
+/** Elemento de vídeo responsivo com suporte a proporção 16:9 ou 9:16 vertical */
 function criarVideoFrame({ src, poster, legenda, proporcao = '16-9' }) {
   const moldura = criar('div', { classe: `video-moldura video-moldura--${proporcao}` });
   const video = criar('video', {
@@ -50,7 +62,7 @@ function criarVideoFrame({ src, poster, legenda, proporcao = '16-9' }) {
 }
 
 /* --------------------------------------------------------------------------
- * 03. O EFEITO PARAÍSO DAS ÁGUAS & VSL OFICIAL
+ * 03. APRESENTAÇÃO: MAIS DO QUE UM TERRENO • UM NOVO JEITO DE VIVER
  * ------------------------------------------------------------------------ */
 export function montarEfeitoParaiso() {
   const secao = $('#efeito-paraiso');
@@ -93,7 +105,7 @@ export function montarEfeitoParaiso() {
 }
 
 /* --------------------------------------------------------------------------
- * 04. AS PROPRIEDADES (VISÃO GERAL 2 HECTARES) & MAPA OFICIAL
+ * 04. AS PROPRIEDADES (7 GLEBAS & MAPA OFICIAL DEMARCADO)
  * ------------------------------------------------------------------------ */
 export function montarPropriedades() {
   const secao = $('#propriedades');
@@ -132,12 +144,12 @@ export function montarPropriedades() {
       alt: 'Mapa oficial de demarcação do Paraíso das Águas em São José dos Campos',
       loading: 'lazy',
       decoding: 'async',
-      width: '1920',
-      height: '1080'
+      width: '1400',
+      height: '1580'
     }));
     mapaCaixa.appendChild(criar('span', {
       classe: 'mapa-oficial-tag',
-      texto: 'Planta Demarcada Oficial • 7 Glebas de ~2 Hectares'
+      texto: 'Planta Demarcada Oficial • Glebas A a G com Lago Central'
     }));
     painel.appendChild(mapaCaixa);
   }
@@ -167,7 +179,7 @@ export function montarPropriedades() {
 }
 
 /* --------------------------------------------------------------------------
- * 05. INFRAESTRUTURA COMPLETA
+ * 05. INFRAESTRUTURA COMPLETA (8 CARDS COM GLOW ESMERALDA & ÍCONES)
  * ------------------------------------------------------------------------ */
 export function montarInfraestrutura() {
   const secao = $('#infraestrutura');
@@ -203,7 +215,7 @@ export function montarInfraestrutura() {
 }
 
 /* --------------------------------------------------------------------------
- * 06. POSSIBILIDADES (PROJETOS ILUSTRATIVOS)
+ * 06. POSSIBILIDADES (PROJETOS ILUSTRATIVOS 3D)
  * ------------------------------------------------------------------------ */
 export function montarPossibilidades() {
   const secao = $('#possibilidades');
@@ -259,7 +271,6 @@ export function montarPossibilidades() {
         legenda: vid.titulo,
         proporcao: '16-9'
       });
-      // Adiciona o selo "PROJETO ILUSTRATIVO" também no player do vídeo
       moldura.appendChild(criar('span', {
         classe: 'badge-projeto-ilustrativo badge-projeto-ilustrativo--video',
         texto: 'PROJETO ILUSTRATIVO'
@@ -287,56 +298,125 @@ export function montarPossibilidades() {
 }
 
 /* --------------------------------------------------------------------------
- * 07. AUTOSSUFICIÊNCIA (O QUINTAL PRODUTIVO) & FOTOS REAIS
+ * 07. VIDA AUTOSSUSTENTÁVEL (NOVO QUADRO COM IMAGENS NA ESQUERDA & TEXTOS NA DIREITA)
  * ------------------------------------------------------------------------ */
 export function montarAutossuficiencia() {
   const secao = $('#autossuficiencia');
   if (!secao) return null;
 
   const A = config.autossuficiencia;
-  const painel = criar('div', { classe: 'painel' });
+  const painel = criar('div', { classe: 'painel painel--largo quadro-autossuficiencia' });
 
-  painel.appendChild(cabecalho({
-    rotulo: A.rotulo,
-    titulo: A.titulo,
-    texto: A.subtitulo
+  // 1. COLUNA ESQUERDA: QUADRO DE MÍDIAS (MOSAICO DE FOTOS COM GLOW ESMERALDA)
+  const colEsquerda = criar('div', { classe: 'quadro-midias' });
+  const gradeMosaico = criar('div', { classe: 'grade-mosaico-rural' });
+
+  // Foto 1: Horta Produtiva (topo largo)
+  const itemHorta = criar('div', { classe: 'mosaico-item mosaico-item--largo' });
+  itemHorta.appendChild(criar('img', {
+    classe: 'mosaico-img',
+    src: '/media/img/autossuficiencia/horta-produtiva.webp',
+    alt: 'Horta Produtiva no Paraíso das Águas',
+    loading: 'lazy',
+    decoding: 'async',
+    width: '680',
+    height: '420'
   }));
+  itemHorta.appendChild(criar('span', { classe: 'mosaico-tag', texto: 'HORTA PRODUTIVA' }));
+  gradeMosaico.appendChild(itemHorta);
 
-  // Galeria de fotos reais da terra e das águas
-  if (A.fotosReais && A.fotosReais.length > 0) {
-    const gradeFotos = criar('div', { classe: 'grade-fotos-reais' });
-    for (const f of A.fotosReais) {
-      const itemFoto = criar('div', { classe: 'item-foto-real' });
-      itemFoto.appendChild(criar('img', {
-        classe: 'item-foto-real__img',
-        src: f.src,
-        alt: f.legenda,
-        loading: 'lazy',
-        decoding: 'async'
-      }));
-      itemFoto.appendChild(criar('span', {
-        classe: 'item-foto-real__legenda',
-        texto: f.legenda
-      }));
-      gradeFotos.appendChild(itemFoto);
-    }
-    painel.appendChild(gradeFotos);
+  // Linha do meio: Pomar e Criação Natural
+  const linhaMeio = criar('div', { classe: 'mosaico-linha-dupla' });
+
+  const itemPomar = criar('div', { classe: 'mosaico-item' });
+  itemPomar.appendChild(criar('img', {
+    classe: 'mosaico-img',
+    src: '/media/img/autossuficiencia/pomar-arvores.webp',
+    alt: 'Pomar de frutas frescas',
+    loading: 'lazy',
+    decoding: 'async'
+  }));
+  itemPomar.appendChild(criar('span', { classe: 'mosaico-tag', texto: 'POMAR' }));
+  linhaMeio.appendChild(itemPomar);
+
+  const itemCriacao = criar('div', { classe: 'mosaico-item' });
+  itemCriacao.appendChild(criar('img', {
+    classe: 'mosaico-img',
+    src: '/media/img/autossuficiencia/criacao-natural.webp',
+    alt: 'Criação Natural e Piquetes',
+    loading: 'lazy',
+    decoding: 'async'
+  }));
+  itemCriacao.appendChild(criar('span', { classe: 'mosaico-tag', texto: 'CRIAÇÃO NATURAL' }));
+  linhaMeio.appendChild(itemCriacao);
+
+  gradeMosaico.appendChild(linhaMeio);
+
+  // Linha inferior: Energia Solar e Varanda Rural
+  const linhaBaixo = criar('div', { classe: 'mosaico-linha-dupla' });
+
+  const itemSolar = criar('div', { classe: 'mosaico-item' });
+  itemSolar.appendChild(criar('img', {
+    classe: 'mosaico-img',
+    src: '/media/img/autossuficiencia/energia-solar.webp',
+    alt: 'Energia Solar Fotovoltaica',
+    loading: 'lazy',
+    decoding: 'async'
+  }));
+  itemSolar.appendChild(criar('span', { classe: 'mosaico-tag', texto: 'ENERGIA SOLAR' }));
+  linhaBaixo.appendChild(itemSolar);
+
+  const itemVaranda = criar('div', { classe: 'mosaico-item' });
+  itemVaranda.appendChild(criar('img', {
+    classe: 'mosaico-img',
+    src: '/media/img/autossuficiencia/varanda-rural.webp',
+    alt: 'Varanda Rural e Convivência',
+    loading: 'lazy',
+    decoding: 'async'
+  }));
+  itemVaranda.appendChild(criar('span', { classe: 'mosaico-tag', texto: 'VARANDA RURAL' }));
+  linhaBaixo.appendChild(itemVaranda);
+
+  gradeMosaico.appendChild(linhaBaixo);
+  colEsquerda.appendChild(gradeMosaico);
+  painel.appendChild(colEsquerda);
+
+  // 2. COLUNA DIREITA: TÍTULOS COM ANIMAÇÃO, CONTEÚDO E CTAS
+  const colDireita = criar('div', { classe: 'quadro-info' });
+
+  colDireita.appendChild(criar('span', { classe: 'rotulo-secao', texto: A.rotulo }));
+
+  const h2 = criar('h2', { classe: 'secao__titulo quadro-info__titulo' });
+  h2.innerHTML = A.titulo;
+  colDireita.appendChild(h2);
+
+  const pLead = criar('p', { classe: 'secao__apoio secao__apoio--destaque quadro-info__texto' });
+  pLead.innerHTML = A.subtitulo;
+  colDireita.appendChild(pLead);
+
+  // 4 Indicadores rápidos com ícones neon e divisores
+  const faixaIndicadores = criar('div', { classe: 'faixa-indicadores-rurais' });
+  for (const ind of A.indicadores) {
+    const itemInd = criar('div', { classe: 'item-indicador-rural' });
+    const icBox = criar('span', { classe: 'item-indicador-rural__icone' });
+    icBox.innerHTML = icone(ind.icone, { tamanho: 20 });
+    itemInd.appendChild(icBox);
+    itemInd.appendChild(criar('span', { classe: 'item-indicador-rural__rotulo', texto: ind.rotulo }));
+    faixaIndicadores.appendChild(itemInd);
   }
+  colDireita.appendChild(faixaIndicadores);
 
-  const grade = criar('div', { classe: 'grade-duas-colunas' });
-  for (const p of A.pilares) {
-    const card = criar('div', { classe: 'card-beneficio' });
-    const ic = criar('span', { classe: 'cartao-infra__icone' });
-    ic.innerHTML = icone(p.icone, { tamanho: 24 });
-    card.appendChild(ic);
-    card.appendChild(criar('h3', { classe: 'card-beneficio__titulo', texto: p.titulo }));
-    card.appendChild(criar('p', { classe: 'card-beneficio__texto', texto: p.texto }));
-    grade.appendChild(card);
-  }
-  painel.appendChild(grade);
+  // Ações
+  const acoes = criar('div', { classe: 'quadro-info__acoes' });
+  acoes.appendChild(botaoWhatsApp('autossuficiencia', 'Fale Conosco no WhatsApp', 'ouro'));
+  acoes.appendChild(criar('a', {
+    classe: 'btn btn--vidro',
+    href: '#contato',
+    texto: 'Agendar Visita VIP'
+  }));
+  colDireita.appendChild(acoes);
 
-  painel.appendChild(criar('hr', { classe: 'divisor-lago' }));
-  painel.appendChild(botaoWhatsApp('autossuficiencia', 'Quero saber mais sobre a terra e a nascente', 'ouro'));
+  painel.appendChild(colDireita);
 
   secao.replaceChildren(painel);
   secao.hidden = false;
@@ -344,14 +424,14 @@ export function montarAutossuficiencia() {
 }
 
 /* --------------------------------------------------------------------------
- * 08. COMPARTILHAR (AQUISIÇÃO COMPARTILHADA)
+ * 08. UMA PROPRIEDADE PARA COMPARTILHAR (PATRIMÔNIO FAMILIAR)
  * ------------------------------------------------------------------------ */
 export function montarCompartilhar() {
   const secao = $('#compartilhar');
   if (!secao) return null;
 
   const C = config.compartilhar;
-  const painel = criar('div', { classe: 'painel' });
+  const painel = criar('div', { classe: 'painel painel--largo' });
 
   painel.appendChild(cabecalho({
     rotulo: C.rotulo,
@@ -359,19 +439,39 @@ export function montarCompartilhar() {
     texto: C.subtitulo
   }));
 
-  painel.appendChild(criar('p', { classe: 'secao__apoio', texto: C.texto }));
+  // Layout 2 colunas com imagem lifestyle da família no deck
+  const layout = criar('div', { classe: 'grade-lifestyle-compartilhar' });
 
-  const grade = criar('div', { classe: 'grade-duas-colunas' });
+  const fotoBox = criar('div', { classe: 'lifestyle-foto-caixa' });
+  fotoBox.appendChild(criar('img', {
+    classe: 'lifestyle-foto-img',
+    src: C.imagemPrincipal,
+    alt: 'Família na varanda com vista para o vale e lago',
+    loading: 'lazy',
+    decoding: 'async',
+    width: '1200',
+    height: '1600'
+  }));
+  fotoBox.appendChild(criar('div', {
+    classe: 'lifestyle-slogan-overlay',
+    texto: 'O novo luxo mudou de endereço.'
+  }));
+  layout.appendChild(fotoBox);
+
+  const infoBox = criar('div', { classe: 'lifestyle-info-caixa' });
+  const gradeBeneficios = criar('div', { classe: 'grade-duas-colunas' });
   for (const b of C.beneficios) {
     const card = criar('div', { classe: 'card-beneficio' });
     card.appendChild(criar('h3', { classe: 'card-beneficio__titulo', texto: b.titulo }));
     card.appendChild(criar('p', { classe: 'card-beneficio__texto', texto: b.texto }));
-    grade.appendChild(card);
+    gradeBeneficios.appendChild(card);
   }
-  painel.appendChild(grade);
+  infoBox.appendChild(gradeBeneficios);
+  infoBox.appendChild(criar('hr', { classe: 'divisor-lago' }));
+  infoBox.appendChild(botaoWhatsApp('compartilhar', 'Converse sobre as possibilidades no WhatsApp', 'ouro'));
+  layout.appendChild(infoBox);
 
-  painel.appendChild(criar('hr', { classe: 'divisor-lago' }));
-  painel.appendChild(botaoWhatsApp('compartilhar', 'Simular compra compartilhada no WhatsApp', 'vidro'));
+  painel.appendChild(layout);
 
   secao.replaceChildren(painel);
   secao.hidden = false;
@@ -379,14 +479,14 @@ export function montarCompartilhar() {
 }
 
 /* --------------------------------------------------------------------------
- * 09. SÃO JOSÉ DOS CAMPOS & REPRESA JAGUARI
+ * 09. SÃO JOSÉ DOS CAMPOS & REPRESA JAGUARI (VÍDEO VERTICAL 9:16 EM PÉ)
  * ------------------------------------------------------------------------ */
 export function montarSaoJose() {
   const secao = $('#sao-jose');
   if (!secao) return null;
 
   const S = config.saoJose;
-  const painel = criar('div', { classe: 'painel' });
+  const painel = criar('div', { classe: 'painel painel--largo' });
 
   painel.appendChild(cabecalho({
     rotulo: S.rotulo,
@@ -394,24 +494,39 @@ export function montarSaoJose() {
     texto: S.subtitulo
   }));
 
-  if (S.video) {
-    painel.appendChild(criarVideoFrame(S.video));
-  }
+  // Layout 2 Colunas: Vídeo Vertical EM PÉ (9:16) na Esquerda + Destaques na Direita
+  const layoutVertical = criar('div', { classe: 'grade-sjc-vertical' });
 
-  painel.appendChild(criar('p', { classe: 'secao__apoio', texto: S.texto }));
+  // 1. Moldura de Vídeo Vertical Story / Smartphone
+  const videoBox = criar('div', { classe: 'sjc-video-vertical-caixa' });
+  const molduraVertical = criarVideoFrame({
+    src: S.videoVertical.src,
+    poster: S.videoVertical.poster,
+    legenda: S.videoVertical.legenda,
+    proporcao: '9-16'
+  });
+  videoBox.appendChild(molduraVertical);
+  layoutVertical.appendChild(videoBox);
 
-  const grade = criar('div', { classe: 'grade-sjc-destaques' });
+  // 2. Conteúdo e Destaques de Distância
+  const infoBox = criar('div', { classe: 'sjc-info-vertical' });
+  infoBox.appendChild(criar('p', { classe: 'secao__apoio secao__apoio--destaque', texto: S.texto }));
+
+  const gradeDestaques = criar('div', { classe: 'grade-sjc-destaques' });
   for (const d of S.destaques) {
     const card = criar('div', { classe: 'card-sjc' });
     card.appendChild(criar('div', { classe: 'card-sjc__valor', texto: d.valor }));
     card.appendChild(criar('h4', { classe: 'card-sjc__titulo', texto: d.titulo }));
     card.appendChild(criar('p', { classe: 'card-sjc__texto', texto: d.texto }));
-    grade.appendChild(card);
+    gradeDestaques.appendChild(card);
   }
-  painel.appendChild(grade);
+  infoBox.appendChild(gradeDestaques);
 
-  painel.appendChild(criar('hr', { classe: 'divisor-lago' }));
-  painel.appendChild(botaoWhatsApp('saoJose', 'Saber mais sobre a localização e o lazer na represa', 'ouro'));
+  infoBox.appendChild(criar('hr', { classe: 'divisor-lago' }));
+  infoBox.appendChild(botaoWhatsApp('saoJose', 'Saber mais sobre a localização e náutica no WhatsApp', 'ouro'));
+  layoutVertical.appendChild(infoBox);
+
+  painel.appendChild(layoutVertical);
 
   secao.replaceChildren(painel);
   secao.hidden = false;
@@ -419,7 +534,7 @@ export function montarSaoJose() {
 }
 
 /* --------------------------------------------------------------------------
- * 10. CONDIÇÕES DE AQUISIÇÃO & SEGURANÇA JURÍDICA
+ * 10. CONDIÇÕES DE AQUISIÇÃO (4 CARDS COM GLOW ESMERALDA DO DESIGNER)
  * ------------------------------------------------------------------------ */
 export function montarAquisicao() {
   const secao = $('#aquisicao');
@@ -434,22 +549,21 @@ export function montarAquisicao() {
     texto: A.subtitulo
   }));
 
-  const listaAcordeoes = criar('div', { classe: 'lista-acordeoes' });
-  for (let i = 0; i < A.acordeoes.length; i++) {
-    const item = A.acordeoes[i];
-    const details = criar('details', { classe: 'acordeon', open: i === 0 ? '' : null });
-    const summary = criar('summary', { classe: 'acordeon__titulo', texto: item.titulo });
-    const corpo = criar('div', { classe: 'acordeon__corpo' });
-    corpo.appendChild(criar('p', { texto: item.conteudo }));
-
-    details.appendChild(summary);
-    details.appendChild(corpo);
-    listaAcordeoes.appendChild(details);
+  // 4 Cards de Aquisição com Glow Esmeralda
+  const gradeCards = criar('div', { classe: 'grade-aquisicao-cards' });
+  for (const c of A.cards) {
+    const card = criar('div', { classe: 'cartao-aquisicao' });
+    const icBox = criar('span', { classe: 'cartao-aquisicao__icone' });
+    icBox.innerHTML = icone(c.icone, { tamanho: 28 });
+    card.appendChild(icBox);
+    card.appendChild(criar('h3', { classe: 'cartao-aquisicao__titulo', texto: c.titulo }));
+    card.appendChild(criar('p', { classe: 'cartao-aquisicao__texto', texto: c.texto }));
+    gradeCards.appendChild(card);
   }
-  painel.appendChild(listaAcordeoes);
+  painel.appendChild(gradeCards);
 
   painel.appendChild(criar('hr', { classe: 'divisor-lago' }));
-  painel.appendChild(botaoWhatsApp('aquisicao', 'Consultar condições de financiamento direto', 'ouro'));
+  painel.appendChild(botaoWhatsApp('aquisicao', 'Solicitar Informações no WhatsApp', 'ouro'));
 
   secao.replaceChildren(painel);
   secao.hidden = false;
@@ -482,8 +596,9 @@ export function montarLocalizacao() {
   }
   painel.appendChild(tabela);
 
-  // Botão para Google Maps
+  // Botões de rota e Google Maps
   const boxMapa = criar('div', { classe: 'mapa-cta-caixa' });
+  boxMapa.appendChild(botaoWhatsApp('localizacao', 'Como Chegar no WhatsApp', 'ouro'));
   const btnMapa = criar('a', {
     classe: 'btn btn--vidro btn--com-icone',
     href: L.mapaLink,
@@ -494,44 +609,62 @@ export function montarLocalizacao() {
   boxMapa.appendChild(btnMapa);
   painel.appendChild(boxMapa);
 
-  painel.appendChild(criar('hr', { classe: 'divisor-lago' }));
-  painel.appendChild(botaoWhatsApp('localizacao', 'Confirmar localização no WhatsApp', 'ouro'));
-
   secao.replaceChildren(painel);
   secao.hidden = false;
   return secao;
 }
 
 /* --------------------------------------------------------------------------
- * 12. CONTATO & AGENDAMENTO VIP
+ * 12. CONTATO & AGENDAMENTO VIP (FORMULÁRIO DO DESIGNER)
  * ------------------------------------------------------------------------ */
 export function montarContato() {
   const secao = $('#contato');
   if (!secao) return null;
 
   const C = config.contato;
-  const painel = criar('div', { classe: 'painel' });
+  const painel = criar('div', { classe: 'painel painel--largo grade-contato-designer' });
 
-  painel.appendChild(cabecalho({
-    rotulo: C.rotulo,
-    titulo: C.titulo,
-    texto: C.subtitulo
-  }));
+  // Coluna 1: Textos & Filosofia "A Roça é o Novo Luxo"
+  const colTexto = criar('div', { classe: 'contato-info-box' });
+  colTexto.appendChild(criar('span', { classe: 'rotulo-secao', texto: C.rotulo }));
 
-  painel.appendChild(criar('p', { classe: 'secao__apoio', texto: C.texto }));
+  const h2 = criar('h2', { classe: 'secao__titulo' });
+  h2.innerHTML = C.titulo;
+  colTexto.appendChild(h2);
 
-  // Formulário rápido de preferência de visita
+  const pLead = criar('p', { classe: 'secao__apoio secao__apoio--destaque' });
+  pLead.innerHTML = C.subtitulo;
+  colTexto.appendChild(pLead);
+
+  colTexto.appendChild(criar('p', { classe: 'secao__apoio', texto: C.texto }));
+  painel.appendChild(colTexto);
+
+  // Coluna 2: Card Flutuante de Agendamento
+  const cardForm = criar('div', { classe: 'card-agendamento-vip' });
+  cardForm.appendChild(criar('h3', { classe: 'card-agendamento-vip__titulo', texto: 'Agende sua visita' }));
+  cardForm.appendChild(criar('p', { classe: 'card-agendamento-vip__sub', texto: 'Fale com um especialista' }));
+
   const form = criar('form', { classe: 'form-agendamento' });
   form.addEventListener('submit', (e) => {
     e.preventDefault();
+    const nome = form.querySelector('input[name="nome"]')?.value || 'Interessado';
     const diaSel = form.querySelector('input[name="dia"]:checked')?.value || 'qualquer dia';
-    const msg = `Olá! Gostaria de agendar uma visita ao Paraíso das Águas. Tenho preferência para ir em um(a) ${diaSel}.`;
+    const msg = `Olá! Meu nome é ${nome}. Gostaria de agendar uma visita VIP ao Paraíso das Águas (preferência: ${diaSel}).`;
     const numero = String(config.whatsapp.numero).replace(/\D/g, '');
     window.open(`https://wa.me/${numero}?text=${encodeURIComponent(msg)}`, '_blank');
   });
 
-  const rotuloOpcoes = criar('label', { classe: 'form-agendamento__label', texto: 'Selecione seu melhor dia para visita:' });
-  form.appendChild(rotuloOpcoes);
+  const inputNome = criar('input', {
+    type: 'text',
+    name: 'nome',
+    placeholder: 'Seu nome completo',
+    required: '',
+    classe: 'form-input'
+  });
+  form.appendChild(inputNome);
+
+  const rotuloDias = criar('label', { classe: 'form-agendamento__label', texto: 'Melhor dia para visita:' });
+  form.appendChild(rotuloDias);
 
   const grupoDias = criar('div', { classe: 'grupo-dias' });
   const opcoes = [
@@ -563,7 +696,18 @@ export function montarContato() {
   });
   form.appendChild(btnEnviar);
 
-  painel.appendChild(form);
+  const btnWa = criar('a', {
+    classe: 'btn btn--verde-wa btn--bloco',
+    href: '#',
+    'data-wa-origem': 'formVIP',
+    texto: 'Conversar pelo WhatsApp 💬'
+  });
+  form.appendChild(btnWa);
+
+  form.appendChild(criar('span', { classe: 'form-aviso-seguro', texto: '🔒 Seus dados estão protegidos.' }));
+
+  cardForm.appendChild(form);
+  painel.appendChild(cardForm);
 
   secao.replaceChildren(painel);
   secao.hidden = false;

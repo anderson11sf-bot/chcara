@@ -95,8 +95,9 @@
   /* ---------- Z-index (uma escala só, documentada) ---------------------- */
   --z-palco:     0;
   --z-conteudo:  10;
-  --z-progresso: 60;
   --z-dica:      20;
+  --z-nav:       55;
+  --z-progresso: 60;
   --z-wa:        70;
   --z-cookies:   80;
   --z-overlay:   90;
