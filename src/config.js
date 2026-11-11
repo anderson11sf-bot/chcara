@@ -130,7 +130,7 @@ export const hero = {
     { texto: 'Financiamento Direto sem Banco', icone: 'apertoMao' },
     { texto: 'Opções a partir de R$ 475 mil*', icone: 'ouro' }
   ],
-  poster: '/media/img/hero-lago.webp'
+  poster: '/media/img/terreno-real-panorama.webp'
 };
 
 /* ---------------------------------------------------------------------------
@@ -145,7 +145,7 @@ export const titulos = [
 ];
 
 export const carrossel = {
-  faixa: { inicio: 0.08, fim: 0.30 },
+  faixa: { inicio: 0.00, fim: 0.48 },
   visiveis: 3,
   rotacaoMax: 40,
   perspectiva: 1200,
@@ -157,7 +157,7 @@ export const portal3d = {
   poster: '/media/img/terreno-3d-cima-poster.webp',
   tag: 'Projeto 3D • Vista Aérea',
   legenda: '2 Hectares • Topografia Real & Lagos',
-  faixa: { inicio: 0.28, fim: 0.46 }
+  faixa: { inicio: 0.45, fim: 0.95 }
 };
 
 /* ---------------------------------------------------------------------------

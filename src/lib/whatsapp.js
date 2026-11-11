@@ -141,31 +141,12 @@ export function iniciarWhatsAppFlutuante(ambienteDetectado) {
   ambiente = ambienteDetectado;
   if (!botao) return null;
 
-  // O link já fica pronto (com UTM) mesmo antes de qualquer clique.
+  // Garante que o link do WhatsApp esteja pronto com UTM e número
   ligarBotoesWhatsApp();
 
-  calcularLimites();
-  pos = posicaoInicial();
-  animarEntrada();
-
-  // Pointer Events cobrem mouse, toque e caneta com um só código.
-  botao.addEventListener('pointerdown', aoPressionar);
-  botao.addEventListener('pointermove', aoMover);
-  botao.addEventListener('pointerup', aoSoltar);
-  botao.addEventListener('pointercancel', aoSoltar);
-  // Impede o clique "fantasma" depois do arraste (o navegador dispara click
-  // mesmo com pointerup fora). A captura de ponteiro resolve a maior parte;
-  // este preventDefault cobre o resto.
-  botao.addEventListener('click', aoClicar);
-
-  // Recalcula os limites quando a tela muda (barra do navegador, rotação).
-  window.addEventListener('resize', reposicionarDentroDosLimites, { passive: true });
-  window.addEventListener('orientationchange', reposicionarDentroDosLimites, { passive: true });
-  if (window.visualViewport) {
-    window.visualViewport.addEventListener('resize', reposicionarDentroDosLimites, { passive: true });
-  }
-
-  return { destruir };
+  return {
+    destruir: () => {}
+  };
 }
 
 /** Área onde o botão pode ficar: tela inteira menos margens e área segura. */

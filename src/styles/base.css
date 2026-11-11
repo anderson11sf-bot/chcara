@@ -120,7 +120,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .conteudo {
   position: relative;
   z-index: var(--z-conteudo);
-  height: var(--altura-scroll);
+  width: 100%;
 }
 
 .secao {

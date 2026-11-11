@@ -140,9 +140,6 @@ function arrancarInterno() {
   // (c2) Portal 3D de abertura central cinematográfica (Sessão 2)
   portal3d.iniciarPortal3d();
 
-  // (c3) Reserva no fluxo da altura real das seções
-  ajustarAlturaDasSecoes();
-
   aplicarVariaveisCarrossel();
   carrossel.iniciarCarrossel();
 
@@ -158,14 +155,44 @@ function arrancarInterno() {
   /* ------------------------------------------------------------------------
    * (e) Assinatura única de progresso de scroll
    * ---------------------------------------------------------------------- */
+  const secaoCenas = document.getElementById('secao-cenas');
+
+  const atualizarQuadrosScroll = (pGlobal) => {
+    const y = window.scrollY || window.pageYOffset || 0;
+    const vh = window.innerHeight || 1;
+
+    // 1. Progresso do Hero (0 a 1 nos primeiros 75% de vh)
+    const pHero = Math.min(1, Math.max(0, y / Math.max(1, vh * 0.75)));
+    hero.definirProgresso(pHero);
+    dica.definirProgresso(pHero);
+
+    // 2. Progresso da Sessão 2 (Carrossel 3D + Abertura Central 3D)
+    let pCena = 0;
+    if (secaoCenas) {
+      const topoCena = secaoCenas.offsetTop || vh;
+      const distCena = Math.max(1, secaoCenas.offsetHeight - vh);
+      pCena = Math.min(1, Math.max(0, (y - topoCena) / distCena));
+    }
+    carrossel.definirProgresso(pCena);
+    portal3d.definirProgresso(pCena);
+
+    // 3. Fundo procedural e Palco visual
+    controleFundo?.definirProgresso(pCena < 0.98 ? pCena : 1);
+    controlePalco?.definirProgresso(pCena);
+
+    // 4. Barra de progresso de leitura global (0 a 1 no site inteiro)
+    progresso.definirProgresso(pGlobal);
+  };
+
+  const aoRolarImediato = () => {
+    const rolavel = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    const p = Math.min(1, Math.max(0, (window.scrollY || window.pageYOffset || 0) / rolavel));
+    atualizarQuadrosScroll(p);
+  };
+  window.addEventListener('scroll', aoRolarImediato, { passive: true });
+
   aoProgredir((p) => {
-    controleFundo?.definirProgresso(p);
-    controlePalco?.definirProgresso(p);
-    progresso.definirProgresso(p);
-    dica.definirProgresso(p);
-    hero.definirProgresso(p);
-    carrossel.definirProgresso(p);
-    portal3d.definirProgresso(p);
+    atualizarQuadrosScroll(p);
   });
 
   // (f) Revelação do palco
@@ -177,9 +204,7 @@ function arrancarInterno() {
   // (g) Recálculo de medidas após carregamento de fontes
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(() => setTimeout(() => {
-      ajustarAlturaDasSecoes();
-      carrossel.definirProgresso(getProgresso());
-      portal3d.definirProgresso(getProgresso());
+      atualizarQuadrosScroll(getProgresso());
     }, 80));
   }
 
@@ -189,41 +214,12 @@ function arrancarInterno() {
 
   window.__PD = {
     config, ambiente, controleFundo, controlePalco, secoes,
+    atualizar: atualizarQuadrosScroll,
     irPara: (fracao) => {
       const rolavel = document.documentElement.scrollHeight - window.innerHeight;
       window.scrollTo(0, Math.round(rolavel * Math.max(0, Math.min(1, fracao))));
     }
   };
-}
-
-/* --------------------------------------------------------------------------
- * 4b. Reserva de altura das seções densas
- * ------------------------------------------------------------------------ */
-
-function ajustarAlturaDasSecoes() {
-  const secoes = document.getElementById('secoes');
-  if (!secoes) return;
-
-  const medir = () => {
-    const altura = Math.ceil(secoes.getBoundingClientRect().height);
-    if (altura > 0) {
-      aplicarVariaveis({ '--altura-secoes': `${altura}px` });
-    }
-    atualizarMedidas();
-  };
-
-  medir();
-
-  let t = 0;
-  window.addEventListener('resize', () => {
-    clearTimeout(t);
-    t = setTimeout(medir, 220);
-  }, { passive: true });
-
-  if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(() => setTimeout(medir, 90));
-  }
-  window.addEventListener('load', () => setTimeout(medir, 160), { once: true });
 }
 
 /* --------------------------------------------------------------------------

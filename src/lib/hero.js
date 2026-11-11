@@ -85,7 +85,7 @@ function montarSelos() {
 export function definirProgresso(p) {
   if (!ativo) return;
 
-  const t = normalizar(p, FAIXA_SAIDA.inicio, FAIXA_SAIDA.fim); // 0 → 1
+  const t = clamp(p, 0, 1);
 
   if (t === 0) {
     if (!noTopo) {

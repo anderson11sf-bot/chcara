@@ -8,7 +8,7 @@
 
 .secao-cenas {
   position: relative;
-  height: 380svh;
+  height: 250svh;
   z-index: var(--z-conteudo);
   pointer-events: none;
 }

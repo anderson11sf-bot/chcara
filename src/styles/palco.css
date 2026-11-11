@@ -251,46 +251,48 @@ body.prova-sem-fade .palco__fundo {
   100%    { opacity: 0.35; }
 }
 
-/* ---------- WHATSAPP FLUTUANTE (arrastável) ---------------------------- */
+/* ---------- WHATSAPP FLUTUANTE ---------------------------- */
 
 .wa-flutuante {
   position: fixed;
-  left: 0;
-  top: 0;
-  z-index: var(--z-wa);
+  right: 22px;
+  bottom: 24px;
+  left: auto !important;
+  top: auto !important;
+  z-index: 99999;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: var(--e2);
-  width: 62px;
-  height: 62px;
+  width: 60px;
+  height: 60px;
   padding: 0;
   border-radius: 999px;
-  background: #1FA38A;
+  background: #25D366;
   color: #FFFFFF;
-  box-shadow: 0 10px 28px rgba(2, 17, 20, 0.45), 0 0 0 1px rgba(111, 227, 210, 0.3) inset;
-  transition: background-color var(--t-rapido) var(--curva), box-shadow var(--t-rapido) var(--curva);
-  /* O botão é posicionado por translate3d (JS) — apenas composição */
-  transform: translate3d(0, 0, 0);
-  will-change: transform;
-  /* Impede o navegador de rolar/zoom enquanto arrastamos */
-  touch-action: none;
+  box-shadow: 0 10px 28px rgba(2, 17, 20, 0.45), 0 0 18px rgba(37, 211, 102, 0.45);
+  transition: transform 0.22s var(--curva), box-shadow 0.22s var(--curva), background-color 0.22s ease;
+  transform: scale(1);
+  touch-action: manipulation;
   -webkit-user-select: none;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
-  cursor: grab;
+  cursor: pointer;
 }
-.wa-flutuante:active { cursor: grabbing; }
+.wa-flutuante:active {
+  transform: scale(0.94);
+}
 .wa-flutuante:hover {
-  background: #17806D;
+  background: #20BA5A;
   color: #FFFFFF;
-  box-shadow: 0 12px 32px rgba(2, 17, 20, 0.55), 0 0 18px rgba(31, 163, 138, 0.45);
+  transform: scale(1.08);
+  box-shadow: 0 14px 34px rgba(2, 17, 20, 0.55), 0 0 24px rgba(37, 211, 102, 0.6);
 }
 
 .wa-flutuante__icone {
-  width: 28px;
-  height: 28px;
-  flex: 0 0 28px;
+  width: 30px;
+  height: 30px;
+  flex: 0 0 30px;
   fill: #FFFFFF;
 }
 
@@ -301,10 +303,11 @@ body.prova-sem-fade .palco__fundo {
 /* Anel do pulso: constante, fora do scroll (permitido pelo projeto) */
 .wa-flutuante__anel {
   position: absolute;
-  inset: -3px;
+  inset: -4px;
   border-radius: 999px;
-  border: 2px solid rgba(31, 163, 138, 0.7);
+  border: 2px solid rgba(37, 211, 102, 0.7);
   animation: anel-pulso 2.6s var(--curva) infinite;
+  pointer-events: none;
 }
 
 @keyframes anel-pulso {

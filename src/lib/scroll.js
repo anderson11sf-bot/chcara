@@ -242,22 +242,19 @@ export function iniciarScroll(opcoes = {}) {
   //
   // Os dois convergem para o mesmo `atualizarProgresso()`, que só age quando
   // o valor realmente mudou. Custo: praticamente zero.
-  const aoRolarNativo = () => {
+  const aoRolar = () => {
     ScrollTrigger.update();
+    atualizarProgresso();
   };
-  if (!lenis) {
-    window.addEventListener('scroll', aoRolarNativo, { passive: true });
-  }
+  window.addEventListener('scroll', aoRolar, { passive: true });
 
   let ultimoY = -1;
   const lerFallback = () => {
     const y = window.scrollY || window.pageYOffset || 0;
     if (y !== ultimoY) {
       ultimoY = y;
-      if (!lenis) {
-        ScrollTrigger.update();
-        atualizarProgresso();
-      }
+      ScrollTrigger.update();
+      atualizarProgresso();
     }
     requestAnimationFrame(lerFallback);
   };
