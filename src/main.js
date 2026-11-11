@@ -3,8 +3,8 @@
  * ----------------------------------------------------------------------------
  * Ordem de subida:
  *   1. Motor de scroll  → define a altura da página e emite progresso (0 a 1)
- *   2. Palco + fundo    → renderiza o canvas procedural / sequências de frames
- *   3. UI               → hero, carrossel 3D, portal 3D de abertura central
+ *   2. Palco + fundo    → canvas procedural e sequências de frames
+ *   3. UI               → hero com scroll canvas, carrossel 3D, portal 3D
  *   4. Seções Mestres   → as 13 seções em fluxo normal, com legibilidade total
  * ==========================================================================*/
 
@@ -22,6 +22,8 @@ import * as fundo from './lib/fundoCanvas.js';
 import * as progresso from './lib/progresso.js';
 import * as dica from './lib/dica.js';
 import * as hero from './lib/hero.js';
+import * as heroScroll from './lib/heroScroll.js';
+import * as sessao2Scroll from './lib/sessao2Scroll.js';
 import * as carrossel from './lib/carrossel.js';
 import * as portal3d from './lib/portal3d.js';
 import { montarSecoesMestre } from './lib/secoes.js';
@@ -137,7 +139,11 @@ function arrancarInterno() {
   // (c) Montagem das seções mestres (3 a 13)
   const secoes = montarSecoesMestre();
 
-  // (c2) Portal 3D de abertura central cinematográfica (Sessão 2)
+  // (c2) Canvas e animações de scroll
+  const controleHeroScroll = heroScroll.iniciarHeroScroll();
+  const controleSessao2Scroll = sessao2Scroll.iniciarSessao2Scroll();
+
+  // (c3) Portal 3D de abertura central cinematográfica (Sessão 2)
   portal3d.iniciarPortal3d();
 
   aplicarVariaveisCarrossel();
@@ -147,7 +153,7 @@ function arrancarInterno() {
   progresso.iniciarProgresso();
   dica.iniciarDica();
   hero.iniciarHero();
-  iniciarWhatsAppFlutuante(ambiente);
+  iniciarWhatsAppFlutuante();
   ligarCtasInternos();
   ligarPausaPorVisibilidade();
   ligarEventosDeScroll();
@@ -161,18 +167,20 @@ function arrancarInterno() {
     const y = window.scrollY || window.pageYOffset || 0;
     const vh = window.innerHeight || 1;
 
-    // 1. Progresso do Hero (0 a 1 nos primeiros 75% de vh)
-    const pHero = Math.min(1, Math.max(0, y / Math.max(1, vh * 0.75)));
+    // 1. Progresso do Hero (0 a 1 nos primeiros 85% de vh)
+    const pHero = Math.min(1, Math.max(0, y / Math.max(1, vh * 0.85)));
     hero.definirProgresso(pHero);
+    controleHeroScroll?.definirProgresso(pHero);
     dica.definirProgresso(pHero);
 
-    // 2. Progresso da Sessão 2 (Carrossel 3D + Abertura Central 3D)
+    // 2. Progresso da Sessão 2 (Canvas de transição + Carrossel 3D + Abertura Central 3D)
     let pCena = 0;
     if (secaoCenas) {
       const topoCena = secaoCenas.offsetTop || vh;
       const distCena = Math.max(1, secaoCenas.offsetHeight - vh);
       pCena = Math.min(1, Math.max(0, (y - topoCena) / distCena));
     }
+    controleSessao2Scroll?.definirProgresso(pCena);
     carrossel.definirProgresso(pCena);
     portal3d.definirProgresso(pCena);
 
@@ -220,49 +228,41 @@ function arrancarInterno() {
       window.scrollTo(0, Math.round(rolavel * Math.max(0, Math.min(1, fracao))));
     }
   };
-}
 
-/* --------------------------------------------------------------------------
- * 4c. Variáveis do carrossel
- * ------------------------------------------------------------------------ */
+  document.body.classList.remove('preload');
+}
 
 function aplicarVariaveisCarrossel() {
-  aplicarVariaveis({
-    '--perspectiva-carrossel': `${config.carrossel.perspectiva}px`
+  const c = config.carrossel || {};
+  aplicarVariaveis(document.documentElement, {
+    'perspectiva-carrossel': `${c.perspectiva || 1200}px`
   });
-  const el = document.getElementById('carrossel');
-  if (el) el.style.perspective = `${config.carrossel.perspectiva}px`;
 }
 
-/* --------------------------------------------------------------------------
- * 4d. Eventos de profundidade de scroll
- * ------------------------------------------------------------------------ */
-
 function ligarEventosDeScroll() {
-  const marcos = [25, 50, 75, 100];
-  const disparados = new Set();
+  let disparou50 = false;
+  let disparou90 = false;
 
   aoProgredir((p) => {
-    for (const marco of marcos) {
-      if (disparados.has(marco)) continue;
-      if (p * 100 >= marco) {
-        disparados.add(marco);
-        try {
-          if (typeof window.fbq === 'function') {
-            window.fbq('trackCustom', `Scroll${marco}`);
-          }
-          if (typeof window.gtag === 'function') {
-            window.gtag('event', 'scroll_profundidade', { percentual: marco });
-          }
-        } catch { /* silencioso */ }
-      }
+    if (!disparou50 && p >= 0.50) {
+      disparou50 = true;
+      dispararEventoAnalitico('scroll_50');
+    }
+    if (!disparou90 && p >= 0.90) {
+      disparou90 = true;
+      dispararEventoAnalitico('scroll_90');
     }
   });
 }
 
-/* --------------------------------------------------------------------------
- * 5. Arranque e HMR
- * ------------------------------------------------------------------------ */
+function dispararEventoAnalitico(nome) {
+  try {
+    if (typeof window.gtag === 'function') window.gtag('event', nome);
+    if (typeof window.fbq === 'function') window.fbq('trackCustom', nome);
+  } catch {
+    /* analíticos não quebram navegação */
+  }
+}
 
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', arrancar, { once: true });
@@ -270,13 +270,4 @@ if (document.readyState === 'loading') {
   arrancar();
 }
 
-if (import.meta.hot) {
-  import.meta.hot.dispose(() => {
-    destruirScroll();
-    fundo.parar();
-    dica.destruir();
-    hero.destruir();
-    carrossel.destruir();
-    portal3d.destruir();
-  });
-}
+export default { arrancar };

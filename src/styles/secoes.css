@@ -103,13 +103,6 @@
   aspect-ratio: 16 / 9;
 }
 
-.video-moldura--9-16 {
-  max-width: 420px;
-  margin-left: auto;
-  margin-right: auto;
-  aspect-ratio: 9 / 16;
-}
-
 .video-player {
   width: 100%;
   height: 100%;
@@ -120,14 +113,14 @@
 .video-legenda-tag {
   position: absolute;
   bottom: 12px;
-  left: 12px;
-  background: rgba(4, 25, 31, 0.85);
-  color: #e6f4f1;
-  font-size: 0.78rem;
-  padding: 4px 10px;
+  left: 14px;
+  padding: 6px 14px;
   border-radius: 999px;
+  background: rgba(3, 20, 25, 0.85);
   border: 1px solid rgba(111, 227, 210, 0.3);
-  backdrop-filter: blur(6px);
+  font-size: 0.75rem;
+  color: #e6f4f1;
+  backdrop-filter: blur(8px);
   pointer-events: none;
 }
 
@@ -136,169 +129,173 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: var(--e3);
-  margin-top: var(--e3);
+  margin: var(--e4) 0;
 }
 
 .comparativo-card {
   padding: var(--e4);
   border-radius: var(--r-organico);
   border: 1px solid var(--cor-borda);
-  background: rgba(10, 50, 54, 0.35);
+  background: rgba(10, 50, 54, 0.3);
 }
 
 .comparativo-card--paraiso {
   border-color: rgba(217, 168, 60, 0.45);
-  background: linear-gradient(165deg, rgba(14, 58, 62, 0.5) 0%, rgba(6, 36, 39, 0.65) 100%);
-  box-shadow: 0 8px 30px rgba(217, 168, 60, 0.1);
+  background: linear-gradient(145deg, rgba(14, 60, 54, 0.5) 0%, rgba(8, 36, 40, 0.7) 100%);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
 }
 
 .comparativo-card__titulo {
   font-family: var(--fonte-titulos, serif);
-  font-size: 1.35rem;
+  font-size: 1.3rem;
   color: var(--ouro);
   margin-bottom: var(--e2);
 }
 
 .comparativo-card__desc {
   font-size: 0.95rem;
-  color: var(--cor-texto-fraco);
   line-height: 1.5;
+  color: var(--cor-texto-fraco);
 }
 
-/* ---------- Sessão 04: As Propriedades (Geral 2 Hectares) ---------- */
+/* ---------- Sessão 04: Propriedades, Destaques & Mapa Oficial ---------- */
 .propriedades-destaques {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: var(--e3);
-  margin-bottom: var(--e4);
+  margin: var(--e4) 0;
 }
 
 .propriedade-item {
-  display: flex;
-  flex-direction: column;
   padding: var(--e3);
   border: 1px solid var(--cor-borda);
   border-radius: var(--r-organico);
-  background: rgba(10, 50, 54, 0.4);
+  background: rgba(10, 50, 54, 0.35);
+  text-align: center;
 }
 
 .propriedade-item__icone {
-  color: var(--ciano-suave);
+  display: inline-flex;
   margin-bottom: var(--e2);
+  color: var(--turquesa);
 }
 
 .propriedade-item__titulo {
-  font-family: var(--fonte-rotulos, sans-serif);
-  font-size: 1rem;
+  font-size: 1.05rem;
   font-weight: 600;
   color: #fff;
   margin-bottom: 4px;
 }
 
 .propriedade-item__texto {
-  font-size: 0.88rem;
+  font-size: 0.85rem;
   color: var(--cor-texto-fraco);
   line-height: 1.4;
 }
 
+/* Mapa Oficial em Alta Resolução */
 .mapa-oficial-caixa {
   position: relative;
   width: 100%;
   border-radius: var(--r-organico);
   overflow: hidden;
-  border: 1.5px solid rgba(111, 227, 210, 0.35);
-  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.6);
-  margin: var(--e3) 0 var(--e4);
+  border: 1.5px solid rgba(217, 168, 60, 0.45);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+  margin: var(--e4) 0;
+  background: #020c0e;
 }
 
 .mapa-oficial-img {
   width: 100%;
   height: auto;
   display: block;
+  object-fit: cover;
 }
 
 .mapa-oficial-tag {
   position: absolute;
-  top: 12px;
-  right: 12px;
-  background: rgba(3, 20, 25, 0.9);
-  color: var(--ouro);
-  border: 1px solid rgba(217, 168, 60, 0.5);
-  padding: 6px 14px;
+  top: 14px;
+  right: 14px;
+  padding: 6px 16px;
   border-radius: 999px;
-  font-size: 0.78rem;
+  background: rgba(4, 25, 31, 0.88);
+  border: 1px solid rgba(217, 168, 60, 0.5);
+  font-family: var(--fonte-rotulos, sans-serif);
+  font-size: 0.72rem;
   font-weight: 600;
   letter-spacing: 0.1em;
+  color: var(--ouro);
   text-transform: uppercase;
+  backdrop-filter: blur(8px);
 }
 
 .faixa-comercial-referencia {
-  background: rgba(217, 168, 60, 0.12);
-  border: 1px solid rgba(217, 168, 60, 0.4);
-  border-radius: var(--r-organico);
   padding: var(--e3) var(--e4);
-  text-align: center;
-  color: #fce8a6;
-  font-size: 1rem;
+  border-radius: 12px;
+  background: rgba(217, 168, 60, 0.12);
+  border: 1px solid rgba(217, 168, 60, 0.35);
+  color: var(--ouro-claro);
+  font-size: 0.95rem;
   font-weight: 500;
-  margin-top: var(--e3);
+  text-align: center;
+  margin: var(--e3) 0;
 }
 
-/* ---------- Sessão 05: Cards de Infraestrutura ---------- */
+/* ---------- Sessão 05: Grade de Infraestrutura (Cards 3D) ---------- */
 .grade-infraestrutura {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: var(--e3);
+  margin: var(--e4) 0;
 }
 
 .cartao-infra {
   padding: var(--e4);
-  border-radius: var(--r-organico);
   border: 1px solid var(--cor-borda);
-  background: rgba(8, 42, 46, 0.45);
-  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  border-radius: var(--r-organico);
+  background: linear-gradient(160deg, rgba(14, 60, 54, 0.4) 0%, rgba(6, 36, 39, 0.6) 100%);
+  transition: transform 0.28s var(--curva), border-color 0.28s var(--curva), box-shadow 0.28s var(--curva);
 }
 
 .cartao-infra:hover {
-  transform: translateY(-4px);
-  border-color: rgba(111, 227, 210, 0.5);
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5);
+  transform: translateY(-4px) scale(1.01);
+  border-color: rgba(217, 168, 60, 0.55);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
 }
 
 .cartao-infra__icone {
   display: inline-flex;
-  color: var(--ouro);
   margin-bottom: var(--e2);
+  color: var(--turquesa);
 }
 
 .cartao-infra__titulo {
   font-family: var(--fonte-titulos, serif);
   font-size: 1.25rem;
+  font-weight: 600;
   color: #fff;
   margin-bottom: 6px;
 }
 
 .cartao-infra__texto {
   font-size: 0.9rem;
-  color: var(--cor-texto-fraco);
   line-height: 1.5;
+  color: var(--cor-texto-fraco);
 }
 
-/* ---------- Sessão 06: Projetos Ilustrativos ---------- */
+/* ---------- Sessão 06: Projetos Conceituais (Ilustrativos) ---------- */
 .grade-projetos {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: var(--e4);
-  margin: var(--e3) 0 var(--e4);
+  gap: var(--e3);
+  margin: var(--e4) 0;
 }
 
 .card-projeto {
-  position: relative;
-  border-radius: var(--r-organico);
   border: 1px solid var(--cor-borda);
-  background: rgba(4, 25, 31, 0.7);
+  border-radius: var(--r-organico);
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  background: rgba(10, 50, 54, 0.35);
   display: flex;
   flex-direction: column;
 }
@@ -308,33 +305,44 @@
   width: 100%;
   aspect-ratio: 16 / 10;
   overflow: hidden;
+  background: #020c0e;
 }
 
 .card-projeto__foto {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.4s ease;
+  display: block;
+  transition: transform 0.4s var(--curva);
 }
 
 .card-projeto:hover .card-projeto__foto {
   transform: scale(1.05);
 }
 
+/* Selo Obrigatório de Projeto Ilustrativo */
 .badge-projeto-ilustrativo {
   position: absolute;
   top: 10px;
-  left: 10px;
-  background: rgba(2, 16, 20, 0.88);
-  color: var(--ouro);
-  border: 1px solid rgba(217, 168, 60, 0.55);
-  font-size: 0.68rem;
+  right: 10px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(4, 25, 31, 0.90);
+  border: 1px solid rgba(217, 168, 60, 0.65);
+  font-family: var(--fonte-rotulos, sans-serif);
+  font-size: 0.65rem;
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  padding: 3px 8px;
-  border-radius: 4px;
-  backdrop-filter: blur(4px);
+  color: var(--ouro);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(6px);
+  z-index: 2;
+}
+
+.badge-projeto-ilustrativo--video {
+  top: 14px;
+  right: 14px;
 }
 
 .card-projeto__corpo {
@@ -346,57 +354,121 @@
 
 .card-projeto__titulo {
   font-family: var(--fonte-titulos, serif);
-  font-size: 1.25rem;
+  font-size: 1.15rem;
   color: #fff;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .card-projeto__subtitulo {
-  font-size: 0.88rem;
+  font-size: 0.85rem;
+  line-height: 1.4;
   color: var(--cor-texto-fraco);
-  line-height: 1.45;
 }
 
+/* Vídeos de Projetos Conceituais */
+.grade-videos-projetos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--e3);
+  margin: var(--e4) 0;
+}
+
+.card-video-projeto {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-video-projeto__titulo {
+  font-family: var(--fonte-titulos, serif);
+  font-size: 1.2rem;
+  color: var(--ouro);
+  margin-top: 8px;
+  margin-bottom: 4px;
+}
+
+.card-video-projeto__sub {
+  font-size: 0.85rem;
+  color: var(--cor-texto-fraco);
+  line-height: 1.4;
+}
+
+/* Box de Aviso Legal Transparente */
 .aviso-legal-box {
-  background: rgba(2, 16, 20, 0.6);
-  border-left: 3px solid var(--ouro);
   padding: var(--e3) var(--e4);
-  border-radius: 4px;
-  font-size: 0.82rem;
+  border-radius: 12px;
+  background: rgba(2, 17, 20, 0.85);
+  border: 1px dashed rgba(217, 168, 60, 0.45);
+  font-size: 0.8rem;
+  line-height: 1.6;
   color: rgba(230, 244, 241, 0.75);
-  line-height: 1.5;
-  margin: var(--e3) 0;
+  text-align: center;
+  margin-top: var(--e4);
 }
 
-/* ---------- Sessão 07 & 08: Autossuficiência e Compartilhar ---------- */
+/* ---------- Sessão 07: Autossuficiência & Fotos Reais ---------- */
+.grade-fotos-reais {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--e3);
+  margin: var(--e4) 0;
+}
+
+.item-foto-real {
+  position: relative;
+  border-radius: var(--r-organico);
+  overflow: hidden;
+  border: 1px solid var(--cor-borda);
+  aspect-ratio: 16 / 10;
+  background: #020c0e;
+}
+
+.item-foto-real__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.item-foto-real__legenda {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 8px 12px;
+  background: linear-gradient(180deg, transparent 0%, rgba(2, 17, 20, 0.88) 100%);
+  font-size: 0.75rem;
+  color: #fff;
+  text-align: center;
+}
+
 .grade-duas-colunas {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: var(--e3);
-  margin-top: var(--e3);
+  margin: var(--e4) 0;
 }
 
 .card-beneficio {
-  padding: var(--e4);
-  border-radius: var(--r-organico);
+  padding: var(--e3) var(--e4);
   border: 1px solid var(--cor-borda);
-  background: rgba(8, 42, 46, 0.4);
+  border-radius: var(--r-organico);
+  background: rgba(10, 50, 54, 0.35);
 }
 
 .card-beneficio__titulo {
   font-family: var(--fonte-titulos, serif);
-  font-size: 1.25rem;
-  color: var(--ciano-suave);
-  margin-bottom: 6px;
+  font-size: 1.2rem;
+  color: #fff;
+  margin-bottom: 4px;
 }
 
 .card-beneficio__texto {
   font-size: 0.9rem;
-  color: var(--cor-texto-fraco);
   line-height: 1.5;
+  color: var(--cor-texto-fraco);
 }
 
-/* ---------- Sessão 09: São José dos Campos ---------- */
+/* ---------- Sessão 09: São José dos Campos & Represa Jaguari ---------- */
 .grade-sjc-destaques {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -433,15 +505,15 @@
   line-height: 1.4;
 }
 
-/* ---------- Sessão 10: Acordeões de Aquisição ---------- */
-.acordeoes-lista {
+/* ---------- Sessões 10 e 13: Acordeões (Aquisição & FAQ) ---------- */
+.lista-acordeoes {
   display: flex;
   flex-direction: column;
   gap: var(--e3);
   margin-top: var(--e3);
 }
 
-.acordeon-item {
+.acordeon {
   border: 1px solid var(--cor-borda);
   border-radius: var(--r-organico);
   background: rgba(6, 36, 39, 0.6);
@@ -449,15 +521,15 @@
   transition: border-color 0.2s;
 }
 
-.acordeon-item[open] {
+.acordeon[open] {
   border-color: rgba(217, 168, 60, 0.5);
   background: rgba(8, 42, 46, 0.85);
 }
 
-.acordeon-sumario {
+.acordeon__titulo {
   padding: var(--e3) var(--e4);
   font-family: var(--fonte-titulos, serif);
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   font-weight: 600;
   color: #fff;
   cursor: pointer;
@@ -467,11 +539,11 @@
   user-select: none;
 }
 
-.acordeon-sumario::-webkit-details-marker {
+.acordeon__titulo::-webkit-details-marker {
   display: none;
 }
 
-.acordeon-conteudo {
+.acordeon__corpo {
   padding: 0 var(--e4) var(--e4);
   font-size: 0.95rem;
   color: var(--cor-texto-fraco);
@@ -481,140 +553,200 @@
 /* ---------- Sessão 11: Localização & Distâncias ---------- */
 .tabela-distancias {
   width: 100%;
-  list-style: none;
-  padding: 0;
-  margin: var(--e3) 0 var(--e4);
   display: flex;
   flex-direction: column;
   gap: var(--e2);
+  margin: var(--e3) 0 var(--e4);
 }
 
-.distancia-linha {
+.tabela-distancias__linha {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
-  padding: var(--e3);
-  border: 1px solid var(--cor-borda);
-  border-radius: var(--r-organico);
+  padding: 10px var(--e3);
+  border-radius: 8px;
   background: rgba(10, 50, 54, 0.35);
+  border: 1px solid var(--cor-borda);
+  gap: 12px;
 }
 
-.distancia-linha__destino {
+.tabela-distancias__destino {
   font-size: 0.95rem;
   color: #fff;
+  white-space: nowrap;
 }
 
-.distancia-linha__valor {
+.tabela-distancias__pontilhado {
+  flex: 1;
+  border-bottom: 1px dotted rgba(111, 227, 210, 0.3);
+  margin: 0 4px;
+}
+
+.tabela-distancias__valor {
   font-weight: 600;
   color: var(--ouro);
+  white-space: nowrap;
+}
+
+.mapa-cta-caixa {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--e3);
 }
 
 /* ---------- Sessão 12: Contato & Agendamento VIP ---------- */
-.form-contato-caixa {
+.form-agendamento {
   display: flex;
   flex-direction: column;
   gap: var(--e3);
-  max-width: 540px;
+  max-width: 520px;
   margin: var(--e3) auto 0;
+  width: 100%;
 }
 
-.form-campo {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  text-align: left;
-}
-
-.form-rotulo {
-  font-size: 0.85rem;
+.form-agendamento__label {
+  font-size: 0.9rem;
   font-weight: 500;
   color: #e6f4f1;
+  text-align: center;
 }
 
-.form-input {
-  width: 100%;
-  padding: 12px 16px;
-  border-radius: 8px;
-  border: 1px solid rgba(111, 227, 210, 0.35);
-  background: rgba(3, 20, 25, 0.85);
-  color: #fff;
-  font-family: var(--fonte-texto, sans-serif);
-  font-size: 1rem;
-  transition: border-color 0.2s, box-shadow 0.2s;
+.grupo-dias {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
 }
 
-.form-input:focus {
-  outline: none;
+@media (max-width: 480px) {
+  .grupo-dias {
+    grid-template-columns: 1fr;
+  }
+}
+
+.radio-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--cor-borda);
+  background: rgba(10, 50, 54, 0.4);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.radio-card input {
+  position: absolute;
+  opacity: 0;
+}
+
+.radio-card:has(input:checked) {
   border-color: var(--ouro);
-  box-shadow: 0 0 12px rgba(217, 168, 60, 0.3);
+  background: rgba(217, 168, 60, 0.2);
+  box-shadow: 0 0 16px rgba(217, 168, 60, 0.3);
 }
 
-/* ---------- Sessão 13: Rodapé Institucional ---------- */
+.radio-card__rotulo {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.btn--bloco {
+  width: 100%;
+  justify-content: center;
+  font-size: 1.05rem;
+  padding: 14px 24px;
+}
+
+/* ---------- Sessão 13: FAQ & Rodapé ---------- */
 .rodape {
   position: relative;
   z-index: var(--z-conteudo);
   background: #020c0e;
   border-top: 1px solid rgba(217, 168, 60, 0.25);
   padding: var(--e6) var(--e4) var(--e5);
-  text-align: center;
 }
 
-.rodape__inner {
-  max-width: 980px;
+.rodape__faq {
+  max-width: 860px;
+  margin: 0 auto var(--e6);
+}
+
+.rodape__faq-titulo {
+  font-family: var(--fonte-titulos, serif);
+  font-size: 1.8rem;
+  color: var(--ouro);
+  text-align: center;
+  margin-bottom: var(--e4);
+}
+
+.rodape__corpo {
+  max-width: 860px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
   gap: var(--e3);
+  padding-top: var(--e4);
+  border-top: 1px solid rgba(111, 227, 210, 0.15);
 }
 
 .rodape__marca {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.rodape__nome {
   font-family: var(--fonte-titulos, serif);
-  font-size: 1.8rem;
+  font-size: 1.6rem;
+  font-weight: 600;
   color: var(--ouro);
-  letter-spacing: 0.08em;
 }
 
 .rodape__sub {
-  font-family: var(--fonte-rotulos, sans-serif);
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--cor-texto-fraco);
 }
 
+.rodape__tel {
+  font-size: 0.85rem;
+  color: var(--ouro-claro);
+  margin-top: 4px;
+}
+
 .rodape__aviso {
   font-size: 0.8rem;
   color: rgba(230, 244, 241, 0.6);
-  max-width: 70ch;
+  max-width: 68ch;
   line-height: 1.5;
 }
 
 .rodape__links {
   display: flex;
-  gap: var(--e4);
+  gap: var(--e3);
   font-size: 0.85rem;
   flex-wrap: wrap;
   justify-content: center;
 }
 
-.rodape__links a,
-.rodape__links button {
+.rodape__links a {
   color: var(--cor-texto-fraco);
   text-decoration: underline;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font: inherit;
 }
 
-.rodape__links a:hover,
-.rodape__links button:hover {
+.rodape__links a:hover {
   color: var(--ouro);
 }
 
-.rodape__copy {
-  font-size: 0.78rem;
+.rodape__copia {
+  font-size: 0.75rem;
   color: rgba(230, 244, 241, 0.4);
-  margin-top: var(--e2);
 }

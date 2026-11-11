@@ -6,8 +6,8 @@
 <meta name="theme-color" content="#04191F">
 <meta name="format-detection" content="telephone=no">
 
-<title>Chácaras em São José dos Campos | Paraíso das Águas — 2 Hectares com 3 Lagos e Água Mineral</title>
-<meta name="description" content="Propriedades rurais exclusivas de 2 hectares (20.000 m²) em São José dos Campos. 3 grandes lagos, minas de água mineral, asfalto até a portaria, fibra óptica, energia trifásica e financiamento direto.">
+<title>Chácaras em São José dos Campos | Paraíso das Águas — 2 Hectares com Grande Lago e Água Mineral</title>
+<meta name="description" content="Propriedades rurais de 2 hectares (20.000 m² a 22.300 m²) em São José dos Campos. Grande lago central, minas perenes de água mineral, asfalto até a portaria, fibra óptica, energia trifásica e financiamento direto com o proprietário.">
 <meta name="keywords" content="chácara à venda São José dos Campos, chácara com lago, terreno 2 hectares SJC, sítio São José dos Campos, represa jaguari jetski">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="canonical" href="/">
@@ -17,9 +17,9 @@
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="Paraíso das Águas">
 <meta property="og:title" content="Chácaras em São José dos Campos | Paraíso das Águas">
-<meta property="og:description" content="2 hectares com 3 lagos, água mineral de nascente, asfalto e segurança a 20 min do centro de SJC e a 2 km da Represa Jaguari. Financiamento direto com o proprietário.">
+<meta property="og:description" content="2 hectares com grande lago central, água mineral de nascente, asfalto e segurança a 20 min do centro de SJC e a 2 km da Represa Jaguari. Financiamento direto com o proprietário.">
 <meta property="og:url" content="/">
-<meta property="og:image" content="/media/img/terreno-real-panorama.webp">
+<meta property="og:image" content="/media/img/hero-scroll-poster.webp">
 <meta name="twitter:card" content="summary_large_image">
 
 <!-- Favicon -->
@@ -40,7 +40,7 @@
   "@context": "https://schema.org",
   "@type": "Residence",
   "name": "Paraíso das Águas",
-  "description": "Comunidade de chácaras de 20 mil m² a 22.300 m² com 3 grandes lagos, minas de água mineral, asfalto até a portaria, fibra óptica e energia trifásica em São José dos Campos - SP.",
+  "description": "Propriedades rurais de 20 mil m² a 22.300 m² com grande lago central, minas de água mineral, asfalto até a portaria, fibra óptica e energia trifásica em São José dos Campos - SP.",
   "address": {
     "@type": "PostalAddress",
     "addressLocality": "São José dos Campos",
@@ -48,7 +48,7 @@
     "addressCountry": "BR"
   },
   "amenityFeature": [
-    { "@type": "LocationFeatureSpecification", "name": "3 Grandes Lagos com peixes e decks" },
+    { "@type": "LocationFeatureSpecification", "name": "Grande Lago Central com peixes e decks" },
     { "@type": "LocationFeatureSpecification", "name": "Minas perenes de água mineral" },
     { "@type": "LocationFeatureSpecification", "name": "Asfalto até a portaria" },
     { "@type": "LocationFeatureSpecification", "name": "Fibra óptica de alta velocidade" },
@@ -84,10 +84,11 @@
        ===================================================================== -->
   <main class="conteudo" id="conteudo">
 
-    <!-- 01. HERO CINEMATOGRÁFICA ------------------------------------------ -->
+    <!-- 01. HERO CINEMATOGRÁFICA COM ANIMAÇÃO DE SCROLL -------------------- -->
     <section class="secao hero" id="hero">
       <div class="hero__bg" id="hero-bg" aria-hidden="true">
-        <img src="/media/img/terreno-real-panorama.webp" alt="Vista Panorâmica dos Terrenos e Lagos do Paraíso das Águas" class="hero__bg-img" id="hero-bg-img" width="1920" height="1080" fetchpriority="high">
+        <canvas class="hero__canvas" id="hero-canvas"></canvas>
+        <img src="/media/img/hero-scroll-poster.webp" alt="Paraíso das Águas em São José dos Campos" class="hero__bg-img" id="hero-bg-img" width="1080" height="1920" fetchpriority="high">
         <div class="hero__bg-overlay"></div>
       </div>
 
@@ -116,6 +117,8 @@
             Ver apresentação completa
           </a>
         </div>
+
+        <ul class="hero__emblemas" id="hero-emblemas" aria-label="Diferenciais da propriedade"></ul>
       </div>
 
       <!-- Aviso "Deslize para baixo" -->
@@ -131,6 +134,7 @@
     <!-- 02. SESSÃO 2: CENA NARRATIVA & ABERTURA CINEMATOGRÁFICA DO VÍDEO 3D -->
     <section class="secao-cenas" id="secao-cenas">
       <div class="cenas-palco" id="cenas-palco">
+        <canvas class="sessao2__canvas" id="sessao2-canvas"></canvas>
 
         <!-- Carrossel 3D de Textos -->
         <div class="carrossel" id="carrossel" data-ativo="false" aria-hidden="true"></div>
@@ -173,10 +177,10 @@
        ===================================================================== -->
   <div class="secoes" id="secoes">
 
-    <!-- 03. O EFEITO PARAÍSO DAS ÁGUAS -->
+    <!-- 03. O EFEITO PARAÍSO DAS ÁGUAS & VSL OFICIAL -->
     <section class="secao secao--painel secao--densa" id="efeito-paraiso"></section>
 
-    <!-- 04. AS PROPRIEDADES (VISÃO GERAL 2 HECTARES) -->
+    <!-- 04. AS PROPRIEDADES (VISÃO GERAL 2 HECTARES) & MAPA OFICIAL -->
     <section class="secao secao--painel secao--densa" id="propriedades"></section>
 
     <!-- 05. INFRAESTRUTURA COMPLETA -->
@@ -191,7 +195,7 @@
     <!-- 08. UMA PROPRIEDADE PARA COMPARTILHAR -->
     <section class="secao secao--painel secao--densa" id="compartilhar"></section>
 
-    <!-- 09. SÃO JOSÉ DOS CAMPOS (A CIDADE AO SEU LADO) -->
+    <!-- 09. SÃO JOSÉ DOS CAMPOS & REPRESA JAGUARI -->
     <section class="secao secao--painel secao--densa" id="sao-jose"></section>
 
     <!-- 10. CONDIÇÕES DE AQUISIÇÃO & SEGURANÇA JURÍDICA -->
@@ -211,7 +215,7 @@
   <footer class="rodape" id="rodape"></footer>
 
   <!-- =====================================================================
-       BOTÃO FLUTUANTE DE WHATSAPP
+       BOTÃO FLUTUANTE DE WHATSAPP (#25D366 fixo no canto inferior direito)
        ===================================================================== -->
   <a class="wa-flutuante" id="wa-flutuante" href="#" data-wa-origem="flutuante"
      aria-label="Falar no WhatsApp e agendar visita" rel="noopener">
