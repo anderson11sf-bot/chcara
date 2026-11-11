@@ -1,388 +1,633 @@
 /* ============================================================================
- * secoes.css — SEÇÕES DE CONTEÚDO DENSO (2, 4, 5, 6, 7 e 8)
+ * secoes.css — ESTILOS DAS 13 SEÇÕES MESTRES DO SITE
  * ----------------------------------------------------------------------------
- * Estas seções NÃO passam pelo carrossel 3D. Ficam em fluxo normal, sobre um
- * painel escuro semitransparente, com leitura confortável — é aqui que o
- * visitante tira dúvida antes de clicar no WhatsApp.
+ * Conteúdo denso, fluido, mobile-first, indexável e com legibilidade impecável.
  * ==========================================================================*/
 
-/* ---------- Empilhamento abaixo da régua narrativa --------------------- */
-
-/*
- * .secoes é POSICIONADO, não estático. Isso é essencial.
- *
- * Por que: .secoes começa em `top: 100%` da régua narrativa, que tem altura
- * fixa. Se ele ficasse no fluxo normal, ele empurraria o rodapé para baixo a
- * partir do TOPO da régua — e o rodapé subiria para cima das seções (bug
- * encontrado na verificação da Fase 3). Posicionado, ele flutua sobre a área
- * logo abaixo da régua e o rodapé (no fluxo) cai exatamente depois dele.
- */
 .secoes {
   position: absolute;
   top: 100%;
   left: 0;
   right: 0;
   z-index: var(--z-conteudo);
-  /* Fundo próprio: aqui não precisa mais da cena animada atrapalhando o texto */
   background: linear-gradient(
     180deg,
     rgba(4, 25, 31, 0) 0%,
-    rgba(4, 25, 31, 0.72) 6%,
-    rgba(3, 20, 25, 0.94) 14%,
-    var(--noite-abissal) 26%
+    rgba(4, 25, 31, 0.75) 5%,
+    rgba(3, 20, 25, 0.95) 12%,
+    var(--noite-abissal) 22%
   );
 }
 
-/* ---------- Reserva de altura ----------------------------------------- */
-
-/*
- * Como .secoes é posicionado (fora do fluxo), o documento NÃO reserva a altura
- * dele sozinho. Este espaçador faz esse papel: fica no fluxo, logo depois da
- * régua narrativa, e o rodapé vem naturalmente depois dele.
- *
- * A altura é medida pelo JS (--altura-secoes) depois que as seções montam e a
- * cada mudança de tamanho. Se o JS não rodar, o CSS ainda reserva um mínimo
- * razoável para o rodapé não subir em cima do conteúdo.
- */
 .espacador-secoes {
-  height: var(--altura-secoes, 400svh);
+  height: var(--altura-secoes, 520svh);
   pointer-events: none;
 }
 
-/* ---------- Painéis ---------------------------------------------------- */
-
+/* Painéis de Seção */
 .secao--painel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: flex-start;
-  padding-top: calc(var(--e7) + var(--safe-top));
-  padding-bottom: calc(var(--e7) + var(--safe-bottom));
+  padding: calc(var(--e7) + var(--safe-top)) var(--e3) calc(var(--e7) + var(--safe-bottom));
+  width: 100%;
 }
 
 .painel {
   width: 100%;
-  max-width: 760px;
+  max-width: 980px;
   margin: 0 auto;
   padding: var(--e5) var(--e4);
   border: 1px solid var(--cor-borda);
   border-radius: var(--r-organico);
   background: linear-gradient(
     180deg,
-    rgba(4, 25, 31, 0.86) 0%,
-    rgba(6, 36, 39, 0.9) 100%
+    rgba(4, 25, 31, 0.88) 0%,
+    rgba(6, 36, 39, 0.92) 100%
   );
   box-shadow: var(--sombra-cartao);
+  backdrop-filter: blur(10px);
 }
 
-.painel--faixa { max-width: 980px; }
-
-.secao__apoio {
-  max-width: 62ch;
-  color: var(--cor-texto-fraco);
-}
-
-.secao__cta { margin-top: var(--e3); }
-
-/* ---------- 2. Prova rápida ------------------------------------------- */
-
-.prova {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--e3);
-}
-
-.prova__item {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  padding: var(--e3);
-  border: 1px solid var(--cor-borda);
-  border-radius: var(--r-organico);
-  background: rgba(10, 50, 54, 0.42);
-}
-
-.prova__icone {
-  display: block;
-  margin-bottom: 4px;
-  color: var(--turquesa);
-}
-
-.prova__valor {
-  color: var(--palha-forte);
-  font-family: var(--fonte-titulo);
-  font-size: clamp(1.05rem, 4.4vw, 1.55rem);
-  font-weight: 700;
-  line-height: 1.15;
-}
-
-.prova__rotulo {
-  color: var(--terra-media);
-  font-family: var(--fonte-rotulo);
-  font-size: var(--t-rotulo);
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.prova__legenda,
-.prova__comparativo {
-  margin: var(--e4) 0 0;
-  padding-top: var(--e4);
-  border-top: 1px solid var(--cor-borda);
-  color: var(--cor-texto-fraco);
-  font-size: var(--t-pequeno);
-}
-
-/* ---------- 4. O Paraíso: grupos de diferenciais ---------------------- */
-
-.grupos {
-  display: grid;
-  gap: var(--e4);
-  margin-top: var(--e4);
-}
-
-.grupo__titulo {
-  margin-bottom: var(--e2);
-  color: var(--ciano-claro);
-  font-family: var(--fonte-rotulo);
-  font-size: var(--t-rotulo);
-  font-weight: 600;
-  letter-spacing: var(--tracking-rotulo);
-  text-transform: uppercase;
-}
-
-.lista-marcada li {
-  position: relative;
-  padding-left: 22px;
-  margin-bottom: 10px;
-  color: var(--cor-texto-fraco);
-  font-size: var(--t-corpo);
-}
-
-.lista-marcada li::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0.55em;
-  width: 8px;
-  height: 8px;
-  border-radius: 60% 40% 55% 45%;
-  background: var(--turquesa);
-  box-shadow: 0 0 10px rgba(31, 182, 166, 0.5);
-}
-
-/* ---------- 5. Distâncias --------------------------------------------- */
-
-.distancias {
-  display: grid;
-  gap: 2px;
-  margin-top: var(--e3);
-}
-
-.distancias__item {
-  display: flex;
-  align-items: center;
-  gap: var(--e3);
-  padding: 13px 2px;
-  border-bottom: 1px solid rgba(20, 81, 79, 0.5);
-}
-
-.distancias__icone {
-  flex: 0 0 auto;
-  color: var(--turquesa);
-  line-height: 0;
-}
-
-.distancias__destino {
-  flex: 1 1 auto;
-  color: var(--cor-texto-fraco);
-}
-
-.distancias__valor {
-  flex: 0 0 auto;
-  color: var(--palha-forte);
-  font-family: var(--fonte-rotulo);
-  font-size: var(--t-pequeno);
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.botao-mapa { margin-top: var(--e4); }
-
-/* ---------- Grades de cartões (6 e 7) --------------------------------- */
-
-.grade-cartoes {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--e3);
-  margin-top: var(--e4);
-}
-
-.cartao {
-  padding: var(--e4);
-  border: 1px solid var(--cor-borda);
-  border-radius: var(--r-organico);
-  background: rgba(10, 50, 54, 0.4);
-  transition: border-color var(--t-medio) var(--curva),
-              background-color var(--t-medio) linear;
-}
-
-/* Só reage ao ponteiro em aparelho com mouse: no toque, hover "gruda" */
-@media (hover: hover) {
-  .cartao:hover {
-    border-color: rgba(111, 227, 210, 0.4);
-    background-color: rgba(12, 60, 64, 0.5);
+@media (max-width: 600px) {
+  .painel {
+    padding: var(--e4) var(--e3);
+    border-radius: 16px;
   }
 }
 
-.cartao__icone {
-  display: block;
-  margin-bottom: var(--e2);
-  color: var(--cor-acao);
-  line-height: 0;
-}
-
-.cartao__titulo {
-  margin-bottom: 6px;
-  color: var(--palha-forte);
-  font-family: var(--fonte-rotulo);
-  font-size: 1rem;
+/* Cabeçalhos de Seções */
+.rotulo-secao {
+  display: inline-block;
+  font-family: var(--fonte-rotulos, 'Quicksand', sans-serif);
+  font-size: 0.78rem;
   font-weight: 600;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ouro);
+  margin-bottom: var(--e2);
 }
 
-.cartao__texto {
-  margin: 0;
-  color: var(--terra-clara);
-  font-size: var(--t-pequeno);
+.secao h2 {
+  font-family: var(--fonte-titulos, 'Cormorant Garamond', serif);
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 600;
+  line-height: 1.15;
+  color: #fff;
+  margin-bottom: var(--e2);
+}
+
+.secao__apoio {
+  font-family: var(--fonte-texto, 'Outfit', sans-serif);
+  font-size: clamp(0.95rem, 1.8vw, 1.15rem);
+  line-height: 1.6;
+  color: var(--cor-texto-fraco);
+  max-width: 68ch;
+  margin-bottom: var(--e4);
+}
+
+.secao__cta {
+  display: inline-flex;
+  margin-top: var(--e4);
+}
+
+/* Divisor elegante */
+.divisor-lago {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(111, 227, 210, 0.3) 50%, transparent 100%);
+  margin: var(--e5) 0 var(--e4);
+}
+
+/* Players de Vídeo Embutidos nas Seções */
+.video-moldura {
+  position: relative;
+  width: 100%;
+  border-radius: var(--r-organico);
+  overflow: hidden;
+  border: 1px solid rgba(217, 168, 60, 0.35);
+  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.6);
+  background: #020c0e;
+  margin-bottom: var(--e4);
+}
+
+.video-moldura--16-9 {
+  aspect-ratio: 16 / 9;
+}
+
+.video-moldura--9-16 {
+  max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
+  aspect-ratio: 9 / 16;
+}
+
+.video-player {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.video-legenda-tag {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  background: rgba(4, 25, 31, 0.85);
+  color: #e6f4f1;
+  font-size: 0.78rem;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(111, 227, 210, 0.3);
+  backdrop-filter: blur(6px);
+  pointer-events: none;
+}
+
+/* ---------- Sessão 03: Comparativo de Ritmo ---------- */
+.comparativo-ritmo {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--e3);
+  margin-top: var(--e3);
+}
+
+.comparativo-card {
+  padding: var(--e4);
+  border-radius: var(--r-organico);
+  border: 1px solid var(--cor-borda);
+  background: rgba(10, 50, 54, 0.35);
+}
+
+.comparativo-card--paraiso {
+  border-color: rgba(217, 168, 60, 0.45);
+  background: linear-gradient(165deg, rgba(14, 58, 62, 0.5) 0%, rgba(6, 36, 39, 0.65) 100%);
+  box-shadow: 0 8px 30px rgba(217, 168, 60, 0.1);
+}
+
+.comparativo-card__titulo {
+  font-family: var(--fonte-titulos, serif);
+  font-size: 1.35rem;
+  color: var(--ouro);
+  margin-bottom: var(--e2);
+}
+
+.comparativo-card__desc {
+  font-size: 0.95rem;
+  color: var(--cor-texto-fraco);
   line-height: 1.5;
 }
 
-.cartao--compacto { padding: var(--e3) var(--e3) var(--e4); }
+/* ---------- Sessão 04: As Propriedades (Geral 2 Hectares) ---------- */
+.propriedades-destaques {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--e3);
+  margin-bottom: var(--e4);
+}
 
-/* ---------- 8. Visão 3D / ortofoto ------------------------------------ */
-
-.ortofoto {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  margin-top: var(--e4);
-  overflow: hidden;
+.propriedade-item {
+  display: flex;
+  flex-direction: column;
+  padding: var(--e3);
   border: 1px solid var(--cor-borda);
   border-radius: var(--r-organico);
-  background: #062427;
+  background: rgba(10, 50, 54, 0.4);
 }
 
-.ortofoto img {
+.propriedade-item__icone {
+  color: var(--ciano-suave);
+  margin-bottom: var(--e2);
+}
+
+.propriedade-item__titulo {
+  font-family: var(--fonte-rotulos, sans-serif);
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.propriedade-item__texto {
+  font-size: 0.88rem;
+  color: var(--cor-texto-fraco);
+  line-height: 1.4;
+}
+
+.mapa-oficial-caixa {
+  position: relative;
+  width: 100%;
+  border-radius: var(--r-organico);
+  overflow: hidden;
+  border: 1.5px solid rgba(111, 227, 210, 0.35);
+  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.6);
+  margin: var(--e3) 0 var(--e4);
+}
+
+.mapa-oficial-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.mapa-oficial-tag {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(3, 20, 25, 0.9);
+  color: var(--ouro);
+  border: 1px solid rgba(217, 168, 60, 0.5);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.faixa-comercial-referencia {
+  background: rgba(217, 168, 60, 0.12);
+  border: 1px solid rgba(217, 168, 60, 0.4);
+  border-radius: var(--r-organico);
+  padding: var(--e3) var(--e4);
+  text-align: center;
+  color: #fce8a6;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-top: var(--e3);
+}
+
+/* ---------- Sessão 05: Cards de Infraestrutura ---------- */
+.grade-infraestrutura {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--e3);
+}
+
+.cartao-infra {
+  padding: var(--e4);
+  border-radius: var(--r-organico);
+  border: 1px solid var(--cor-borda);
+  background: rgba(8, 42, 46, 0.45);
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.cartao-infra:hover {
+  transform: translateY(-4px);
+  border-color: rgba(111, 227, 210, 0.5);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5);
+}
+
+.cartao-infra__icone {
+  display: inline-flex;
+  color: var(--ouro);
+  margin-bottom: var(--e2);
+}
+
+.cartao-infra__titulo {
+  font-family: var(--fonte-titulos, serif);
+  font-size: 1.25rem;
+  color: #fff;
+  margin-bottom: 6px;
+}
+
+.cartao-infra__texto {
+  font-size: 0.9rem;
+  color: var(--cor-texto-fraco);
+  line-height: 1.5;
+}
+
+/* ---------- Sessão 06: Projetos Ilustrativos ---------- */
+.grade-projetos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--e4);
+  margin: var(--e3) 0 var(--e4);
+}
+
+.card-projeto {
+  position: relative;
+  border-radius: var(--r-organico);
+  border: 1px solid var(--cor-borda);
+  background: rgba(4, 25, 31, 0.7);
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+}
+
+.card-projeto__foto-caixa {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+}
+
+.card-projeto__foto {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.4s ease;
 }
 
-.ortofoto--placeholder {
-  border-style: dashed;
-  border-color: rgba(111, 227, 210, 0.28);
+.card-projeto:hover .card-projeto__foto {
+  transform: scale(1.05);
 }
 
-.planta {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-.planta__aviso {
+.badge-projeto-ilustrativo {
   position: absolute;
-  left: 50%;
-  bottom: 10px;
-  transform: translateX(-50%);
-  padding: 5px 12px;
-  border-radius: 999px;
-  background: rgba(3, 20, 25, 0.82);
-  color: var(--terra-clara);
-  font-family: var(--fonte-rotulo);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
+  top: 10px;
+  left: 10px;
+  background: rgba(2, 16, 20, 0.88);
+  color: var(--ouro);
+  border: 1px solid rgba(217, 168, 60, 0.55);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  white-space: nowrap;
+  padding: 3px 8px;
+  border-radius: 4px;
+  backdrop-filter: blur(4px);
 }
 
-/* Legenda das glebas (reforça a seção 9, da Fase 3) */
-.legenda-glebas {
+.card-projeto__corpo {
+  padding: var(--e3);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.card-projeto__titulo {
+  font-family: var(--fonte-titulos, serif);
+  font-size: 1.25rem;
+  color: #fff;
+  margin-bottom: 6px;
+}
+
+.card-projeto__subtitulo {
+  font-size: 0.88rem;
+  color: var(--cor-texto-fraco);
+  line-height: 1.45;
+}
+
+.aviso-legal-box {
+  background: rgba(2, 16, 20, 0.6);
+  border-left: 3px solid var(--ouro);
+  padding: var(--e3) var(--e4);
+  border-radius: 4px;
+  font-size: 0.82rem;
+  color: rgba(230, 244, 241, 0.75);
+  line-height: 1.5;
+  margin: var(--e3) 0;
+}
+
+/* ---------- Sessão 07 & 08: Autossuficiência e Compartilhar ---------- */
+.grade-duas-colunas {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: var(--e2) var(--e3);
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--e3);
+  margin-top: var(--e3);
+}
+
+.card-beneficio {
+  padding: var(--e4);
+  border-radius: var(--r-organico);
+  border: 1px solid var(--cor-borda);
+  background: rgba(8, 42, 46, 0.4);
+}
+
+.card-beneficio__titulo {
+  font-family: var(--fonte-titulos, serif);
+  font-size: 1.25rem;
+  color: var(--ciano-suave);
+  margin-bottom: 6px;
+}
+
+.card-beneficio__texto {
+  font-size: 0.9rem;
+  color: var(--cor-texto-fraco);
+  line-height: 1.5;
+}
+
+/* ---------- Sessão 09: São José dos Campos ---------- */
+.grade-sjc-destaques {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--e3);
   margin-top: var(--e4);
 }
 
-.legenda-glebas__item {
+.card-sjc {
+  padding: var(--e3);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--r-organico);
+  background: rgba(10, 50, 54, 0.35);
+  text-align: center;
+}
+
+.card-sjc__valor {
+  font-family: var(--fonte-titulos, serif);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--ouro);
+  margin-bottom: 4px;
+}
+
+.card-sjc__titulo {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.card-sjc__texto {
+  font-size: 0.85rem;
+  color: var(--cor-texto-fraco);
+  line-height: 1.4;
+}
+
+/* ---------- Sessão 10: Acordeões de Aquisição ---------- */
+.acordeoes-lista {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e3);
+  margin-top: var(--e3);
+}
+
+.acordeon-item {
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--r-organico);
+  background: rgba(6, 36, 39, 0.6);
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+
+.acordeon-item[open] {
+  border-color: rgba(217, 168, 60, 0.5);
+  background: rgba(8, 42, 46, 0.85);
+}
+
+.acordeon-sumario {
+  padding: var(--e3) var(--e4);
+  font-family: var(--fonte-titulos, serif);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: var(--t-pequeno);
+  justify-content: space-between;
+  user-select: none;
 }
 
-.legenda-glebas__marca {
-  width: 12px;
-  height: 12px;
-  flex: 0 0 12px;
-  border-radius: 3px;
-  background: var(--turquesa);
+.acordeon-sumario::-webkit-details-marker {
+  display: none;
 }
 
-/* Cada gleba ganha uma cor própria, dentro da mesma família fria */
-.legenda-glebas__marca[data-gleba='A'] { background: #6fe3d2; }
-.legenda-glebas__marca[data-gleba='B'] { background: #4fc9c0; }
-.legenda-glebas__marca[data-gleba='C'] { background: #35b0a8; }
-.legenda-glebas__marca[data-gleba='D'] { background: #2e9e4f; }
-.legenda-glebas__marca[data-gleba='E'] { background: #128f63; }
-.legenda-glebas__marca[data-gleba='F'] { background: #4a8fa8; }
-.legenda-glebas__marca[data-gleba='G'] { background: #d9a83c; }
-
-.legenda-glebas__area {
-  margin-left: auto;
-  color: var(--terra-media);
-  font-family: var(--fonte-rotulo);
-  font-size: 12px;
-  white-space: nowrap;
+.acordeon-conteudo {
+  padding: 0 var(--e4) var(--e4);
+  font-size: 0.95rem;
+  color: var(--cor-texto-fraco);
+  line-height: 1.6;
 }
 
-/* ---------- Telas maiores --------------------------------------------- */
-
-@media (min-width: 720px) {
-  .prova { grid-template-columns: repeat(4, 1fr); }
-  .grupos { grid-template-columns: repeat(2, 1fr); }
-  .grade-cartoes { grid-template-columns: repeat(2, 1fr); }
-  .grade-cartoes--vida { grid-template-columns: repeat(3, 1fr); }
-}
-
-@media (min-width: 1100px) {
-  .painel { max-width: 820px; }
-  .painel--faixa { max-width: 1060px; }
-}
-
-/* ---------- Mídias e Imagens Reais das Seções ---------- */
-.secao__figura {
+/* ---------- Sessão 11: Localização & Distâncias ---------- */
+.tabela-distancias {
+  width: 100%;
+  list-style: none;
+  padding: 0;
   margin: var(--e3) 0 var(--e4);
-  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--e2);
 }
 
-.secao__picture {
-  display: block;
-  width: 100%;
-}
-
-.secao__imagem-destaque {
-  display: block;
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
-  border-radius: var(--r-organico-b);
+.distancia-linha {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--e3);
   border: 1px solid var(--cor-borda);
-  box-shadow: var(--sombra-cartao);
-  background: #062427;
+  border-radius: var(--r-organico);
+  background: rgba(10, 50, 54, 0.35);
 }
 
-/* ---------- Sem movimento --------------------------------------------- */
+.distancia-linha__destino {
+  font-size: 0.95rem;
+  color: #fff;
+}
 
-@media (prefers-reduced-motion: reduce) {
-  .cartao { transition: none; }
+.distancia-linha__valor {
+  font-weight: 600;
+  color: var(--ouro);
+}
+
+/* ---------- Sessão 12: Contato & Agendamento VIP ---------- */
+.form-contato-caixa {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e3);
+  max-width: 540px;
+  margin: var(--e3) auto 0;
+}
+
+.form-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+}
+
+.form-rotulo {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #e6f4f1;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(111, 227, 210, 0.35);
+  background: rgba(3, 20, 25, 0.85);
+  color: #fff;
+  font-family: var(--fonte-texto, sans-serif);
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--ouro);
+  box-shadow: 0 0 12px rgba(217, 168, 60, 0.3);
+}
+
+/* ---------- Sessão 13: Rodapé Institucional ---------- */
+.rodape {
+  position: relative;
+  z-index: var(--z-conteudo);
+  background: #020c0e;
+  border-top: 1px solid rgba(217, 168, 60, 0.25);
+  padding: var(--e6) var(--e4) var(--e5);
+  text-align: center;
+}
+
+.rodape__inner {
+  max-width: 980px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--e3);
+}
+
+.rodape__marca {
+  font-family: var(--fonte-titulos, serif);
+  font-size: 1.8rem;
+  color: var(--ouro);
+  letter-spacing: 0.08em;
+}
+
+.rodape__sub {
+  font-family: var(--fonte-rotulos, sans-serif);
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--cor-texto-fraco);
+}
+
+.rodape__aviso {
+  font-size: 0.8rem;
+  color: rgba(230, 244, 241, 0.6);
+  max-width: 70ch;
+  line-height: 1.5;
+}
+
+.rodape__links {
+  display: flex;
+  gap: var(--e4);
+  font-size: 0.85rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.rodape__links a,
+.rodape__links button {
+  color: var(--cor-texto-fraco);
+  text-decoration: underline;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+}
+
+.rodape__links a:hover,
+.rodape__links button:hover {
+  color: var(--ouro);
+}
+
+.rodape__copy {
+  font-size: 0.78rem;
+  color: rgba(230, 244, 241, 0.4);
+  margin-top: var(--e2);
 }

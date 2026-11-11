@@ -6,27 +6,26 @@
 <meta name="theme-color" content="#04191F">
 <meta name="format-detection" content="telephone=no">
 
-<title>Chácaras em São José dos Campos | Paraíso das Águas — 2 hectares com lago e água mineral</title>
-<meta name="description" content="Chácaras de 20 mil m² com um grande lago no coração da comunidade, água mineral, asfalto, fibra óptica e energia trifásica, a cerca de 20 min do centro de São José dos Campos e perto de SP. Documentação em ordem e financiamento direto.">
-<meta name="keywords" content="chácara à venda São José dos Campos, terreno com lago, sítio São José dos Campos, chácara com água mineral, represa jaguari jetski">
+<title>Chácaras em São José dos Campos | Paraíso das Águas — 2 Hectares com 3 Lagos e Água Mineral</title>
+<meta name="description" content="Propriedades rurais exclusivas de 2 hectares (20.000 m²) em São José dos Campos. 3 grandes lagos, minas de água mineral, asfalto até a portaria, fibra óptica, energia trifásica e financiamento direto.">
+<meta name="keywords" content="chácara à venda São José dos Campos, chácara com lago, terreno 2 hectares SJC, sítio São José dos Campos, represa jaguari jetski">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="canonical" href="/">
 
-<!-- Open Graph / redes -->
+<!-- Open Graph / Redes Sociais -->
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="Paraíso das Águas">
 <meta property="og:title" content="Chácaras em São José dos Campos | Paraíso das Águas">
-<meta property="og:description" content="2 hectares com grande lago no coração da comunidade, água mineral e infraestrutura completa, a cerca de 20 min do centro. Documentação em ordem. Financiamento direto.">
+<meta property="og:description" content="2 hectares com 3 lagos, água mineral de nascente, asfalto e segurança a 20 min do centro de SJC e a 2 km da Represa Jaguari. Financiamento direto com o proprietário.">
 <meta property="og:url" content="/">
-<meta property="og:image" content="/og.jpg">
+<meta property="og:image" content="/media/img/hero-lago.webp">
 <meta name="twitter:card" content="summary_large_image">
 
 <!-- Favicon -->
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 
-<!-- Fontes: Cormorant Garamond (títulos) + Outfit (texto) + Quicksand (rótulos)
-     preconnect + display=swap para não bloquear o LCP -->
+<!-- Fontes: Cormorant Garamond + Outfit + Quicksand -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" media="print" onload="this.media='all'"
@@ -35,13 +34,13 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Outfit:wght@300;400;500;600&display=swap">
 </noscript>
 
-<!-- Dados estruturados básicos -->
+<!-- Dados estruturados (Schema.org) -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Residence",
   "name": "Paraíso das Águas",
-  "description": "Comunidade de chácaras de 20 mil m² com um grande lago no coração da comunidade, água mineral, asfalto, fibra óptica e energia trifásica, a cerca de 20 minutos do centro de São José dos Campos.",
+  "description": "Comunidade de chácaras de 20 mil m² a 22.300 m² com 3 grandes lagos, minas de água mineral, asfalto até a portaria, fibra óptica e energia trifásica em São José dos Campos - SP.",
   "address": {
     "@type": "PostalAddress",
     "addressLocality": "São José dos Campos",
@@ -49,18 +48,19 @@
     "addressCountry": "BR"
   },
   "amenityFeature": [
-    { "@type": "LocationFeatureSpecification", "name": "Um grande lago no coração da comunidade" },
-    { "@type": "LocationFeatureSpecification", "name": "Água mineral e nascente" },
-    { "@type": "LocationFeatureSpecification", "name": "Fibra óptica" },
-    { "@type": "LocationFeatureSpecification", "name": "Energia trifásica" },
-    { "@type": "LocationFeatureSpecification", "name": "Portaria e monitoramento" }
+    { "@type": "LocationFeatureSpecification", "name": "3 Grandes Lagos com peixes e decks" },
+    { "@type": "LocationFeatureSpecification", "name": "Minas perenes de água mineral" },
+    { "@type": "LocationFeatureSpecification", "name": "Asfalto até a portaria" },
+    { "@type": "LocationFeatureSpecification", "name": "Fibra óptica de alta velocidade" },
+    { "@type": "LocationFeatureSpecification", "name": "Energia elétrica trifásica instalada" },
+    { "@type": "LocationFeatureSpecification", "name": "Portaria e segurança monitorada" }
   ]
 }
 </script>
 </head>
 
 <body class="preload">
-  <!-- Atalho de acessibilidade: primeiro elemento focável -->
+  <!-- Atalho de acessibilidade -->
   <a class="skip-link" href="#hero">Ir para o conteúdo</a>
 
   <!-- Barra de progresso de leitura (topo, 2px) -->
@@ -69,9 +69,7 @@
   </div>
 
   <!-- =====================================================================
-       PALCO FIXO — camadas independentes e pointer-events: none.
-       Toda a experiência visual (fundo, vidro de TV) vive aqui.
-       O conteúdo textual fica no fluxo normal, acima, dentro de #conteudo.
+       PALCO FIXO — Camadas Visuais (Canvas 2D Procedural + Frames WebP)
        ===================================================================== -->
   <div class="palco" id="palco" aria-hidden="true">
     <canvas class="palco__fundo" id="fundo-canvas"></canvas>
@@ -82,16 +80,11 @@
   </div>
 
   <!-- =====================================================================
-       CONTEÚDO — fluxo normal de documento (SEO + acessibilidade).
-
-       IMPORTANTE: este bloco tem ALTURA FIXA (config.scroll.alturaTotalSvh).
-       É ele que define a "régua" da narrativa. As seções de conteúdo denso
-       (Fases 2 e 3) ficam FORA dele, logo abaixo, em fluxo normal — assim a
-       narrativa termina exatamente quando a última seção começa a aparecer.
+       CONTEÚDO NARRATIVO — Fluxo Mestre (Régua de Scroll)
        ===================================================================== -->
   <main class="conteudo" id="conteudo">
 
-    <!-- 1. HERO ---------------------------------------------------------- -->
+    <!-- 01. HERO CINEMATOGRÁFICA ------------------------------------------ -->
     <section class="secao hero" id="hero">
       <div class="hero__bg" id="hero-bg" aria-hidden="true">
         <img src="/media/img/hero-lago.webp" alt="Lago do Paraíso das Águas" class="hero__bg-img" id="hero-bg-img" width="1280" height="720" fetchpriority="high">
@@ -101,7 +94,7 @@
       <div class="hero__inner">
         <div class="hero__wordmark-caixa">
           <span class="hero__wordmark">Paraíso das Águas</span>
-          <span class="hero__wordmark-sub">SÃO JOSÉ DOS CAMPOS</span>
+          <span class="hero__wordmark-sub">SÃO JOSÉ DOS CAMPOS • SP</span>
         </div>
 
         <h1 class="hero__headline" id="hero-headline">
@@ -109,18 +102,18 @@
         </h1>
 
         <p class="hero__sub" id="hero-sub">
-          a 20 minutos do centro de São José dos Campos
+          a 20 minutos do centro de São José dos Campos e a 2 km da Represa Jaguari
         </p>
 
-        <ul class="hero__selos" id="hero-selos" aria-label="Principais condições"></ul>
+        <ul class="hero__selos" id="hero-selos" aria-label="Principais condições comerciais"></ul>
 
         <div class="hero__acoes">
           <a class="btn btn--ouro" id="hero-cta-primario" href="#" data-wa-origem="hero" rel="noopener">
             <span class="btn__icone" aria-hidden="true"></span>
             Agendar visita no WhatsApp
           </a>
-          <a class="btn btn--vidro" id="hero-cta-secundario" href="#prova-rapida">
-            Ver as chácaras disponíveis
+          <a class="btn btn--vidro" id="hero-cta-secundario" href="#propriedades">
+            Ver apresentação completa
           </a>
         </div>
       </div>
@@ -135,69 +128,95 @@
       </div>
     </section>
 
-    <!-- CENA NARRATIVA DEDICADA: Palco sticky para os textos 3D -->
+    <!-- 02. SESSÃO 2: CENA NARRATIVA & ABERTURA CINEMATOGRÁFICA DO VÍDEO 3D -->
     <section class="secao-cenas" id="secao-cenas">
       <div class="cenas-palco" id="cenas-palco">
+
+        <!-- Carrossel 3D de Textos -->
         <div class="carrossel" id="carrossel" data-ativo="false" aria-hidden="true"></div>
+
+        <!-- ABERTURA CINEMATOGRÁFICA DO VÍDEO 3D DO TERRENO -->
+        <div class="portal-abertura" id="portal-abertura" data-ativo="false" aria-label="Apresentação 3D do terreno">
+          <!-- Quadro Central do Vídeo -->
+          <div class="portal-video-frame" id="portal-video-frame">
+            <video class="portal-video" id="portal-video-3d" src="/media/video/terreno-3d-cima.mp4" poster="/media/img/terreno-3d-cima-poster.webp" playsinline muted loop preload="metadata"></video>
+            <div class="portal-video-overlay">
+              <span class="portal-video-tag">Projeto 3D • Vista Aérea</span>
+              <span class="portal-video-status">
+                <span class="portal-video-status__ponto"></span>
+                Ao vivo
+              </span>
+            </div>
+            <div class="portal-video-rodape">
+              <span class="portal-video-legenda">2 Hectares • Topografia Real & Lagos</span>
+              <button class="portal-video-som-btn" id="portal-video-som" type="button" aria-label="Ativar som">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Portas com Abertura pelo Centro -->
+          <div class="portal-portas" aria-hidden="true">
+            <div class="portal-porta portal-porta--esq" id="portal-porta-esq"></div>
+            <div class="portal-porta portal-porta--dir" id="portal-porta-dir"></div>
+            <div class="portal-costura-brilho" id="portal-costura-brilho"></div>
+          </div>
+        </div>
+
       </div>
     </section>
 
   </main>
 
   <!-- =====================================================================
-       ESPAÇADOR — reserva no fluxo a altura das seções densas
+       ESPAÇADOR — Reserva a altura das seções densas
        ===================================================================== -->
   <div class="espacador-secoes" aria-hidden="true"></div>
 
   <!-- =====================================================================
-       SEÇÕES DE CONTEÚDO DENSO — fluxo normal, sem animação de scroll.
-       Legíveis, indexáveis e com painel escuro semitransparente.
+       SEÇÕES DE CONTEÚDO DENSO (3 a 12) — Fluxo normal, legível e indexável
        ===================================================================== -->
   <div class="secoes" id="secoes">
 
-    <!-- 2. PROVA RÁPIDA -->
-    <section class="secao secao--painel" id="prova-rapida" hidden></section>
+    <!-- 03. O EFEITO PARAÍSO DAS ÁGUAS -->
+    <section class="secao secao--painel secao--densa" id="efeito-paraiso" hidden></section>
 
-    <!-- 3. VSL (TV que liga) chega na Fase 3 -->
-    <section class="secao secao--painel" id="vsl" hidden></section>
+    <!-- 04. AS PROPRIEDADES (VISÃO GERAL 2 HECTARES) -->
+    <section class="secao secao--painel secao--densa" id="propriedades" hidden></section>
 
-    <!-- 4. O PARAÍSO -->
-    <section class="secao secao--painel secao--densa" id="o-paraiso" hidden></section>
+    <!-- 05. INFRAESTRUTURA COMPLETA -->
+    <section class="secao secao--painel secao--densa" id="infraestrutura" hidden></section>
 
-    <!-- 5. LOCALIZAÇÃO E DISTÂNCIAS -->
+    <!-- 06. UMA TERRA, INÚMERAS POSSIBILIDADES (PROJETOS ILUSTRATIVOS) -->
+    <section class="secao secao--painel secao--densa" id="possibilidades" hidden></section>
+
+    <!-- 07. VIDA AUTOSSUSTENTÁVEL (O QUINTAL PRODUTIVO) -->
+    <section class="secao secao--painel secao--densa" id="autossuficiencia" hidden></section>
+
+    <!-- 08. UMA PROPRIEDADE PARA COMPARTILHAR -->
+    <section class="secao secao--painel secao--densa" id="compartilhar" hidden></section>
+
+    <!-- 09. SÃO JOSÉ DOS CAMPOS (A CIDADE AO SEU LADO) -->
+    <section class="secao secao--painel secao--densa" id="sao-jose" hidden></section>
+
+    <!-- 10. CONDIÇÕES DE AQUISIÇÃO & SEGURANÇA JURÍDICA -->
+    <section class="secao secao--painel secao--densa" id="aquisicao" hidden></section>
+
+    <!-- 11. LOCALIZAÇÃO & DISTÂNCIAS REAIS -->
     <section class="secao secao--painel secao--densa" id="localizacao" hidden></section>
 
-    <!-- 6. COMUNIDADE E SEGURANÇA -->
-    <section class="secao secao--painel secao--densa" id="comunidade" hidden></section>
-
-    <!-- 7. VIDA NA CHÁCARA -->
-    <section class="secao secao--painel secao--densa" id="vida-na-chacara" hidden></section>
-
-    <!-- 8. VISÃO 3D / DRONE -->
-    <section class="secao secao--painel secao--densa" id="visao-3d" hidden></section>
-
-    <!-- 9. CHÁCARAS DISPONÍVEIS (A–G) -->
-    <section class="secao secao--painel secao--densa" id="chacaras" hidden></section>
-
-    <!-- 10. VÍDEOS 2×2 COM ABERTURA "LINHA DE BAMBU" -->
-    <section class="secao secao--painel secao--densa" id="videos" hidden></section>
-
-    <!-- 11. FAQ -->
-    <section class="secao secao--painel secao--densa" id="faq" hidden></section>
-
-    <!-- 12. CTA FINAL -->
-    <section class="secao secao--painel secao--densa" id="cta-final" hidden></section>
+    <!-- 12. CONTATO & AGENDAMENTO VIP -->
+    <section class="secao secao--painel secao--densa" id="contato" hidden></section>
 
   </div>
 
   <!-- =====================================================================
-       RODAPÉ — fora de .secoes de propósito: é o fim do documento, não uma
-       seção da narrativa.
+       13. RODAPÉ INSTITUCIONAL
        ===================================================================== -->
   <footer class="rodape" id="rodape"></footer>
 
   <!-- =====================================================================
-       BOTÃO FLUTUANTE DE WHATSAPP — arrastável, com pulso constante.
+       BOTÃO FLUTUANTE DE WHATSAPP
        ===================================================================== -->
   <a class="wa-flutuante" id="wa-flutuante" href="#" data-wa-origem="flutuante"
      aria-label="Falar no WhatsApp e agendar visita" rel="noopener">
@@ -208,8 +227,6 @@
     </svg>
     <span class="wa-flutuante__rotulo" aria-hidden="true">Agendar visita</span>
   </a>
-
-  <!-- Módulos de escurecimento (política de privacidade / cookies) → Fase 4 -->
 
   <script type="module" src="/src/main.js"></script>
 </body>

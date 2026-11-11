@@ -88,19 +88,17 @@
 @keyframes hero-entrada {
   from {
     opacity: 0;
-    filter: blur(18px);
-    transform: translate3d(0, 26px, 0) scale(1.04);
+    transform: translate3d(0, 18px, 0);
   }
   to {
     opacity: 1;
-    filter: blur(0);
-    transform: translate3d(0, 0, 0) scale(1);
+    transform: translate3d(0, 0, 0);
   }
 }
 
 @keyframes hero-entrada-suave {
-  from { opacity: 0; transform: translate3d(0, 18px, 0); filter: blur(6px); }
-  to   { opacity: 1; transform: translate3d(0, 0, 0);   filter: blur(0); }
+  from { opacity: 0; transform: translate3d(0, 12px, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
 }
 
 .hero__headline {
