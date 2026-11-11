@@ -25,25 +25,31 @@ const send = (method, params = {}) => new Promise(res => {
 await send('Page.enable');
 await send('Runtime.enable');
 await send('Page.navigate', { url: 'https://chcara.vercel.app' });
-await new Promise(r => setTimeout(r, 3500));
+await new Promise(r => setTimeout(r, 4000));
 
-const scrollPoints = [
-  { name: 'live_01_hero', y: 0 },
-  { name: 'live_02_sessao2_portal', y: 1200 },
-  { name: 'live_03_vsl_comparativo', y: 2500 },
-  { name: 'live_04_mapa_propriedades', y: 4500 },
-  { name: 'live_05_projetos_3d', y: 7000 },
-  { name: 'live_06_localizacao_faq', y: 12000 }
+const targetsToCapture = [
+  { name: 'live_01_hero_navbar', selector: '#hero' },
+  { name: 'live_02_mapa_propriedades', selector: '#propriedades' },
+  { name: 'live_03_autossuficiencia_quadro', selector: '#autossuficiencia' },
+  { name: 'live_04_lifestyle_compartilhar', selector: '#compartilhar' },
+  { name: 'live_05_sjc_vertical_video', selector: '#sao-jose' },
+  { name: 'live_06_aquisicao_cards', selector: '#aquisicao' },
+  { name: 'live_07_contato_vip', selector: '#contato' }
 ];
 
-for (const pt of scrollPoints) {
-  await send('Runtime.evaluate', { expression: `window.scrollTo(0, ${pt.y})` });
-  await new Promise(r => setTimeout(r, 800));
+for (const target of targetsToCapture) {
+  await send('Runtime.evaluate', {
+    expression: `(() => {
+      const el = document.querySelector('${target.selector}');
+      if (el) el.scrollIntoView({ behavior: 'instant', block: 'start' });
+    })()`
+  });
+  await new Promise(r => setTimeout(r, 1200));
   const ss = await send('Page.captureScreenshot', { format: 'png' });
-  fs.writeFileSync(`${pt.name}.png`, Buffer.from(ss.data, 'base64'));
-  console.log(`Saved screenshot: ${pt.name}.png`);
+  fs.writeFileSync(`scripts/${target.name}.png`, Buffer.from(ss.data, 'base64'));
+  console.log(`Saved screenshot: scripts/${target.name}.png`);
 }
 
 ws.close();
 edge.kill();
-console.log('All screenshots captured successfully!');
+console.log('All live screenshots captured successfully!');
