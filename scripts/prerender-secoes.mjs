@@ -25,12 +25,37 @@ const server = http.createServer((req, res) => {
 
 server.listen(4175, async () => {
   console.log('Dist server on 4175');
+  const tempProfile = path.join(process.env.TEMP || 'C:\\Temp', 'edge_prerender_profile_' + Date.now());
   const edge = spawn('C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe', [
-    '--headless=new', '--remote-debugging-port=9222', '--no-first-run', '--disable-gpu', 'about:blank'
+    '--headless=new',
+    '--remote-debugging-port=9222',
+    '--no-first-run',
+    '--no-default-browser-check',
+    `--user-data-dir=${tempProfile}`,
+    '--disable-gpu',
+    'about:blank'
   ]);
-  await new Promise(r => setTimeout(r, 1500));
-  const targets = await (await fetch('http://127.0.0.1:9222/json/list')).json();
-  const pageTarget = targets.find(t => t.type === 'page' && !t.url.startsWith('chrome-extension://'));
+
+  let targets = null;
+  for (let i = 0; i < 15; i++) {
+    await new Promise(r => setTimeout(r, 600));
+    try {
+      const res = await fetch('http://127.0.0.1:9222/json/list');
+      if (res.ok) {
+        targets = await res.json();
+        if (targets && targets.length > 0) break;
+      }
+    } catch {}
+  }
+
+  if (!targets) {
+    console.error('Failed to connect to Edge debugging port 9222');
+    edge.kill();
+    server.close();
+    process.exit(1);
+  }
+
+  const pageTarget = targets.find(t => t.type === 'page' && !t.url.startsWith('chrome-extension://')) || targets[0];
   const ws = new WebSocket(pageTarget.webSocketDebuggerUrl);
   await new Promise(r => ws.onopen = r);
 

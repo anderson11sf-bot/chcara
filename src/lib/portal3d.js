@@ -23,11 +23,11 @@ let semMovimento = false;
 
 /* Faixa de progresso em que o portal atua na Sessão 2 */
 const FAIXA_PORTAL = {
-  surgir: 0.44,      // ativação e fade-in do contêiner
-  abrirInicio: 0.48, // momento em que as portas começam a se afastar
-  abrirFim: 0.68,    // portas 100% abertas e vídeo em escala normal
-  manterFim: 0.90,   // encerramento da exibição antes das próximas seções
-  esconderFim: 0.98  // fade out completo
+  surgir:      0.38, // ativação e fade-in do contêiner
+  abrirInicio: 0.42, // momento em que as portas começam a se afastar pelo centro
+  abrirFim:    0.68, // portas 100% abertas e vídeo em escala normal
+  manterFim:   0.88, // início do fade suave de encerramento
+  esconderFim: 1.00  // encerra exatamente quando a próxima sessão assume a tela
 };
 
 export function iniciarPortal3d() {

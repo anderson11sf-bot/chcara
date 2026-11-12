@@ -1,17 +1,20 @@
 /* ============================================================================
- * secoes.js — MONTAGEM DAS SEÇÕES CONFORME IDENTIDADE VISUAL DO DESIGNER
+ * secoes.js — MONTAGEM DAS SEÇÕES CONFORME DESIGN OFICIAL DO PDF (mobile .pdf)
  * ----------------------------------------------------------------------------
- * Segue estritamente a identidade visual de "DESIGNER DO SITE" e mídias de "lago drone".
- * Títulos e headlines com tipografia serif de luxo, sem prefixos mecânicos de seção.
- * Sessão 07 totalmente reestruturada com quadro de imagens na esquerda e títulos na direita.
- * Vídeo de São José em formato vertical 9:16 (em pé).
+ * Reconstrução fiel da identidade visual do PDF:
+ * - Tipografia serifada elegante (Cormorant Garamond) com destaques em verde suave e ouro
+ * - Cores: verde floresta profundo, dourado nobre, ciano/verde folha sutil
+ * - Eliminação de qualquer aparência de software ou excesso tecnológico
+ * - Sete Glebas: remoção do vídeo abaixo do mapa e galeria de fotos reais dos terrenos
+ * - Projetos e Inspirações: quadros fotográficos + ticker contínuo horizontal 9:16
+ * - Autossuficiência, Patrimônio, Localização, Documentação e Contato 100% fiéis ao PDF
  * ==========================================================================*/
 
 import config from '../config.js';
 import { criar, $ } from './utils.js';
 import { icone } from './icones.js';
 
-/** Cabeçalho de seção de alto padrão */
+/** Cabeçalho de seção de alto padrão no estilo do PDF */
 function cabecalho({ rotulo, titulo, texto }) {
   const frag = document.createDocumentFragment();
   if (rotulo) {
@@ -30,18 +33,19 @@ function cabecalho({ rotulo, titulo, texto }) {
   return frag;
 }
 
-/** Botão de WhatsApp contextual */
-function botaoWhatsApp(origem, texto, variante = 'ouro') {
-  return criar('a', {
-    classe: `btn btn--${variante} secao__cta`,
-    href: '#',
+/** Botão de WhatsApp / Ação no estilo do PDF */
+function botaoPDF(origem, texto, variante = 'dourado', link = '#') {
+  const btn = criar('a', {
+    classe: `btn-pdf btn-pdf--${variante} secao__cta`,
+    href: link,
     'data-wa-origem': origem,
-    rel: 'noopener',
-    texto
+    rel: 'noopener'
   });
+  btn.innerHTML = `<span>${texto}</span> <span class="btn-pdf__seta" aria-hidden="true">&gt;</span>`;
+  return btn;
 }
 
-/** Elemento de vídeo responsivo com suporte a proporção 16:9 ou 9:16 vertical */
+/** Elemento de vídeo responsivo */
 function criarVideoFrame({ src, poster, legenda, proporcao = '16-9' }) {
   const moldura = criar('div', { classe: `video-moldura video-moldura--${proporcao}` });
   const video = criar('video', {
@@ -62,7 +66,7 @@ function criarVideoFrame({ src, poster, legenda, proporcao = '16-9' }) {
 }
 
 /* --------------------------------------------------------------------------
- * 03. APRESENTAÇÃO: MAIS DO QUE UM TERRENO • UM NOVO JEITO DE VIVER
+ * 03. APRESENTAÇÃO: CONHEÇA O PARAÍSO (PÁGINAS 3 E 7 DO PDF)
  * ------------------------------------------------------------------------ */
 export function montarEfeitoParaiso() {
   const secao = $('#efeito-paraiso');
@@ -77,27 +81,42 @@ export function montarEfeitoParaiso() {
     texto: P.subtitulo
   }));
 
+  // Vídeo de apresentação oficial (Novo vídeo lv_0_20261112135807.mp4)
   if (P.video) {
     painel.appendChild(criarVideoFrame(P.video));
   }
 
-  painel.appendChild(criar('p', { classe: 'secao__apoio', texto: P.texto }));
+  // Carrossel com profundidade dos 3 cards de destaque da terra
+  if (P.carrosselCards && P.carrosselCards.length > 0) {
+    const carrosselCaixa = criar('div', { classe: 'carrossel-profundidade' });
+    const gradeCards = criar('div', { classe: 'carrossel-profundidade__grade' });
 
-  // Comparativo de ritmos
-  const comparativo = criar('div', { classe: 'comparativo-ritmo' });
-  for (let i = 0; i < P.comparativos.length; i++) {
-    const item = P.comparativos[i];
-    const card = criar('div', {
-      classe: `comparativo-card ${i === 1 ? 'comparativo-card--paraiso' : ''}`
-    });
-    card.appendChild(criar('h3', { classe: 'comparativo-card__titulo', texto: item.ritmo }));
-    card.appendChild(criar('p', { classe: 'comparativo-card__desc', texto: item.desc }));
-    comparativo.appendChild(card);
+    for (const cardData of P.carrosselCards) {
+      const card = criar('div', { classe: 'card-profundidade' });
+      card.appendChild(criar('img', {
+        classe: 'card-profundidade__img',
+        src: cardData.imagem,
+        alt: cardData.titulo,
+        loading: 'lazy',
+        decoding: 'async',
+        width: '420',
+        height: '560'
+      }));
+      const info = criar('div', { classe: 'card-profundidade__info' });
+      info.appendChild(criar('h3', { classe: 'card-profundidade__titulo', texto: cardData.titulo }));
+      if (cardData.tag) {
+        info.appendChild(criar('span', { classe: 'card-profundidade__tag', texto: cardData.tag }));
+      }
+      card.appendChild(info);
+      gradeCards.appendChild(card);
+    }
+
+    carrosselCaixa.appendChild(gradeCards);
+    painel.appendChild(carrosselCaixa);
   }
-  painel.appendChild(comparativo);
 
   painel.appendChild(criar('hr', { classe: 'divisor-lago' }));
-  painel.appendChild(botaoWhatsApp('vsl', 'Quero viver esse ritmo no WhatsApp', 'ouro'));
+  painel.appendChild(botaoPDF('vsl', P.ctaTexto || 'Explorar os Lotes →', 'dourado'));
 
   secao.replaceChildren(painel);
   secao.hidden = false;
@@ -105,7 +124,7 @@ export function montarEfeitoParaiso() {
 }
 
 /* --------------------------------------------------------------------------
- * 04. AS PROPRIEDADES (7 GLEBAS & MAPA OFICIAL DEMARCADO)
+ * 04. AS SETE GLEBAS (PÁGINA 4 DO PDF — VÍDEO REMOVIDO, GALERIA REAL DE GLEBAS)
  * ------------------------------------------------------------------------ */
 export function montarPropriedades() {
   const secao = $('#propriedades');
@@ -120,48 +139,83 @@ export function montarPropriedades() {
     texto: P.subtitulo
   }));
 
-  // Destaques da terra
-  const destaques = criar('div', { classe: 'propriedades-destaques' });
-  for (const d of P.destaques) {
-    const box = criar('div', { classe: 'propriedade-item' });
-    const ic = criar('span', { classe: 'propriedade-item__icone' });
-    ic.innerHTML = icone(d.icone, { tamanho: 24 });
-    box.appendChild(ic);
-    box.appendChild(criar('h4', { classe: 'propriedade-item__titulo', texto: d.titulo }));
-    box.appendChild(criar('p', { classe: 'propriedade-item__texto', texto: d.texto }));
-    destaques.appendChild(box);
-  }
-  painel.appendChild(destaques);
-
-  painel.appendChild(criar('p', { classe: 'secao__apoio', texto: P.texto }));
-
   // Mapa de demarcação oficial de alta definição
   if (P.mapaImagem) {
     const mapaCaixa = criar('div', { classe: 'mapa-oficial-caixa' });
     mapaCaixa.appendChild(criar('img', {
       classe: 'mapa-oficial-img',
       src: P.mapaImagem,
-      alt: 'Mapa oficial de demarcação do Paraíso das Águas em São José dos Campos',
+      alt: 'Mapa oficial de demarcação das Sete Glebas no Paraíso das Águas',
       loading: 'lazy',
       decoding: 'async',
       width: '1400',
       height: '1580'
     }));
-    mapaCaixa.appendChild(criar('span', {
+
+    const barraAcaoMapa = criar('div', { classe: 'mapa-oficial-barra' });
+    barraAcaoMapa.appendChild(criar('span', {
       classe: 'mapa-oficial-tag',
-      texto: 'Planta Demarcada Oficial • Glebas A a G com Lago Central'
+      texto: 'MAPA DAS GLEBAS (A a G)'
     }));
+    const btnMapa = criar('a', {
+      classe: 'btn-mapa-interativo',
+      href: '#contato',
+      'data-wa-origem': 'mapa',
+      texto: P.botaoMapa || 'Ver no Mapa Interativo'
+    });
+    barraAcaoMapa.appendChild(btnMapa);
+    mapaCaixa.appendChild(barraAcaoMapa);
+
     painel.appendChild(mapaCaixa);
   }
 
-  // Vídeo de sobrevoo da demarcação
-  if (P.mapaVideo) {
-    painel.appendChild(criarVideoFrame({
-      src: P.mapaVideo.src,
-      poster: P.mapaVideo.poster,
-      legenda: P.mapaVideo.legenda,
-      proporcao: '16-9'
-    }));
+  // Composição elegante de fotografias reais dos terrenos e cards das 7 Glebas
+  // (Vídeo removido conforme instrução do usuário)
+  if (P.glebas && P.glebas.length > 0) {
+    const listaGlebas = criar('div', { classe: 'grade-glebas-pdf' });
+    for (const g of P.glebas) {
+      const cardGleba = criar('div', { classe: 'card-gleba-pdf' });
+
+      // Foto real da gleba
+      const fotoCaixa = criar('div', { classe: 'card-gleba-pdf__foto-caixa' });
+      fotoCaixa.appendChild(criar('img', {
+        classe: 'card-gleba-pdf__foto',
+        src: g.imagem,
+        alt: `${g.nome} - Paraíso das Águas`,
+        loading: 'lazy',
+        decoding: 'async',
+        width: '400',
+        height: '260'
+      }));
+      cardGleba.appendChild(fotoCaixa);
+
+      // Informações da gleba
+      const infoCaixa = criar('div', { classe: 'card-gleba-pdf__info' });
+      infoCaixa.appendChild(criar('h3', { classe: 'card-gleba-pdf__nome', texto: g.nome }));
+      infoCaixa.appendChild(criar('p', { classe: 'card-gleba-pdf__area', texto: g.area }));
+
+      // Tags de diferenciais
+      const tagsBox = criar('div', { classe: 'card-gleba-pdf__tags' });
+      for (const t of g.tags) {
+        const tagSpan = criar('span', { classe: 'tag-gleba-pdf' });
+        tagSpan.innerHTML = `<span class="tag-gleba-pdf__ponto"></span>${t}`;
+        tagsBox.appendChild(tagSpan);
+      }
+      infoCaixa.appendChild(tagsBox);
+
+      // Botão Conhecer Gleba
+      const btnGleba = criar('a', {
+        classe: 'btn-conhecer-gleba',
+        href: '#contato',
+        'data-wa-origem': `gleba-${g.nome.toLowerCase()}`
+      });
+      btnGleba.innerHTML = `<span>Conhecer Gleba</span> <span class="seta">&gt;</span>`;
+      infoCaixa.appendChild(btnGleba);
+
+      cardGleba.appendChild(infoCaixa);
+      listaGlebas.appendChild(cardGleba);
+    }
+    painel.appendChild(listaGlebas);
   }
 
   // Faixa de valor referencial
@@ -171,7 +225,7 @@ export function montarPropriedades() {
   }));
 
   painel.appendChild(criar('hr', { classe: 'divisor-lago' }));
-  painel.appendChild(botaoWhatsApp('propriedades', 'Verificar disponibilidade das glebas no WhatsApp', 'ouro'));
+  painel.appendChild(botaoPDF('propriedades', 'Verificar disponibilidade das glebas no WhatsApp', 'dourado'));
 
   secao.replaceChildren(painel);
   secao.hidden = false;
@@ -179,7 +233,7 @@ export function montarPropriedades() {
 }
 
 /* --------------------------------------------------------------------------
- * 05. INFRAESTRUTURA COMPLETA (8 CARDS COM GLOW ESMERALDA & ÍCONES)
+ * 05. INFRAESTRUTURA COMPLETA (PÁGINA 5 DO PDF — 4 CARDS HORIZONTAIS DE VIDRO)
  * ------------------------------------------------------------------------ */
 export function montarInfraestrutura() {
   const secao = $('#infraestrutura');
@@ -194,20 +248,25 @@ export function montarInfraestrutura() {
     texto: I.subtitulo
   }));
 
-  const grade = criar('div', { classe: 'grade-infraestrutura' });
+  const grade = criar('div', { classe: 'grade-infra-pdf' });
   for (const c of I.cards) {
-    const card = criar('div', { classe: 'cartao-infra' });
-    const ic = criar('span', { classe: 'cartao-infra__icone' });
-    ic.innerHTML = icone(c.icone, { tamanho: 28 });
-    card.appendChild(ic);
-    card.appendChild(criar('h3', { classe: 'cartao-infra__titulo', texto: c.titulo }));
-    card.appendChild(criar('p', { classe: 'cartao-infra__texto', texto: c.texto }));
+    const card = criar('div', { classe: 'card-infra-pdf' });
+
+    const icCaixa = criar('div', { classe: 'card-infra-pdf__icone' });
+    icCaixa.innerHTML = icone(c.icone, { tamanho: 28 });
+    card.appendChild(icCaixa);
+
+    const corpo = criar('div', { classe: 'card-infra-pdf__corpo' });
+    corpo.appendChild(criar('h3', { classe: 'card-infra-pdf__titulo', texto: c.titulo }));
+    corpo.appendChild(criar('p', { classe: 'card-infra-pdf__texto', texto: c.texto }));
+    card.appendChild(corpo);
+
     grade.appendChild(card);
   }
   painel.appendChild(grade);
 
   painel.appendChild(criar('hr', { classe: 'divisor-lago' }));
-  painel.appendChild(botaoWhatsApp('infraestrutura', 'Tirar dúvidas sobre a infraestrutura', 'vidro'));
+  painel.appendChild(botaoPDF('infraestrutura', 'Tirar dúvidas sobre a infraestrutura', 'vidro'));
 
   secao.replaceChildren(painel);
   secao.hidden = false;
@@ -215,14 +274,14 @@ export function montarInfraestrutura() {
 }
 
 /* --------------------------------------------------------------------------
- * 06. POSSIBILIDADES (PROJETOS ILUSTRATIVOS 3D)
+ * 06. PROJETOS E POSSIBILIDADES (PÁGINAS 6 & 12 DO PDF)
  * ------------------------------------------------------------------------ */
 export function montarPossibilidades() {
   const secao = $('#possibilidades');
   if (!secao) return null;
 
   const P = config.possibilidades;
-  const painel = criar('div', { classe: 'painel' });
+  const painel = criar('div', { classe: 'painel painel--largo' });
 
   painel.appendChild(cabecalho({
     rotulo: P.rotulo,
@@ -230,57 +289,71 @@ export function montarPossibilidades() {
     texto: P.subtitulo
   }));
 
-  // Galeria de imagens dos projetos conceituais
-  const grade = criar('div', { classe: 'grade-projetos' });
-  for (const item of P.galeria) {
-    const card = criar('article', { classe: 'card-projeto' });
+  // Galeria fotográfica em quadros com profundidade
+  const galeriaCaixa = criar('div', { classe: 'galeria-projetos-pdf', id: 'galeria-projetos-pdf' });
+  for (let i = 0; i < P.quadros.length; i++) {
+    const q = P.quadros[i];
+    const quadro = criar('article', {
+      classe: `quadro-projeto-pdf ${i === 0 ? 'quadro-projeto-pdf--principal' : ''}`,
+      'data-indice': i
+    });
 
-    const fotoCaixa = criar('div', { classe: 'card-projeto__foto-caixa' });
+    const fotoCaixa = criar('div', { classe: 'quadro-projeto-pdf__foto-caixa' });
     fotoCaixa.appendChild(criar('img', {
-      classe: 'card-projeto__foto',
-      src: item.imagem,
-      alt: item.titulo,
+      classe: 'quadro-projeto-pdf__foto',
+      src: q.imagem,
+      alt: q.tituloCompleto,
       loading: 'lazy',
       decoding: 'async',
-      width: '800',
-      height: '500'
+      width: '900',
+      height: '560'
     }));
-    fotoCaixa.appendChild(criar('span', {
-      classe: 'badge-projeto-ilustrativo',
-      texto: 'PROJETO ILUSTRATIVO'
-    }));
-    card.appendChild(fotoCaixa);
 
-    const corpo = criar('div', { classe: 'card-projeto__corpo' });
-    corpo.appendChild(criar('h3', { classe: 'card-projeto__titulo', texto: item.titulo }));
-    corpo.appendChild(criar('p', { classe: 'card-projeto__subtitulo', texto: item.subtitulo }));
-    card.appendChild(corpo);
+    if (q.badge) {
+      fotoCaixa.appendChild(criar('span', {
+        classe: 'quadro-projeto-pdf__badge',
+        texto: q.badge
+      }));
+    }
 
-    grade.appendChild(card);
+    const barraTitulo = criar('div', { classe: 'quadro-projeto-pdf__barra' });
+    barraTitulo.innerHTML = `<h3 class="quadro-projeto-pdf__titulo">${q.titulo}</h3> <span class="quadro-projeto-pdf__seta">&gt;</span>`;
+    fotoCaixa.appendChild(barraTitulo);
+
+    quadro.appendChild(fotoCaixa);
+    galeriaCaixa.appendChild(quadro);
   }
-  painel.appendChild(grade);
+  painel.appendChild(galeriaCaixa);
 
-  // Vídeos dos projetos conceituais 3D
-  if (P.videosProjetos && P.videosProjetos.length > 0) {
-    const gradeVideos = criar('div', { classe: 'grade-videos-projetos' });
-    for (const vid of P.videosProjetos) {
-      const cardVid = criar('div', { classe: 'card-video-projeto' });
-      const moldura = criarVideoFrame({
+  // Ticker permanente horizontal contínuo com vídeos 9:16 verticais
+  if (P.videosTicker && P.videosTicker.length > 0) {
+    const tickerContainer = criar('div', { classe: 'ticker-videos-container' });
+    const tickerFaixa = criar('div', { classe: 'ticker-videos-faixa' });
+
+    // Duplicar a lista para fluxo contínuo infinito sem cortes visuais
+    const listaDuplicada = [...P.videosTicker, ...P.videosTicker];
+    for (const vid of listaDuplicada) {
+      const itemVid = criar('div', { classe: 'ticker-video-item' });
+      const video = criar('video', {
+        classe: 'ticker-video-player',
         src: vid.src,
         poster: vid.poster,
-        legenda: vid.titulo,
-        proporcao: '16-9'
+        preload: 'metadata',
+        playsinline: '',
+        muted: '',
+        loop: '',
+        autoplay: ''
       });
-      moldura.appendChild(criar('span', {
-        classe: 'badge-projeto-ilustrativo badge-projeto-ilustrativo--video',
-        texto: 'PROJETO ILUSTRATIVO'
-      }));
-      cardVid.appendChild(moldura);
-      cardVid.appendChild(criar('h4', { classe: 'card-video-projeto__titulo', texto: vid.titulo }));
-      cardVid.appendChild(criar('p', { classe: 'card-video-projeto__sub', texto: vid.subtitulo }));
-      gradeVideos.appendChild(cardVid);
+      video.muted = true;
+      video.play().catch(() => {});
+      itemVid.appendChild(video);
+
+      const legenda = criar('span', { classe: 'ticker-video-legenda', texto: vid.titulo });
+      itemVid.appendChild(legenda);
+      tickerFaixa.appendChild(itemVid);
     }
-    painel.appendChild(gradeVideos);
+    tickerContainer.appendChild(tickerFaixa);
+    painel.appendChild(tickerContainer);
   }
 
   // Aviso legal obrigatório
@@ -290,7 +363,7 @@ export function montarPossibilidades() {
   }));
 
   painel.appendChild(criar('hr', { classe: 'divisor-lago' }));
-  painel.appendChild(botaoWhatsApp('possibilidades', 'Conversar sobre ideias de projeto no WhatsApp', 'ouro'));
+  painel.appendChild(botaoPDF('possibilidades', 'Conversar sobre ideias de projeto no WhatsApp', 'dourado'));
 
   secao.replaceChildren(painel);
   secao.hidden = false;
@@ -298,249 +371,13 @@ export function montarPossibilidades() {
 }
 
 /* --------------------------------------------------------------------------
- * 07. VIDA AUTOSSUSTENTÁVEL (NOVO QUADRO COM IMAGENS NA ESQUERDA & TEXTOS NA DIREITA)
+ * 07. VIDA AUTOSSUFICIENTE (PÁGINA 9 DO PDF — GRADE 2x2 FOTOGRÁFICA)
  * ------------------------------------------------------------------------ */
 export function montarAutossuficiencia() {
   const secao = $('#autossuficiencia');
   if (!secao) return null;
 
   const A = config.autossuficiencia;
-  const painel = criar('div', { classe: 'painel painel--largo quadro-autossuficiencia' });
-
-  // 1. COLUNA ESQUERDA: QUADRO DE MÍDIAS (MOSAICO DE FOTOS COM GLOW ESMERALDA)
-  const colEsquerda = criar('div', { classe: 'quadro-midias' });
-  const gradeMosaico = criar('div', { classe: 'grade-mosaico-rural' });
-
-  // Foto 1: Horta Produtiva (topo largo)
-  const itemHorta = criar('div', { classe: 'mosaico-item mosaico-item--largo' });
-  itemHorta.appendChild(criar('img', {
-    classe: 'mosaico-img',
-    src: '/media/img/autossuficiencia/horta-produtiva.webp',
-    alt: 'Horta Produtiva no Paraíso das Águas',
-    loading: 'lazy',
-    decoding: 'async',
-    width: '680',
-    height: '420'
-  }));
-  itemHorta.appendChild(criar('span', { classe: 'mosaico-tag', texto: 'HORTA PRODUTIVA' }));
-  gradeMosaico.appendChild(itemHorta);
-
-  // Linha do meio: Pomar e Criação Natural
-  const linhaMeio = criar('div', { classe: 'mosaico-linha-dupla' });
-
-  const itemPomar = criar('div', { classe: 'mosaico-item' });
-  itemPomar.appendChild(criar('img', {
-    classe: 'mosaico-img',
-    src: '/media/img/autossuficiencia/pomar-arvores.webp',
-    alt: 'Pomar de frutas frescas',
-    loading: 'lazy',
-    decoding: 'async'
-  }));
-  itemPomar.appendChild(criar('span', { classe: 'mosaico-tag', texto: 'POMAR' }));
-  linhaMeio.appendChild(itemPomar);
-
-  const itemCriacao = criar('div', { classe: 'mosaico-item' });
-  itemCriacao.appendChild(criar('img', {
-    classe: 'mosaico-img',
-    src: '/media/img/autossuficiencia/criacao-natural.webp',
-    alt: 'Criação Natural e Piquetes',
-    loading: 'lazy',
-    decoding: 'async'
-  }));
-  itemCriacao.appendChild(criar('span', { classe: 'mosaico-tag', texto: 'CRIAÇÃO NATURAL' }));
-  linhaMeio.appendChild(itemCriacao);
-
-  gradeMosaico.appendChild(linhaMeio);
-
-  // Linha inferior: Energia Solar e Varanda Rural
-  const linhaBaixo = criar('div', { classe: 'mosaico-linha-dupla' });
-
-  const itemSolar = criar('div', { classe: 'mosaico-item' });
-  itemSolar.appendChild(criar('img', {
-    classe: 'mosaico-img',
-    src: '/media/img/autossuficiencia/energia-solar.webp',
-    alt: 'Energia Solar Fotovoltaica',
-    loading: 'lazy',
-    decoding: 'async'
-  }));
-  itemSolar.appendChild(criar('span', { classe: 'mosaico-tag', texto: 'ENERGIA SOLAR' }));
-  linhaBaixo.appendChild(itemSolar);
-
-  const itemVaranda = criar('div', { classe: 'mosaico-item' });
-  itemVaranda.appendChild(criar('img', {
-    classe: 'mosaico-img',
-    src: '/media/img/autossuficiencia/varanda-rural.webp',
-    alt: 'Varanda Rural e Convivência',
-    loading: 'lazy',
-    decoding: 'async'
-  }));
-  itemVaranda.appendChild(criar('span', { classe: 'mosaico-tag', texto: 'VARANDA RURAL' }));
-  linhaBaixo.appendChild(itemVaranda);
-
-  gradeMosaico.appendChild(linhaBaixo);
-  colEsquerda.appendChild(gradeMosaico);
-  painel.appendChild(colEsquerda);
-
-  // 2. COLUNA DIREITA: TÍTULOS COM ANIMAÇÃO, CONTEÚDO E CTAS
-  const colDireita = criar('div', { classe: 'quadro-info' });
-
-  colDireita.appendChild(criar('span', { classe: 'rotulo-secao', texto: A.rotulo }));
-
-  const h2 = criar('h2', { classe: 'secao__titulo quadro-info__titulo' });
-  h2.innerHTML = A.titulo;
-  colDireita.appendChild(h2);
-
-  const pLead = criar('p', { classe: 'secao__apoio secao__apoio--destaque quadro-info__texto' });
-  pLead.innerHTML = A.subtitulo;
-  colDireita.appendChild(pLead);
-
-  // 4 Indicadores rápidos com ícones neon e divisores
-  const faixaIndicadores = criar('div', { classe: 'faixa-indicadores-rurais' });
-  for (const ind of A.indicadores) {
-    const itemInd = criar('div', { classe: 'item-indicador-rural' });
-    const icBox = criar('span', { classe: 'item-indicador-rural__icone' });
-    icBox.innerHTML = icone(ind.icone, { tamanho: 20 });
-    itemInd.appendChild(icBox);
-    itemInd.appendChild(criar('span', { classe: 'item-indicador-rural__rotulo', texto: ind.rotulo }));
-    faixaIndicadores.appendChild(itemInd);
-  }
-  colDireita.appendChild(faixaIndicadores);
-
-  // Ações
-  const acoes = criar('div', { classe: 'quadro-info__acoes' });
-  acoes.appendChild(botaoWhatsApp('autossuficiencia', 'Fale Conosco no WhatsApp', 'ouro'));
-  acoes.appendChild(criar('a', {
-    classe: 'btn btn--vidro',
-    href: '#contato',
-    texto: 'Agendar Visita VIP'
-  }));
-  colDireita.appendChild(acoes);
-
-  painel.appendChild(colDireita);
-
-  secao.replaceChildren(painel);
-  secao.hidden = false;
-  return secao;
-}
-
-/* --------------------------------------------------------------------------
- * 08. UMA PROPRIEDADE PARA COMPARTILHAR (PATRIMÔNIO FAMILIAR)
- * ------------------------------------------------------------------------ */
-export function montarCompartilhar() {
-  const secao = $('#compartilhar');
-  if (!secao) return null;
-
-  const C = config.compartilhar;
-  const painel = criar('div', { classe: 'painel painel--largo' });
-
-  painel.appendChild(cabecalho({
-    rotulo: C.rotulo,
-    titulo: C.titulo,
-    texto: C.subtitulo
-  }));
-
-  // Layout 2 colunas com imagem lifestyle da família no deck
-  const layout = criar('div', { classe: 'grade-lifestyle-compartilhar' });
-
-  const fotoBox = criar('div', { classe: 'lifestyle-foto-caixa' });
-  fotoBox.appendChild(criar('img', {
-    classe: 'lifestyle-foto-img',
-    src: C.imagemPrincipal,
-    alt: 'Família na varanda com vista para o vale e lago',
-    loading: 'lazy',
-    decoding: 'async',
-    width: '1200',
-    height: '1600'
-  }));
-  fotoBox.appendChild(criar('div', {
-    classe: 'lifestyle-slogan-overlay',
-    texto: 'O novo luxo mudou de endereço.'
-  }));
-  layout.appendChild(fotoBox);
-
-  const infoBox = criar('div', { classe: 'lifestyle-info-caixa' });
-  const gradeBeneficios = criar('div', { classe: 'grade-duas-colunas' });
-  for (const b of C.beneficios) {
-    const card = criar('div', { classe: 'card-beneficio' });
-    card.appendChild(criar('h3', { classe: 'card-beneficio__titulo', texto: b.titulo }));
-    card.appendChild(criar('p', { classe: 'card-beneficio__texto', texto: b.texto }));
-    gradeBeneficios.appendChild(card);
-  }
-  infoBox.appendChild(gradeBeneficios);
-  infoBox.appendChild(criar('hr', { classe: 'divisor-lago' }));
-  infoBox.appendChild(botaoWhatsApp('compartilhar', 'Converse sobre as possibilidades no WhatsApp', 'ouro'));
-  layout.appendChild(infoBox);
-
-  painel.appendChild(layout);
-
-  secao.replaceChildren(painel);
-  secao.hidden = false;
-  return secao;
-}
-
-/* --------------------------------------------------------------------------
- * 09. SÃO JOSÉ DOS CAMPOS & REPRESA JAGUARI (VÍDEO VERTICAL 9:16 EM PÉ)
- * ------------------------------------------------------------------------ */
-export function montarSaoJose() {
-  const secao = $('#sao-jose');
-  if (!secao) return null;
-
-  const S = config.saoJose;
-  const painel = criar('div', { classe: 'painel painel--largo' });
-
-  painel.appendChild(cabecalho({
-    rotulo: S.rotulo,
-    titulo: S.titulo,
-    texto: S.subtitulo
-  }));
-
-  // Layout 2 Colunas: Vídeo Vertical EM PÉ (9:16) na Esquerda + Destaques na Direita
-  const layoutVertical = criar('div', { classe: 'grade-sjc-vertical' });
-
-  // 1. Moldura de Vídeo Vertical Story / Smartphone
-  const videoBox = criar('div', { classe: 'sjc-video-vertical-caixa' });
-  const molduraVertical = criarVideoFrame({
-    src: S.videoVertical.src,
-    poster: S.videoVertical.poster,
-    legenda: S.videoVertical.legenda,
-    proporcao: '9-16'
-  });
-  videoBox.appendChild(molduraVertical);
-  layoutVertical.appendChild(videoBox);
-
-  // 2. Conteúdo e Destaques de Distância
-  const infoBox = criar('div', { classe: 'sjc-info-vertical' });
-  infoBox.appendChild(criar('p', { classe: 'secao__apoio secao__apoio--destaque', texto: S.texto }));
-
-  const gradeDestaques = criar('div', { classe: 'grade-sjc-destaques' });
-  for (const d of S.destaques) {
-    const card = criar('div', { classe: 'card-sjc' });
-    card.appendChild(criar('div', { classe: 'card-sjc__valor', texto: d.valor }));
-    card.appendChild(criar('h4', { classe: 'card-sjc__titulo', texto: d.titulo }));
-    card.appendChild(criar('p', { classe: 'card-sjc__texto', texto: d.texto }));
-    gradeDestaques.appendChild(card);
-  }
-  infoBox.appendChild(gradeDestaques);
-
-  infoBox.appendChild(criar('hr', { classe: 'divisor-lago' }));
-  infoBox.appendChild(botaoWhatsApp('saoJose', 'Saber mais sobre a localização e náutica no WhatsApp', 'ouro'));
-  layoutVertical.appendChild(infoBox);
-
-  painel.appendChild(layoutVertical);
-
-  secao.replaceChildren(painel);
-  secao.hidden = false;
-  return secao;
-}
-
-/* --------------------------------------------------------------------------
- * 10. CONDIÇÕES DE AQUISIÇÃO (4 CARDS COM GLOW ESMERALDA DO DESIGNER)
- * ------------------------------------------------------------------------ */
-export function montarAquisicao() {
-  const secao = $('#aquisicao');
-  if (!secao) return null;
-
-  const A = config.aquisicao;
   const painel = criar('div', { classe: 'painel' });
 
   painel.appendChild(cabecalho({
@@ -549,21 +386,41 @@ export function montarAquisicao() {
     texto: A.subtitulo
   }));
 
-  // 4 Cards de Aquisição com Glow Esmeralda
-  const gradeCards = criar('div', { classe: 'grade-aquisicao-cards' });
-  for (const c of A.cards) {
-    const card = criar('div', { classe: 'cartao-aquisicao' });
-    const icBox = criar('span', { classe: 'cartao-aquisicao__icone' });
-    icBox.innerHTML = icone(c.icone, { tamanho: 28 });
-    card.appendChild(icBox);
-    card.appendChild(criar('h3', { classe: 'cartao-aquisicao__titulo', texto: c.titulo }));
-    card.appendChild(criar('p', { classe: 'cartao-aquisicao__texto', texto: c.texto }));
-    gradeCards.appendChild(card);
+  // Grade 2x2 com fotos, ícones e bordas iluminadas (Page 9 do PDF)
+  const grade = criar('div', { classe: 'grade-autossuficiencia-pdf' });
+  for (const item of A.cards) {
+    const card = criar('div', { classe: 'card-autossuf-pdf' });
+
+    const fotoCaixa = criar('div', { classe: 'card-autossuf-pdf__foto-caixa' });
+    fotoCaixa.appendChild(criar('img', {
+      classe: 'card-autossuf-pdf__foto',
+      src: item.imagem,
+      alt: item.titulo,
+      loading: 'lazy',
+      decoding: 'async',
+      width: '500',
+      height: '380'
+    }));
+
+    const cabecalhoCard = criar('div', { classe: 'card-autossuf-pdf__topo' });
+    const icSpan = criar('span', { classe: 'card-autossuf-pdf__icone' });
+    icSpan.innerHTML = icone(item.icone, { tamanho: 20 });
+    cabecalhoCard.appendChild(icSpan);
+    cabecalhoCard.appendChild(criar('h3', { classe: 'card-autossuf-pdf__titulo', texto: item.titulo }));
+    fotoCaixa.appendChild(cabecalhoCard);
+
+    card.appendChild(fotoCaixa);
+
+    const rodapeCard = criar('div', { classe: 'card-autossuf-pdf__rodape' });
+    rodapeCard.appendChild(criar('span', { classe: 'card-autossuf-pdf__sub', texto: item.sub }));
+    card.appendChild(rodapeCard);
+
+    grade.appendChild(card);
   }
-  painel.appendChild(gradeCards);
+  painel.appendChild(grade);
 
   painel.appendChild(criar('hr', { classe: 'divisor-lago' }));
-  painel.appendChild(botaoWhatsApp('aquisicao', 'Solicitar Informações no WhatsApp', 'ouro'));
+  painel.appendChild(botaoPDF('autossuficiencia', A.botaoTexto || 'Conhecer o Paraíso >', 'dourado'));
 
   secao.replaceChildren(painel);
   secao.hidden = false;
@@ -571,7 +428,64 @@ export function montarAquisicao() {
 }
 
 /* --------------------------------------------------------------------------
- * 11. LOCALIZAÇÃO & DISTÂNCIAS REAIS
+ * 08. PATRIMÔNIO PARA COMPARTILHAR (PÁGINA 10 DO PDF)
+ * ------------------------------------------------------------------------ */
+export function montarCompartilhar() {
+  const secao = $('#compartilhar');
+  if (!secao) return null;
+
+  const C = config.compartilhar;
+  const painel = criar('div', { classe: 'painel' });
+
+  // Foto de destaque da família no campo
+  if (C.imagemPrincipal) {
+    const fotoDestaque = criar('div', { classe: 'patrimonio-foto-destaque' });
+    fotoDestaque.appendChild(criar('img', {
+      classe: 'patrimonio-foto-img',
+      src: C.imagemPrincipal,
+      alt: 'Família no campo — Paraíso das Águas',
+      loading: 'lazy',
+      decoding: 'async',
+      width: '1200',
+      height: '700'
+    }));
+    painel.appendChild(fotoDestaque);
+  }
+
+  painel.appendChild(cabecalho({
+    rotulo: C.rotulo,
+    titulo: C.titulo,
+    texto: C.subtitulo
+  }));
+
+  // 3 Cards horizontais de vidro
+  const gradeCards = criar('div', { classe: 'grade-patrimonio-cards' });
+  for (const c of C.cards) {
+    const card = criar('div', { classe: 'card-patrimonio-item' });
+
+    const icBox = criar('div', { classe: 'card-patrimonio-item__icone' });
+    icBox.innerHTML = icone(c.icone, { tamanho: 24 });
+    card.appendChild(icBox);
+
+    const corpo = criar('div', { classe: 'card-patrimonio-item__corpo' });
+    corpo.appendChild(criar('h3', { classe: 'card-patrimonio-item__titulo', texto: c.titulo }));
+    corpo.appendChild(criar('p', { classe: 'card-patrimonio-item__texto', texto: c.texto }));
+    card.appendChild(corpo);
+
+    gradeCards.appendChild(card);
+  }
+  painel.appendChild(gradeCards);
+
+  painel.appendChild(criar('hr', { classe: 'divisor-lago' }));
+  painel.appendChild(botaoPDF('compartilhar', C.botaoTexto || 'CONVERSE COM NOSSA EQUIPE >', 'dourado'));
+
+  secao.replaceChildren(painel);
+  secao.hidden = false;
+  return secao;
+}
+
+/* --------------------------------------------------------------------------
+ * 09. LOCALIZAÇÃO PRIVILEGIADA (PÁGINA 3 DO PDF)
  * ------------------------------------------------------------------------ */
 export function montarLocalizacao() {
   const secao = $('#localizacao');
@@ -586,28 +500,48 @@ export function montarLocalizacao() {
     texto: L.subtitulo
   }));
 
-  const tabela = criar('div', { classe: 'tabela-distancias' });
-  for (const d of L.distancias) {
-    const linha = criar('div', { classe: 'tabela-distancias__linha' });
-    linha.appendChild(criar('span', { classe: 'tabela-distancias__destino', texto: d.destino }));
-    linha.appendChild(criar('span', { classe: 'tabela-distancias__pontilhado' }));
-    linha.appendChild(criar('span', { classe: 'tabela-distancias__valor', texto: d.valor }));
-    tabela.appendChild(linha);
-  }
-  painel.appendChild(tabela);
+  // Imagem aérea panorâmica da cidade e relevo com pin "PARAÍSO DAS ÁGUAS"
+  if (L.imagemAerea) {
+    const mapaCaixa = criar('div', { classe: 'localizacao-mapa-caixa' });
+    mapaCaixa.appendChild(criar('img', {
+      classe: 'localizacao-mapa-img',
+      src: L.imagemAerea,
+      alt: 'Localização do Paraíso das Águas próximo a São José dos Campos',
+      loading: 'lazy',
+      decoding: 'async',
+      width: '1200',
+      height: '680'
+    }));
 
-  // Botões de rota e Google Maps
-  const boxMapa = criar('div', { classe: 'mapa-cta-caixa' });
-  boxMapa.appendChild(botaoWhatsApp('localizacao', 'Como Chegar no WhatsApp', 'ouro'));
-  const btnMapa = criar('a', {
-    classe: 'btn btn--vidro btn--com-icone',
-    href: L.mapaLink,
-    target: '_blank',
-    rel: 'noopener noreferrer',
-    texto: L.legendaMapa
-  });
-  boxMapa.appendChild(btnMapa);
-  painel.appendChild(boxMapa);
+    const pinTag = criar('div', { classe: 'pin-paraiso-marcador' });
+    pinTag.innerHTML = `
+      <span class="pin-paraiso-icone"></span>
+      <span class="pin-paraiso-texto">PARAÍSO<br>DAS ÁGUAS</span>
+    `;
+    mapaCaixa.appendChild(pinTag);
+    painel.appendChild(mapaCaixa);
+  }
+
+  // 3 Cards de tempo de deslocamento
+  const gradeDist = criar('div', { classe: 'grade-distancias-pdf' });
+  for (const d of L.distancias) {
+    const card = criar('div', { classe: 'card-distancia-pdf' });
+
+    const icBox = criar('div', { classe: 'card-distancia-pdf__icone' });
+    icBox.innerHTML = icone(d.icone, { tamanho: 24 });
+    card.appendChild(icBox);
+
+    const info = criar('div', { classe: 'card-distancia-pdf__info' });
+    info.appendChild(criar('span', { classe: 'card-distancia-pdf__valor', texto: d.valor }));
+    info.appendChild(criar('span', { classe: 'card-distancia-pdf__destino', texto: d.destino }));
+    card.appendChild(info);
+
+    gradeDist.appendChild(card);
+  }
+  painel.appendChild(gradeDist);
+
+  painel.appendChild(criar('hr', { classe: 'divisor-lago' }));
+  painel.appendChild(botaoPDF('localizacao', L.botaoTexto || 'COMO CHEGAR >', 'dourado', L.mapsLink || '#'));
 
   secao.replaceChildren(painel);
   secao.hidden = false;
@@ -615,99 +549,123 @@ export function montarLocalizacao() {
 }
 
 /* --------------------------------------------------------------------------
- * 12. CONTATO & AGENDAMENTO VIP (FORMULÁRIO DO DESIGNER)
+ * 10. DOCUMENTAÇÃO E CONDIÇÕES (PÁGINA 8 DO PDF)
+ * ------------------------------------------------------------------------ */
+export function montarAquisicao() {
+  const secao = $('#aquisicao');
+  if (!secao) return null;
+
+  const A = config.aquisicao;
+  const painel = criar('div', { classe: 'painel' });
+
+  painel.appendChild(cabecalho({
+    rotulo: A.rotulo,
+    titulo: A.titulo
+  }));
+
+  const grade = criar('div', { classe: 'grade-condicoes-pdf' });
+  for (const c of A.cards) {
+    const card = criar('div', { classe: 'card-condicao-pdf' });
+
+    const icBox = criar('div', { classe: 'card-condicao-pdf__icone' });
+    icBox.innerHTML = icone(c.icone, { tamanho: 28 });
+    card.appendChild(icBox);
+
+    const corpo = criar('div', { classe: 'card-condicao-pdf__corpo' });
+    corpo.appendChild(criar('h3', { classe: 'card-condicao-pdf__titulo', texto: c.titulo }));
+    corpo.appendChild(criar('p', { classe: 'card-condicao-pdf__texto', texto: c.texto }));
+    card.appendChild(corpo);
+
+    grade.appendChild(card);
+  }
+  painel.appendChild(grade);
+
+  painel.appendChild(criar('hr', { classe: 'divisor-lago' }));
+  painel.appendChild(botaoPDF('aquisicao', A.botaoTexto || 'FALE COM UM CONSULTOR', 'dourado'));
+
+  secao.replaceChildren(painel);
+  secao.hidden = false;
+  return secao;
+}
+
+/* --------------------------------------------------------------------------
+ * 12. CONTATO & AGENDE SUA VISITA (PÁGINA 11 DO PDF)
  * ------------------------------------------------------------------------ */
 export function montarContato() {
   const secao = $('#contato');
   if (!secao) return null;
 
   const C = config.contato;
-  const painel = criar('div', { classe: 'painel painel--largo grade-contato-designer' });
+  const painel = criar('div', { classe: 'painel painel--largo' });
 
-  // Coluna 1: Textos & Filosofia "A Roça é o Novo Luxo"
-  const colTexto = criar('div', { classe: 'contato-info-box' });
-  colTexto.appendChild(criar('span', { classe: 'rotulo-secao', texto: C.rotulo }));
+  painel.appendChild(cabecalho({
+    rotulo: C.rotulo,
+    titulo: C.titulo,
+    texto: C.subtitulo
+  }));
 
-  const h2 = criar('h2', { classe: 'secao__titulo' });
-  h2.innerHTML = C.titulo;
-  colTexto.appendChild(h2);
+  // Card de Agendamento em Vidro Fosco (Página 11 do PDF)
+  const cardAgendamento = criar('div', { classe: 'card-agendamento-pdf' });
+  cardAgendamento.appendChild(criar('h3', {
+    classe: 'card-agendamento-pdf__titulo',
+    texto: C.cardForm.titulo
+  }));
+  cardAgendamento.appendChild(criar('p', {
+    classe: 'card-agendamento-pdf__sub',
+    texto: C.cardForm.subtitulo
+  }));
 
-  const pLead = criar('p', { classe: 'secao__apoio secao__apoio--destaque' });
-  pLead.innerHTML = C.subtitulo;
-  colTexto.appendChild(pLead);
-
-  colTexto.appendChild(criar('p', { classe: 'secao__apoio', texto: C.texto }));
-  painel.appendChild(colTexto);
-
-  // Coluna 2: Card Flutuante de Agendamento
-  const cardForm = criar('div', { classe: 'card-agendamento-vip' });
-  cardForm.appendChild(criar('h3', { classe: 'card-agendamento-vip__titulo', texto: 'Agende sua visita' }));
-  cardForm.appendChild(criar('p', { classe: 'card-agendamento-vip__sub', texto: 'Fale com um especialista' }));
-
-  const form = criar('form', { classe: 'form-agendamento' });
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const nome = form.querySelector('input[name="nome"]')?.value || 'Interessado';
-    const diaSel = form.querySelector('input[name="dia"]:checked')?.value || 'qualquer dia';
-    const msg = `Olá! Meu nome é ${nome}. Gostaria de agendar uma visita VIP ao Paraíso das Águas (preferência: ${diaSel}).`;
-    const numero = String(config.whatsapp.numero).replace(/\D/g, '');
-    window.open(`https://wa.me/${numero}?text=${encodeURIComponent(msg)}`, '_blank');
-  });
+  const form = criar('form', { classe: 'form-agendamento-pdf' });
 
   const inputNome = criar('input', {
+    classe: 'input-agendamento-pdf',
     type: 'text',
     name: 'nome',
-    placeholder: 'Seu nome completo',
-    required: '',
-    classe: 'form-input'
+    placeholder: 'Nome',
+    required: ''
   });
   form.appendChild(inputNome);
 
-  const rotuloDias = criar('label', { classe: 'form-agendamento__label', texto: 'Melhor dia para visita:' });
-  form.appendChild(rotuloDias);
-
-  const grupoDias = criar('div', { classe: 'grupo-dias' });
-  const opcoes = [
-    { id: 'dia-sabado', valor: 'Sábado', rotulo: 'Sábado' },
-    { id: 'dia-domingo', valor: 'Domingo', rotulo: 'Domingo' },
-    { id: 'dia-semana', valor: 'Dia de Semana', rotulo: 'Segunda a Sexta' }
-  ];
-
-  for (let i = 0; i < opcoes.length; i++) {
-    const o = opcoes[i];
-    const radioCaixa = criar('label', { classe: 'radio-card' });
-    const radio = criar('input', {
-      type: 'radio',
-      name: 'dia',
-      value: o.valor,
-      id: o.id,
-      checked: i === 0 ? '' : null
-    });
-    radioCaixa.appendChild(radio);
-    radioCaixa.appendChild(criar('span', { classe: 'radio-card__rotulo', texto: o.rotulo }));
-    grupoDias.appendChild(radioCaixa);
-  }
-  form.appendChild(grupoDias);
-
-  const btnEnviar = criar('button', {
-    type: 'submit',
-    classe: 'btn btn--ouro btn--bloco',
-    texto: C.ctaBotao
+  const inputTel = criar('input', {
+    classe: 'input-agendamento-pdf',
+    type: 'tel',
+    name: 'telefone',
+    placeholder: 'WhatsApp / Telefone',
+    required: ''
   });
-  form.appendChild(btnEnviar);
+  form.appendChild(inputTel);
 
-  const btnWa = criar('a', {
-    classe: 'btn btn--verde-wa btn--bloco',
+  const btnAgendar = criar('button', {
+    classe: 'btn-pdf btn-pdf--dourado btn-pdf--bloco',
+    type: 'submit'
+  });
+  btnAgendar.innerHTML = `<span>${C.cardForm.botaoAgendar}</span>`;
+  form.appendChild(btnAgendar);
+
+  const btnWA = criar('a', {
+    classe: 'btn-pdf btn-pdf--vidro-wa btn-pdf--bloco',
     href: '#',
-    'data-wa-origem': 'formVIP',
-    texto: 'Conversar pelo WhatsApp 💬'
+    'data-wa-origem': 'formVIP'
   });
-  form.appendChild(btnWa);
+  btnWA.innerHTML = `
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0;">
+      <path d="M12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.4 1.3 4.9L2 22l5.3-1.3c1.4.8 3 1.3 4.7 1.3 5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18.1c-1.5 0-3-.4-4.2-1.2l-.3-.2-3.1.8.8-3-.2-.3C4.2 15 3.8 13.5 3.8 12 3.8 7.5 7.5 3.8 12 3.8s8.2 3.7 8.2 8.2-3.7 8.1-8.2 8.1z"/>
+    </svg>
+    <span>${C.cardForm.botaoWhatsApp}</span>
+  `;
+  form.appendChild(btnWA);
 
-  form.appendChild(criar('span', { classe: 'form-aviso-seguro', texto: '🔒 Seus dados estão protegidos.' }));
+  form.addEventListener('submit', (ev) => {
+    ev.preventDefault();
+    const nomeVal = inputNome.value.trim();
+    const telVal = inputTel.value.trim();
+    const msg = `Olá! Meu nome é ${nomeVal || 'Visitante'} (Telefone: ${telVal}). Gostaria de agendar uma visita ao Paraíso das Águas.`;
+    const url = `https://wa.me/${config.whatsapp.numero}?text=${encodeURIComponent(msg)}`;
+    window.open(url, '_blank', 'noopener,noreferrer');
+  });
 
-  cardForm.appendChild(form);
-  painel.appendChild(cardForm);
+  cardAgendamento.appendChild(form);
+  painel.appendChild(cardAgendamento);
 
   secao.replaceChildren(painel);
   secao.hidden = false;
@@ -715,75 +673,32 @@ export function montarContato() {
 }
 
 /* --------------------------------------------------------------------------
- * 13. FAQ & RODAPÉ INSTITUCIONAL
- * ------------------------------------------------------------------------ */
-export function montarFaqERodape() {
-  const rodapeEl = $('#rodape');
-  if (!rodapeEl) return;
-
-  const frag = document.createDocumentFragment();
-
-  // FAQ
-  const faqSecao = criar('div', { classe: 'rodape__faq' });
-  faqSecao.appendChild(criar('h3', { classe: 'rodape__faq-titulo', texto: 'Perguntas Frequentes (FAQ)' }));
-
-  const listaFaq = criar('div', { classe: 'lista-acordeoes lista-acordeoes--faq' });
-  for (const item of config.faq) {
-    const d = criar('details', { classe: 'acordeon acordeon--faq' });
-    d.appendChild(criar('summary', { classe: 'acordeon__titulo', texto: item.p }));
-    const c = criar('div', { classe: 'acordeon__corpo' });
-    c.appendChild(criar('p', { texto: item.r }));
-    d.appendChild(c);
-    listaFaq.appendChild(d);
-  }
-  faqSecao.appendChild(listaFaq);
-  frag.appendChild(faqSecao);
-
-  // Rodapé institucional
-  const R = config.rodape;
-  const rodapeCorpo = criar('div', { classe: 'rodape__corpo' });
-
-  const infoMarca = criar('div', { classe: 'rodape__marca' });
-  infoMarca.appendChild(criar('span', { classe: 'rodape__nome', texto: R.nome }));
-  infoMarca.appendChild(criar('span', { classe: 'rodape__sub', texto: R.sub }));
-  infoMarca.appendChild(criar('span', { classe: 'rodape__tel', texto: `Plantão: ${R.telefone}` }));
-  rodapeCorpo.appendChild(infoMarca);
-
-  rodapeCorpo.appendChild(criar('p', { classe: 'rodape__aviso', texto: R.avisoLegal }));
-
-  const linksLegais = criar('div', { classe: 'rodape__links' });
-  linksLegais.appendChild(criar('a', { href: '/politica-de-privacidade.html', texto: 'Política de Privacidade' }));
-  linksLegais.appendChild(criar('span', { texto: '•' }));
-  linksLegais.appendChild(criar('a', { href: '/politica-de-cookies.html', texto: 'Política de Cookies' }));
-  rodapeCorpo.appendChild(linksLegais);
-
-  rodapeCorpo.appendChild(criar('p', {
-    classe: 'rodape__copia',
-    texto: `© ${R.ano} ${R.nome}. Todos os direitos reservados.`
-  }));
-
-  frag.appendChild(rodapeCorpo);
-
-  rodapeEl.replaceChildren(frag);
-}
-
-/* --------------------------------------------------------------------------
- * MONTAGEM COMPLETA DAS SEÇÕES 3 A 13
+ * MONTAGEM MESTRE DE TODAS AS SEÇÕES
  * ------------------------------------------------------------------------ */
 export function montarSecoesMestre() {
-  montarEfeitoParaiso();
-  montarPropriedades();
-  montarInfraestrutura();
-  montarPossibilidades();
-  montarAutossuficiencia();
-  montarCompartilhar();
-  montarSaoJose();
-  montarAquisicao();
-  montarLocalizacao();
-  montarContato();
-  montarFaqERodape();
-
-  return true;
+  const lista = [
+    montarEfeitoParaiso(),
+    montarPropriedades(),
+    montarInfraestrutura(),
+    montarPossibilidades(),
+    montarAutossuficiencia(),
+    montarCompartilhar(),
+    montarLocalizacao(),
+    montarAquisicao(),
+    montarContato()
+  ];
+  return lista;
 }
 
-export default { montarSecoesMestre };
+export default {
+  montarSecoesMestre,
+  montarEfeitoParaiso,
+  montarPropriedades,
+  montarInfraestrutura,
+  montarPossibilidades,
+  montarAutossuficiencia,
+  montarCompartilhar,
+  montarLocalizacao,
+  montarAquisicao,
+  montarContato
+};

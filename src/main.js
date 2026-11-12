@@ -200,9 +200,9 @@ function arrancarInterno() {
     carrossel.definirProgresso(pCena);
     portal3d.definirProgresso(pCena);
 
-    // 3. Fundo procedural e Palco visual
-    controleFundo?.definirProgresso(pCena < 0.98 ? pCena : 1);
-    controlePalco?.definirProgresso(pCena);
+    // 3. Fundo Global contínuo (vídeo sincronizado com o scroll de todo o site)
+    controleFundo?.definirProgresso(pGlobal);
+    controlePalco?.definirProgresso(pGlobal);
 
     // 4. Barra de progresso de leitura global (0 a 1 no site inteiro)
     progresso.definirProgresso(pGlobal);

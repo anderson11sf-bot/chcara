@@ -81,61 +81,43 @@ body.prova-sem-fade .palco__fundo {
   opacity: 1;
 }
 
-/* ---------- VIDRO DE TV -------------------------------------------------
- * Vidro escuro semitransparente + reflexo diagonal + vinheta + scanlines.
- * NUNCA animar blur/backdrop-filter: só opacidade de camadas estáticas.
+/* ---------- CAMADA DE VIDRO FOSCO (GLASSMORPHISM NATURAL & ELEGANTE) ------
+ * Camada de vidro fosco com transparência controlada sobre o vídeo de fundo
+ * global. Suaviza as imagens e garante leitura perfeita de todos os textos,
+ * preservando a profundidade, a iluminação e as cores naturais.
  * ---------------------------------------------------------------------- */
 
 .vidro {
   position: absolute;
   inset: 0;
-  background-color: rgba(2, 17, 20, var(--vidro-opacidade, 0.28));
-  border: 1px solid rgba(168, 242, 230, var(--vidro-borda, 0.35));
-  border-radius: var(--vidro-raio, 14px);
-  box-shadow:
-    /* vinheta nas bordas */
-    inset 0 0 120px 40px rgba(2, 17, 20, var(--vidro-vinheta, 0.55)),
-    /* brilho fino na borda interna */
-    inset 0 0 0 1px rgba(217, 251, 244, 0.06);
+  background: radial-gradient(
+    130% 100% at 50% 30%,
+    rgba(3, 24, 25, 0.62) 0%,
+    rgba(3, 20, 21, 0.78) 60%,
+    rgba(2, 16, 17, 0.90) 100%
+  );
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: inset 0 0 160px 40px rgba(2, 16, 17, 0.75);
 }
 
-/* Reflexo diagonal suave: uma faixa clara atravessando o vidro */
 .vidro::before {
   content: '';
   position: absolute;
   inset: 0;
-  border-radius: inherit;
   background: linear-gradient(
-    118deg,
-    rgba(217, 251, 244, 0) 30%,
-    rgba(217, 251, 244, var(--vidro-reflexo, 0.10)) 46%,
-    rgba(217, 251, 244, 0.04) 54%,
-    rgba(217, 251, 244, 0) 70%
+    180deg,
+    rgba(4, 25, 31, 0.40) 0%,
+    transparent 25%,
+    transparent 75%,
+    rgba(4, 25, 31, 0.65) 100%
   );
+  pointer-events: none;
 }
 
-/* Scanlines / textura de TV: gradiente repetido minúsculo (custo ~zero) */
-.vidro::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background-image: repeating-linear-gradient(
-    0deg,
-    rgba(217, 251, 244, var(--vidro-scanline, 0.035)) 0px,
-    rgba(217, 251, 244, var(--vidro-scanline, 0.035)) 1px,
-    transparent 1px,
-    transparent 3px
-  );
-  mix-blend-mode: overlay;
-  opacity: 0.7;
-}
-
-/* backdrop-filter só em painéis pequenos e apenas em aparelho forte.
-   A classe .sem-backdrop é aplicada pelo modo LITE. */
 .palco.com-backdrop .vidro {
-  backdrop-filter: saturate(112%) contrast(104%);
-  -webkit-backdrop-filter: saturate(112%) contrast(104%);
+  backdrop-filter: blur(6px) saturate(110%);
+  -webkit-backdrop-filter: blur(6px) saturate(110%);
 }
 
 /* ---------- BARRA DE PROGRESSO (topo) ---------------------------------- */

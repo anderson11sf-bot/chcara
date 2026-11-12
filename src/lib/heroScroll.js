@@ -7,7 +7,7 @@
 
 import { clamp } from './utils.js';
 
-const TOTAL_FRAMES = 94;
+const TOTAL_FRAMES = 90;
 const PREFIXO = '/media/frames/hero/hero_';
 const EXTENSAO = '.webp';
 
