@@ -37,21 +37,14 @@ import { iniciarWhatsAppFlutuante, ligarBotoesWhatsApp } from './lib/whatsapp.js
 
 function aplicarTextos() {
   const headline = document.getElementById('hero-headline');
-  if (headline) {
+  if (headline && config.hero.headline) {
     headline.innerHTML = config.hero.headline;
   }
 
   const sub = document.getElementById('hero-sub');
-  if (sub) sub.textContent = config.hero.subheadline;
-
-  const ctaPrimario = document.getElementById('hero-cta-primario');
-  if (ctaPrimario) {
-    const rotulo = ctaPrimario.lastChild;
-    if (rotulo && rotulo.nodeType === Node.TEXT_NODE) rotulo.nodeValue = ` ${config.hero.ctaPrimario}`;
+  if (sub && config.hero.subheadline) {
+    sub.innerHTML = config.hero.subheadline;
   }
-
-  const ctaSecundario = document.getElementById('hero-cta-secundario');
-  if (ctaSecundario) ctaSecundario.textContent = config.hero.ctaSecundario;
 
   const dicaTexto = document.getElementById('dica-texto');
   if (dicaTexto && !dicaTexto.textContent.trim()) {
