@@ -78,13 +78,13 @@ export const hero = {
 export const sessao2 = {
   rotulo: '02 / O NOVO LUXO',
   titulo: 'O novo luxo é ter <br><span class="destaque-verde">espaço para viver.</span>',
-  subtitulo: 'Um lugar para a sua família, e. seus projetos e uma vida mais perto da natureza.',
+  subtitulo: 'Um lugar para a sua família, seus projetos e uma vida mais perto da natureza.',
   framesTotal: 90,
   portal3d: {
-    videoSrc: '/media/video/terreno-3d-cima.mp4',
-    poster: '/media/img/terreno-3d-cima-poster.webp',
-    tag: 'Projeto 3D • Topografia Real',
-    legenda: '2 Hectares (20.000 m² a 23.830 m²) • Vista Aérea Exclusiva'
+    videoSrc: '/media/video/drone-panorama-terreno.mp4',
+    poster: '/media/img/drone-panorama-terreno-poster.webp',
+    tag: 'Vista Aérea • Terreno & Lagos',
+    legenda: '2 Hectares • Topografia Real & Lagos'
   }
 };
 
@@ -128,7 +128,9 @@ export const propriedades = {
   titulo: 'AS SETE GLEBAS',
   subtitulo: 'Grandes propriedades rurais com infraestrutura e natureza preservada em São José dos Campos.',
   mapaImagem: '/media/img/mapa-oficial-terreno.webp',
-  botaoMapa: 'Ver no Mapa Interativo',
+  mapaVideoFundo: '/media/video/mapa-drone-bg.mp4',
+  botaoMapa: 'VER LOCALIZAÇÃO NO GOOGLE MAPS',
+  mapsLink: 'https://maps.app.goo.gl/AztxJXPuLWaPUBSWA',
   destaquesComerciais: [
     {
       numero: '7',
@@ -146,23 +148,6 @@ export const propriedades = {
       descricao: 'Financiamento facilitado direto com o proprietário'
     }
   ],
-  fotosReais: [
-    {
-      imagem: '/media/img/glebas/foto-real-lago-panoramica.webp',
-      legenda: 'Lago central e topografia suave com nascentes preservadas',
-      alt: 'Vista panorâmica do lago central no Paraíso das Águas'
-    },
-    {
-      imagem: '/media/img/glebas/foto-real-casa-campo.webp',
-      legenda: 'Residência campestre pronta integrada à paisagem natural',
-      alt: 'Casa de campo no Paraíso das Águas'
-    },
-    {
-      imagem: '/media/img/glebas/foto-real-colina-verde.webp',
-      legenda: 'Platôs elevados e solo fértil com horizonte aberto',
-      alt: 'Colinas e vegetação nativa do Paraíso das Águas'
-    }
-  ],
   referenciaComercial: 'Propriedades a partir de R$ 475 mil* com financiamento facilitado direto com o proprietário.'
 };
 
@@ -171,8 +156,9 @@ export const propriedades = {
  * -------------------------------------------------------------------------*/
 export const infraestrutura = {
   rotulo: '05 . INFRAESTRUTURA',
-  titulo: 'Tudo o que você precisa para <br><span class="destaque-ouro">VIVER MELHOR</span>',
+  titulo: 'Tudo o que você precisa para <br><span class="destaque-verde">VIVER MELHOR</span>',
   subtitulo: 'Infraestrutura planejada para garantir o máximo de conforto, segurança e qualidade de vida.',
+  fundoVidro: '/media/img/fundo-abas.webp',
   cards: [
     {
       icone: 'chave',
@@ -191,8 +177,9 @@ export const infraestrutura = {
     },
     {
       icone: 'arvores',
-      titulo: 'Áreas de Convivência',
-      texto: 'Espaços de lazer integrados à natureza, trilhas ecológicas e áreas preservadas.'
+      titulo: 'Áreas de Convivência & Lazer',
+      texto: 'Espaços de convivência integrados à natureza, parquinho infantil e trilhas ecológicas.',
+      imagem: '/media/img/infraestrutura/parquinho.webp'
     }
   ]
 };
@@ -204,95 +191,112 @@ export const possibilidades = {
   rotulo: '06 | PROJETOS E POSSIBILIDADES',
   titulo: 'Como você imagina o <br><span class="destaque-verde">seu paraíso?</span>',
   subtitulo: 'Inspirações de projetos pensados para a sua chácara de 2 hectares.',
+  fundoVidro: '/media/img/fundo-abas.webp',
   quadros: [
     {
       id: 'casa-campo',
       numero: '01',
       titulo: 'CASA DE CAMPO',
       tituloCompleto: 'CASA DE CAMPO CONTEMPORÂNEA',
-      imagem: '/media/img/proj-house_with_pool_and_hillside_20261014125200_jpg.webp',
+      imagem: '/media/img/possibilidades/casa-campo-nova.webp',
       badge: 'PROJETO ILUSTRATIVO'
     },
     {
-      id: 'lazer-piscina',
+      id: 'chale-rustico',
       numero: '02',
-      titulo: 'ESPAÇO DE LAZER',
-      tituloCompleto: 'ÁREA DE LAZER COM PISCINA',
-      imagem: '/media/img/proj-make_image_attractive_and_beautiful_20261014124921_jpg.webp',
+      titulo: 'CHALÉ RÚSTICO',
+      tituloCompleto: 'CHALÉ RÚSTICO COM ÁREA DE LAZER',
+      imagem: '/media/img/possibilidades/chale-rustico.webp',
       badge: 'PROJETO ILUSTRATIVO'
     },
     {
-      id: 'horta-pomar',
+      id: 'desenvolvimento',
       numero: '03',
-      titulo: 'HORTA E POMAR',
-      tituloCompleto: 'VIVER SUSTENTÁVEL',
-      imagem: '/media/img/autossuficiencia/horta-produtiva.webp',
-      badge: 'PROJETO ILUSTRATIVO'
+      titulo: 'EM DESENVOLVIMENTO',
+      tituloCompleto: 'POSSIBILIDADES DE IMPLANTAÇÃO',
+      imagem: '/media/img/desenvolvimento/proj-desenv-1.webp',
+      badge: 'PROJETO EM DESENVOLVIMENTO'
     },
     {
       id: 'equestre',
       numero: '04',
-      titulo: 'ESPAÇO EQUESTRE',
-      tituloCompleto: 'ÁREA EQUESTRE',
-      imagem: '/media/img/proj-make_this_image_attractive_20261014124853_jpg.webp',
+      titulo: 'ÁREA EQUINA',
+      tituloCompleto: 'ESTRUTURA E EXPERIÊNCIA EQUESTRE',
+      imagem: '/media/img/possibilidades/area-equina.webp',
       badge: 'PROJETO ILUSTRATIVO'
     }
   ],
   videosTicker: [
     {
+      src: '/media/video/drone-relevo-lagos.mp4',
+      poster: '/media/img/drone-relevo-lagos-poster.webp',
+      titulo: 'Topografia & Lagos Reais'
+    },
+    {
+      src: '/media/video/drone-panorama-terreno.mp4',
+      poster: '/media/img/drone-panorama-terreno-poster.webp',
+      titulo: '2 Hectares em Altitude'
+    },
+    {
+      src: '/media/video/drone-chacaras-natureza.mp4',
+      poster: '/media/img/drone-chacaras-natureza-poster.webp',
+      titulo: 'Natureza & Espelho D\'água'
+    },
+    {
+      src: '/media/video/drone-acesso-vale.mp4',
+      poster: '/media/img/drone-acesso-vale-poster.webp',
+      titulo: 'Acesso ao Empreendimento'
+    },
+    {
+      src: '/media/video/drone-patrimonio.mp4',
+      poster: '/media/img/drone-patrimonio-poster.webp',
+      titulo: 'Topografia e Lagos (Drone)'
+    },
+    {
       src: '/media/video/proj-mansao-campo.mp4',
       poster: '/media/img/proj-mansao-campo-poster.webp',
-      titulo: 'Mansão de Campo 3D'
+      titulo: 'Mansão de Campo (Conceito)'
     },
     {
       src: '/media/video/proj-chale-lago.mp4',
       poster: '/media/img/proj-chale-lago-poster.webp',
-      titulo: 'Chalé Junto ao Lago'
-    },
-    {
-      src: '/media/video/demo-1.mp4',
-      poster: '/media/img/terreno-3d-cima-poster.webp',
-      titulo: 'Topografia e Lagos'
-    },
-    {
-      src: '/media/video/demo-2.mp4',
-      poster: '/media/img/terreno-lago-panorama.webp',
-      titulo: 'Acesso e Natureza'
+      titulo: 'Chalé Junto ao Lago (Conceito)'
     }
   ],
-  avisoLegal: '*PROJETO ILUSTRATIVO — As fotos e vídeos desta seção são propostas conceituais e artísticas para demonstrar o potencial da área. Cada proprietário desenvolve seu projeto de forma particular, conforme seu desejo e as regras aplicáveis. As benfeitorias não estão inclusas no valor da terra nua.'
+  avisoLegal: '*PROJETO ILUSTRATIVO — As fotos e vídeos desta seção são referências conceituais e artísticas para demonstrar o potencial da área. Cada proprietário desenvolve seu projeto de forma particular, conforme seu desejo e as regras aplicáveis. As benfeitorias não estão inclusas no valor da terra nua.'
 };
 
 /* ---------------------------------------------------------------------------
  * 9. SESSÃO 7: VIDA AUTOSSUFICIENTE (PÁGINA 9 DO PDF)
  * -------------------------------------------------------------------------*/
 export const autossuficiencia = {
-  rotulo: '07 • VIDA AUTOSSUFICIENTE',
-  titulo: 'MAIS CONEXÃO <br><span class="destaque-verde">COM A NATUREZA</span>',
-  subtitulo: 'Práticas sustentáveis e autonomia para uma vida natural, autossuficiente e em harmonia com o meio ambiente.',
+  rotulo: 'AUTONOMIA & SAÚDE FAMILIAR',
+  titulo: 'Vida Autossustentável: <br><span class="destaque-verde">O Quintal Produtivo</span>',
+  subtitulo: 'Produza parte dos próprios alimentos e viva em contato com a terra fértil.',
+  fundoVidro: '/media/img/fundo-abas.webp',
   cards: [
     {
-      icone: 'arvores',
-      titulo: 'Horta',
-      sub: 'Alimentos orgânicos',
-      imagem: '/media/img/autossuficiencia/horta-produtiva.webp'
+      icone: 'folha',
+      titulo: 'Pomar Produtivo',
+      sub: 'Árvores frutíferas produtivas e colheita fresca no quintal',
+      imagem: '/media/img/autossuficiencia/pomar-novo.webp'
     },
     {
-      icone: 'folha',
-      titulo: 'Pomar',
-      sub: 'Frutas frescas',
-      imagem: '/media/img/autossuficiencia/pomar-arvores.webp'
+      icone: 'arvores',
+      titulo: 'Horta Orgânica',
+      sub: 'Alimentos frescos, verduras e legumes direto da terra fértil',
+      imagem: '/media/img/autossuficiencia/horta-nova.webp'
     },
     {
       icone: 'area',
-      titulo: 'Galinheiro',
-      sub: 'Criação natural',
+      titulo: 'Criação Natural',
+      sub: 'Galinheiro caipira e espaço amplo para convivência animal',
       imagem: '/media/img/autossuficiencia/criacao-natural.webp'
     },
     {
       icone: 'raio',
-      titulo: 'Energia Solar',
-      sub: 'Sustentabilidade',
+      titulo: 'Autonomia Energética',
+      sub: 'Energia solar sustentável e água mineral de nascente perene',
       imagem: '/media/img/autossuficiencia/energia-solar.webp'
     }
   ],
@@ -307,6 +311,11 @@ export const compartilhar = {
   titulo: 'UM PATRIMÔNIO <br><span class="destaque-ouro">PARA COMPARTILHAR</span>',
   subtitulo: 'Crie memórias que duram gerações em um lugar seguro, cercado por natureza e feito para conectar quem você mais ama.',
   imagemPrincipal: '/media/img/familia-novo-luxo.webp',
+  videoDrone: {
+    src: '/media/video/drone-patrimonio.mp4',
+    poster: '/media/img/drone-patrimonio-poster.webp',
+    legenda: 'Vista Aérea da Propriedade • O Legado da Sua Família'
+  },
   cards: [
     {
       icone: 'coracao',
@@ -328,20 +337,43 @@ export const compartilhar = {
 };
 
 /* ---------------------------------------------------------------------------
- * 11. SESSÃO 9: LOCALIZAÇÃO PRIVILEGIADA (PÁGINA 3 DO PDF)
+ * 11. SESSÃO 9: SÃO JOSÉ DOS CAMPOS & REPRESA JAGUARI (VÍDEO VERTICAL 9:16)
+ * -------------------------------------------------------------------------*/
+export const saoJose = {
+  rotulo: 'LOCALIZAÇÃO PRIVILEGIADA',
+  titulo: 'A tranquilidade do campo. <br><span class="destaque-verde">A conveniência da cidade.</span>',
+  subtitulo: 'A perfeita integração entre a paz do interior e a facilidade de acesso a São José dos Campos. Viva cercado pela natureza sem abrir mão da infraestrutura urbana.',
+  video: {
+    src: '/media/video/sao-jose-vertical.mp4',
+    poster: '/media/img/sao-jose-vertical-poster.webp',
+    legenda: 'São José dos Campos & Represa Jaguari • Vídeo Vertical'
+  },
+  textoApoio: 'O Paraíso das Águas reúne o melhor dos dois mundos: tranquilidade rural com asfalto até a porta, a apenas 2 km da Represa Jaguari — ponto privilegiado para lanchas, jetski e passeios náuticos — e a 20 minutos de São José dos Campos, cidade de referência em saúde, educação e serviços.',
+  destaques: [
+    { valor: '20 min', titulo: 'Centro de São José dos Campos', texto: 'Comércio, gastronomia, centros médicos e serviços a curta distância pavimentada.' },
+    { valor: '2 km', titulo: 'Represa Jaguari (Jetski & Náutica)', texto: 'Ideal para esportes aquáticos, passeios de barco e pescaria esportiva a 5 minutos.' },
+    { valor: '6 km', titulo: 'Parque da Cidade (Burle Marx)', texto: 'Área verde tradicional de SJC para caminhadas, passeios culturais e eventos.' },
+    { valor: '~1h', titulo: 'São Paulo (Dutra / Carvalho Pinto)', texto: 'Ligação direta e rápida com a capital paulista e o Aeroporto de Guarulhos.' }
+  ],
+  botaoTexto: 'Saber mais sobre a localização e náutica no WhatsApp'
+};
+
+/* ---------------------------------------------------------------------------
+ * 12. SESSÃO 11: LOCALIZAÇÃO PRIVILEGIADA (PÁGINA 3 DO PDF)
  * -------------------------------------------------------------------------*/
 export const localizacao = {
   rotulo: '09. LOCALIZAÇÃO',
-  titulo: 'PERTO DA CIDADE. <br><span class="destaque-ouro">CONECTADO À NATUREZA.</span>',
+  titulo: 'PERTO DA CIDADE. <br><span class="destaque-verde">CONECTADO À NATUREZA.</span>',
   subtitulo: 'A perfeita integração entre a tranquilidade do campo e a proximidade de São José dos Campos.',
-  imagemAerea: '/media/img/sao-jose-vertical-poster.webp',
+  imagemAerea: '/media/img/localizacao/sao-jose-campos.webp',
+  videoFundo: '/media/video/mapa-drone-bg.mp4',
   distancias: [
     { valor: '20 min', destino: 'Centro de S. J. dos Campos', icone: 'carro' },
     { valor: '15 min', destino: 'Rodovia Dutra', icone: 'estrada' },
     { valor: '10 min', destino: 'Comércios e Serviços', icone: 'loja' }
   ],
-  botaoTexto: 'COMO CHEGAR >',
-  mapsLink: 'https://maps.app.goo.gl/kVdV28pwVikpB3oJ6'
+  botaoTexto: 'VER LOCALIZAÇÃO NO GOOGLE MAPS',
+  mapsLink: 'https://maps.app.goo.gl/AztxJXPuLWaPUBSWA'
 };
 
 /* ---------------------------------------------------------------------------
@@ -415,6 +447,7 @@ export default {
   possibilidades,
   autossuficiencia,
   compartilhar,
+  saoJose,
   localizacao,
   aquisicao,
   contato,

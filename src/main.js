@@ -27,6 +27,7 @@ import * as sessao2Scroll from './lib/sessao2Scroll.js';
 import * as carrossel from './lib/carrossel.js';
 import * as portal3d from './lib/portal3d.js';
 import { montarSecoesMestre } from './lib/secoes.js';
+import { iniciarAnimacoesEntrada } from './lib/animacoes.js';
 import { iniciarSeo } from './lib/seo.js';
 import { iniciarCookies, ligarLinkDePreferencias } from './lib/cookies.js';
 import { iniciarWhatsAppFlutuante, ligarBotoesWhatsApp } from './lib/whatsapp.js';
@@ -142,6 +143,7 @@ function arrancarInterno() {
   let secoes = null;
   try {
     secoes = montarSecoesMestre();
+    iniciarAnimacoesEntrada();
   } catch (e) {
     console.error('[pd] ERRO FATAL EM SECOES:', e);
   }

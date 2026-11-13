@@ -1,11 +1,58 @@
 /* ============================================================================
- * portal3d.css — ABERTURA CINEMATOGRÁFICA DO VÍDEO 3D (SESSÃO 2)
+ * portal3d.css — SESSÃO 2: ZOOM DO CAVALO & PORTAL VEGETAL 3D (6 CAMADAS)
  * ----------------------------------------------------------------------------
- * Efeito adicional no encerramento da animação de scroll da Sessão 2.
- * A área central abre horizontalmente pelo centro (duas superfícies se afastando)
- * revelando um quadro centralizado com o vídeo 3D do terreno.
+ * Timeline Coordenada:
+ * 1. 0% a 60%: Cena do cavalo (animacao 2 nova) com aproximação progressiva (zoom).
+ * 2. 60% a 75%: Fechamento rápido do portal vegetal tridimensional (6 camadas).
+ * 3. 75% a 100%: Abertura do portal em perspectiva 3D revelando o vídeo aéreo de drone.
  * ==========================================================================*/
 
+/* 1. Cena do Cavalo com Zoom Progressivo */
+.sessao2-cavalo-scene {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  z-index: 2;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.sessao2-cavalo-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  will-change: transform;
+  transform: scale(1);
+  transform-origin: center center;
+  transition: transform 0.05s linear;
+}
+
+.sessao2-cavalo-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.32);
+  pointer-events: none;
+  z-index: 1;
+}
+
+@media (max-width: 768px) {
+  .sessao2-cavalo-video {
+    /* Proporção 9:16 vertical natural */
+    aspect-ratio: 9 / 16;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+}
+
+/* 2. Palco do Portal Vegetal e Revelação do Drone */
 .portal-abertura {
   position: absolute;
   inset: 0;
@@ -27,67 +74,125 @@
   visibility: visible;
 }
 
-/* Portas que se abrem pelo centro */
-.portal-portas {
+/* Cenário Tridimensional das 6 Camadas do Portal */
+.portal-vegetal-cenario {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   pointer-events: none;
   z-index: 5;
+  perspective: 1400px;
+  transform-style: preserve-3d;
   overflow: hidden;
 }
 
-.portal-porta {
+/* Grupos Tridimensionais (Esquerdo e Direito) */
+.portal-grupo {
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 50%;
   height: 100%;
-  background: linear-gradient(
-    180deg,
-    rgba(3, 20, 25, 0.96) 0%,
-    rgba(4, 25, 31, 0.98) 50%,
-    rgba(2, 16, 20, 0.98) 100%
-  );
+  width: 53%;
+  z-index: 5;
   will-change: transform;
-  transition: transform 0.08s linear;
-  box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.8);
+  transform-style: preserve-3d;
 }
 
-.portal-porta--esq {
+.portal-grupo--esq {
   left: 0;
-  border-right: 1.5px solid rgba(217, 168, 60, 0.65);
-  box-shadow: 4px 0 25px rgba(217, 168, 60, 0.25), inset -10px 0 30px rgba(0, 0, 0, 0.6);
+  transform-origin: left center;
 }
 
-.portal-porta--dir {
+.portal-grupo--dir {
   right: 0;
-  border-left: 1.5px solid rgba(217, 168, 60, 0.65);
-  box-shadow: -4px 0 25px rgba(217, 168, 60, 0.25), inset 10px 0 30px rgba(0, 0, 0, 0.6);
+  transform-origin: right center;
 }
 
-/* Linha de brilho central antes de abrir */
+/* Camadas de cada grupo com profundidade independente */
+.portal-camada {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  will-change: transform;
+}
+
+.portal-porta-base {
+  inset: 0;
+  width: 100%;
+  z-index: 4;
+  transform: translateZ(0);
+  filter: drop-shadow(4px 0 25px rgba(0, 0, 0, 0.7));
+}
+
+.portal-plantas {
+  inset: 0;
+  width: 100%;
+  z-index: 6;
+  transform: translateZ(26px);
+  filter: drop-shadow(0 14px 30px rgba(0, 0, 0, 0.65));
+}
+
+.portal-tronco {
+  z-index: 7;
+  transform: translateZ(42px);
+  width: clamp(140px, 18vw, 240px);
+  filter: drop-shadow(0 10px 28px rgba(0, 0, 0, 0.75));
+}
+
+.portal-grupo--esq .portal-tronco {
+  left: 0;
+}
+
+.portal-grupo--dir .portal-tronco {
+  right: 0;
+}
+
+.portal-camada-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .portal-grupo {
+    width: 55%;
+  }
+  .portal-tronco {
+    width: clamp(100px, 22vw, 150px);
+  }
+  .portal-camada-img {
+    object-fit: cover;
+  }
+}
+
+/* Linha de costura luminosa botânica sutil no fechamento */
 .portal-costura-brilho {
   position: absolute;
   left: 50%;
-  top: 15%;
-  bottom: 15%;
-  width: 2px;
+  top: 8%;
+  bottom: 8%;
+  width: 3px;
   transform: translateX(-50%);
   background: linear-gradient(
     180deg,
     transparent 0%,
-    rgba(217, 168, 60, 0.85) 50%,
+    rgba(114, 196, 156, 0.95) 25%,
+    rgba(217, 168, 60, 0.95) 50%,
+    rgba(114, 196, 156, 0.95) 75%,
     transparent 100%
   );
-  box-shadow: 0 0 16px rgba(217, 168, 60, 0.9), 0 0 30px rgba(111, 227, 210, 0.5);
-  z-index: 6;
+  box-shadow: 0 0 16px rgba(114, 196, 156, 0.9), 0 0 32px rgba(217, 168, 60, 0.6);
+  z-index: 8;
   pointer-events: none;
-  transition: opacity 0.25s ease;
+  opacity: 0;
+  transition: opacity 0.2s ease;
 }
 
-/* Quadro central do vídeo 3D */
+/* 3. Quadro central do vídeo de Drone revelado atrás do portal */
 .portal-video-frame {
   position: relative;
   z-index: 2;
@@ -96,9 +201,9 @@
   align-items: center;
   justify-content: center;
   border-radius: 20px;
-  border: 1.5px solid rgba(217, 168, 60, 0.45);
+  border: 1.5px solid rgba(114, 196, 156, 0.5);
   background: #020c0e;
-  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.85), 0 0 45px rgba(217, 168, 60, 0.18);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.85), 0 0 45px rgba(114, 196, 156, 0.2);
   overflow: hidden;
   pointer-events: auto;
   will-change: transform, opacity;
@@ -108,8 +213,8 @@
 /* Desktop */
 @media (min-width: 769px) {
   .portal-video-frame {
-    width: min(480px, 80vw);
-    max-height: 74vh;
+    width: min(520px, 82vw);
+    max-height: 76vh;
     aspect-ratio: 9 / 16;
   }
 }
@@ -117,8 +222,8 @@
 /* Mobile */
 @media (max-width: 768px) {
   .portal-video-frame {
-    width: min(330px, 88vw);
-    max-height: 68svh;
+    width: min(340px, 90vw);
+    max-height: 70svh;
     aspect-ratio: 9 / 16;
     border-radius: 16px;
   }
@@ -153,11 +258,11 @@
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--ouro);
-  background: rgba(4, 25, 31, 0.75);
-  padding: 4px 10px;
+  color: #72C49C;
+  background: rgba(4, 25, 31, 0.85);
+  padding: 4px 12px;
   border-radius: 999px;
-  border: 1px solid rgba(217, 168, 60, 0.35);
+  border: 1px solid rgba(114, 196, 156, 0.4);
   backdrop-filter: blur(8px);
 }
 
@@ -167,11 +272,11 @@
   gap: 6px;
   font-family: var(--fonte-rotulos, 'Quicksand', sans-serif);
   font-size: 0.7rem;
-  color: #6fe3d2;
-  background: rgba(3, 20, 25, 0.75);
+  color: #72C49C;
+  background: rgba(3, 20, 25, 0.85);
   padding: 4px 10px;
   border-radius: 999px;
-  border: 1px solid rgba(111, 227, 210, 0.3);
+  border: 1px solid rgba(114, 196, 156, 0.35);
   backdrop-filter: blur(8px);
 }
 
@@ -196,7 +301,7 @@
   left: 0;
   right: 0;
   padding: 14px 16px;
-  background: linear-gradient(0deg, rgba(2, 16, 20, 0.9) 0%, transparent 100%);
+  background: linear-gradient(0deg, rgba(2, 16, 20, 0.92) 0%, transparent 100%);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -211,9 +316,9 @@
 }
 
 .portal-video-som-btn {
-  background: rgba(4, 25, 31, 0.75);
-  border: 1px solid rgba(217, 168, 60, 0.4);
-  color: var(--ouro);
+  background: rgba(4, 25, 31, 0.85);
+  border: 1px solid rgba(114, 196, 156, 0.45);
+  color: #72C49C;
   width: 32px;
   height: 32px;
   border-radius: 50%;
@@ -226,16 +331,15 @@
 }
 
 .portal-video-som-btn:hover {
-  background: rgba(217, 168, 60, 0.25);
+  background: rgba(114, 196, 156, 0.25);
   transform: scale(1.08);
 }
 
 /* Redução de movimento */
 @media (prefers-reduced-motion: reduce) {
-  .portal-porta {
+  .portal-grupo {
     transition: none !important;
     transform: none !important;
-    display: none !important;
   }
   .portal-costura-brilho {
     display: none !important;

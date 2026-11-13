@@ -35,12 +35,16 @@ function cabecalho({ rotulo, titulo, texto }) {
 
 /** Botão de WhatsApp / Ação no estilo do PDF */
 function botaoPDF(origem, texto, variante = 'dourado', link = '#') {
+  const isExternal = typeof link === 'string' && link.startsWith('http');
   const btn = criar('a', {
     classe: `btn-pdf btn-pdf--${variante} secao__cta`,
     href: link,
     'data-wa-origem': origem,
-    rel: 'noopener'
+    rel: isExternal ? 'noopener noreferrer' : 'noopener'
   });
+  if (isExternal) {
+    btn.setAttribute('target', '_blank');
+  }
   btn.innerHTML = `<span>${texto}</span> <span class="btn-pdf__seta" aria-hidden="true">&gt;</span>`;
   return btn;
 }
@@ -81,9 +85,28 @@ export function montarEfeitoParaiso() {
     texto: P.subtitulo
   }));
 
-  // Vídeo de apresentação oficial (Novo vídeo lv_0_20261112135807.mp4)
+  // Vídeo de apresentação oficial (com auto-play silencioso quando atinge o centro da tela)
   if (P.video) {
-    painel.appendChild(criarVideoFrame(P.video));
+    const videoMoldura = criarVideoFrame(P.video);
+    painel.appendChild(videoMoldura);
+    const videoEl = videoMoldura.querySelector('video');
+    if (videoEl && typeof window !== 'undefined' && 'IntersectionObserver' in window) {
+      videoEl.muted = true;
+      videoEl.playsInline = true;
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            videoEl.play().catch(() => {});
+          } else {
+            videoEl.pause();
+          }
+        });
+      }, {
+        threshold: 0.25,
+        rootMargin: '-20% 0px -20% 0px'
+      });
+      obs.observe(videoEl);
+    }
   }
 
   // Carrossel com profundidade dos 3 cards de destaque da terra
@@ -124,7 +147,7 @@ export function montarEfeitoParaiso() {
 }
 
 /* --------------------------------------------------------------------------
- * 04. AS SETE GLEBAS (PÁGINA 4 DO PDF — VÍDEO REMOVIDO, GALERIA REAL DE GLEBAS)
+ * 04. AS SETE GLEBAS (PÁGINA 4 DO PDF — VÍDEO REMOVIDO, MAPA COM FUNDO DRONE)
  * ------------------------------------------------------------------------ */
 export function montarPropriedades() {
   const secao = $('#propriedades');
@@ -161,9 +184,26 @@ export function montarPropriedades() {
     painel.appendChild(painelComercial);
   }
 
-  // Mapa oficial de demarcação (sem vídeo abaixo)
+  // Mapa oficial de demarcação com fundo sutil em vídeo de drone e botão Google Maps
   if (P.mapaImagem) {
     const mapaCaixa = criar('div', { classe: 'mapa-oficial-caixa' });
+
+    if (P.mapaVideoFundo) {
+      const droneBg = criar('video', {
+        classe: 'mapa-drone-video-bg',
+        src: P.mapaVideoFundo,
+        autoplay: '',
+        muted: '',
+        loop: '',
+        playsinline: '',
+        preload: 'metadata',
+        'aria-hidden': 'true'
+      });
+      droneBg.muted = true;
+      droneBg.play?.().catch(() => {});
+      mapaCaixa.appendChild(droneBg);
+    }
+
     mapaCaixa.appendChild(criar('img', {
       classe: 'mapa-oficial-img',
       src: P.mapaImagem,
@@ -180,40 +220,16 @@ export function montarPropriedades() {
       texto: 'MAPA OFICIAL DE DEMARCAÇÃO'
     }));
     const btnMapa = criar('a', {
-      classe: 'btn-mapa-interativo',
-      href: '#contato',
-      'data-wa-origem': 'mapa',
-      texto: P.botaoMapa || 'Ver no Mapa Interativo'
+      classe: 'btn-mapa-interativo btn-pdf btn-pdf--dourado',
+      href: P.mapsLink || 'https://maps.app.goo.gl/AztxJXPuLWaPUBSWA',
+      target: '_blank',
+      rel: 'noopener noreferrer'
     });
+    btnMapa.innerHTML = `<span>${P.botaoMapa || 'VER LOCALIZAÇÃO NO GOOGLE MAPS'}</span> <span class="btn-pdf__seta" aria-hidden="true">&gt;</span>`;
     barraAcaoMapa.appendChild(btnMapa);
     mapaCaixa.appendChild(barraAcaoMapa);
 
     painel.appendChild(mapaCaixa);
-  }
-
-  // Galeria Editorial de Fotos Reais da Propriedade (sem cards individuais ou fictícios)
-  if (P.fotosReais && P.fotosReais.length > 0) {
-    const galeriaReais = criar('div', { classe: 'glebas-fotos-reais' });
-    for (const f of P.fotosReais) {
-      const fig = criar('figure', { classe: 'glebas-foto-item' });
-      fig.appendChild(criar('img', {
-        classe: 'glebas-foto-img',
-        src: f.imagem,
-        alt: f.alt || 'Paisagem real do Paraíso das Águas',
-        loading: 'lazy',
-        decoding: 'async',
-        width: '800',
-        height: '530'
-      }));
-      if (f.legenda) {
-        fig.appendChild(criar('figcaption', {
-          classe: 'glebas-foto-legenda',
-          texto: f.legenda
-        }));
-      }
-      galeriaReais.appendChild(fig);
-    }
-    painel.appendChild(galeriaReais);
   }
 
   // Faixa de valor referencial
@@ -371,53 +387,82 @@ export function montarPossibilidades() {
 }
 
 /* --------------------------------------------------------------------------
- * 07. VIDA AUTOSSUFICIENTE (PÁGINA 9 DO PDF — GRADE 2x2 FOTOGRÁFICA)
+ * 07. VIDA AUTOSSUFICIENTE: O QUINTAL PRODUTIVO (QUADRO IMAGEM ESQ / TÍTULOS DIR)
  * ------------------------------------------------------------------------ */
 export function montarAutossuficiencia() {
   const secao = $('#autossuficiencia');
   if (!secao) return null;
 
   const A = config.autossuficiencia;
-  const painel = criar('div', { classe: 'painel' });
+  const painel = criar('div', { classe: 'painel painel--largo' });
 
-  painel.appendChild(cabecalho({
-    rotulo: A.rotulo,
-    titulo: A.titulo,
-    texto: A.subtitulo
-  }));
+  // Headline / Banner de transição narrativa da Sessão 6 para a 7 (conforme solicitado)
+  const transicaoBanner = criar('div', { classe: 'transicao-s6-s7' });
+  transicaoBanner.innerHTML = `
+    <span class="transicao-s6-s7__rotulo">${A.rotulo || 'AUTONOMIA &amp; SAÚDE FAMILIAR'}</span>
+    <h2 class="transicao-s6-s7__titulo">${A.titulo || 'Vida Autossustentável: <span class="destaque-verde">O Quintal Produtivo</span>'}</h2>
+    <p class="transicao-s6-s7__sub">${A.subtitulo || 'Produza parte dos próprios alimentos e viva em contato com a terra fértil.'}</p>
+  `;
+  painel.appendChild(transicaoBanner);
 
-  // Grade 2x2 com fotos, ícones e bordas iluminadas (Page 9 do PDF)
-  const grade = criar('div', { classe: 'grade-autossuficiencia-pdf' });
-  for (const item of A.cards) {
-    const card = criar('div', { classe: 'card-autossuf-pdf' });
+  // Quadro mestre: Imagens na Esquerda, Títulos na Direita com animação
+  const quadroMestre = criar('div', { classe: 'quadro-autossuf-mestre' });
 
-    const fotoCaixa = criar('div', { classe: 'card-autossuf-pdf__foto-caixa' });
-    fotoCaixa.appendChild(criar('img', {
-      classe: 'card-autossuf-pdf__foto',
-      src: item.imagem,
-      alt: item.titulo,
-      loading: 'lazy',
-      decoding: 'async',
-      width: '500',
-      height: '380'
-    }));
+  // Coluna Esquerda: Moldura fotográfica com transição suave
+  const esqCol = criar('div', { classe: 'quadro-autossuf__esquerda' });
+  const imgPrincipal = criar('img', {
+    classe: 'quadro-autossuf__img-principal',
+    src: A.cards[0].imagem,
+    alt: A.cards[0].titulo,
+    loading: 'lazy',
+    decoding: 'async',
+    width: '640',
+    height: '480'
+  });
+  esqCol.appendChild(imgPrincipal);
+  quadroMestre.appendChild(esqCol);
 
-    const cabecalhoCard = criar('div', { classe: 'card-autossuf-pdf__topo' });
-    const icSpan = criar('span', { classe: 'card-autossuf-pdf__icone' });
-    icSpan.innerHTML = icone(item.icone, { tamanho: 20 });
-    cabecalhoCard.appendChild(icSpan);
-    cabecalhoCard.appendChild(criar('h3', { classe: 'card-autossuf-pdf__titulo', texto: item.titulo }));
-    fotoCaixa.appendChild(cabecalhoCard);
+  // Coluna Direita: Títulos interativos com ícones e animação
+  const dirCol = criar('div', { classe: 'quadro-autossuf__direita' });
+  A.cards.forEach((card, idx) => {
+    const item = criar('div', {
+      classe: `quadro-autossuf__item ${idx === 0 ? 'ativo' : ''}`,
+      'data-indice': idx
+    });
 
-    card.appendChild(fotoCaixa);
+    const icSpan = criar('span', { classe: 'quadro-autossuf__item-icone' });
+    icSpan.innerHTML = icone(card.icone, { tamanho: 24 });
+    item.appendChild(icSpan);
 
-    const rodapeCard = criar('div', { classe: 'card-autossuf-pdf__rodape' });
-    rodapeCard.appendChild(criar('span', { classe: 'card-autossuf-pdf__sub', texto: item.sub }));
-    card.appendChild(rodapeCard);
+    const corpo = criar('div', { classe: 'quadro-autossuf__item-corpo' });
+    corpo.appendChild(criar('h3', { classe: 'quadro-autossuf__item-titulo', texto: card.titulo }));
+    corpo.appendChild(criar('p', { classe: 'quadro-autossuf__item-sub', texto: card.sub }));
+    item.appendChild(corpo);
 
-    grade.appendChild(card);
-  }
-  painel.appendChild(grade);
+    item.addEventListener('mouseenter', () => {
+      quadroMestre.querySelectorAll('.quadro-autossuf__item').forEach(el => el.classList.remove('ativo'));
+      item.classList.add('ativo');
+      imgPrincipal.style.opacity = '0.35';
+      imgPrincipal.style.transform = 'scale(0.98)';
+      setTimeout(() => {
+        imgPrincipal.src = card.imagem;
+        imgPrincipal.alt = card.titulo;
+        imgPrincipal.style.opacity = '1';
+        imgPrincipal.style.transform = 'scale(1)';
+      }, 140);
+    });
+
+    item.addEventListener('click', () => {
+      quadroMestre.querySelectorAll('.quadro-autossuf__item').forEach(el => el.classList.remove('ativo'));
+      item.classList.add('ativo');
+      imgPrincipal.src = card.imagem;
+      imgPrincipal.alt = card.titulo;
+    });
+
+    dirCol.appendChild(item);
+  });
+  quadroMestre.appendChild(dirCol);
+  painel.appendChild(quadroMestre);
 
   painel.appendChild(criar('hr', { classe: 'divisor-lago' }));
   painel.appendChild(botaoPDF('autossuficiencia', A.botaoTexto || 'Conhecer o Paraíso >', 'dourado'));
@@ -437,7 +482,7 @@ export function montarCompartilhar() {
   const C = config.compartilhar;
   const painel = criar('div', { classe: 'painel' });
 
-  // Foto de destaque da família no campo
+  // Foto de destaque da família no campo (Página 10 do PDF)
   if (C.imagemPrincipal) {
     const fotoDestaque = criar('div', { classe: 'patrimonio-foto-destaque' });
     fotoDestaque.appendChild(criar('img', {
@@ -485,7 +530,79 @@ export function montarCompartilhar() {
 }
 
 /* --------------------------------------------------------------------------
- * 09. LOCALIZAÇÃO PRIVILEGIADA (PÁGINA 3 DO PDF)
+ * 09. SÃO JOSÉ DOS CAMPOS & REPRESA JAGUARI (VÍDEO VERTICAL 9:16 EM PÉ)
+ * ------------------------------------------------------------------------ */
+export function montarSaoJose() {
+  const secao = $('#sao-jose');
+  if (!secao) return null;
+
+  const S = config.saoJose;
+  if (!S) return secao;
+
+  const painel = criar('div', { classe: 'painel painel--largo' });
+
+  painel.appendChild(cabecalho({
+    rotulo: S.rotulo,
+    titulo: S.titulo,
+    texto: S.subtitulo
+  }));
+
+  const gradeVertical = criar('div', { classe: 'grade-sjc-vertical' });
+
+  // Player vertical contínuo da Ponte Estaiada (autoplay, muted, loop, playsinline, SEM controles, SEM botão de play)
+  const videoCaixa = criar('div', { classe: 'sjc-video-vertical-caixa' });
+  const videoMoldura = criar('div', { classe: 'video-moldura video-moldura--9-16' });
+  const videoEl = criar('video', {
+    classe: 'video-player video-player--autoplay video-player--sao-jose',
+    src: S.video.src,
+    poster: S.video.poster,
+    autoplay: '',
+    muted: '',
+    loop: '',
+    playsinline: '',
+    preload: 'metadata'
+  });
+  videoEl.muted = true;
+  videoEl.play?.().catch(() => {});
+  videoMoldura.appendChild(videoEl);
+
+  if (S.video.legenda) {
+    videoMoldura.appendChild(criar('span', { classe: 'video-legenda-tag', texto: S.video.legenda }));
+  }
+  videoCaixa.appendChild(videoMoldura);
+  gradeVertical.appendChild(videoCaixa);
+
+  // Coluna de textos e destaques
+  const infoCol = criar('div', { classe: 'sjc-info-vertical' });
+  if (S.textoApoio) {
+    const pApoio = criar('p', { classe: 'secao__apoio secao__apoio--destaque' });
+    pApoio.innerHTML = S.textoApoio;
+    infoCol.appendChild(pApoio);
+  }
+
+  const gradeDestaques = criar('div', { classe: 'grade-sjc-destaques' });
+  for (const d of S.destaques) {
+    const card = criar('div', { classe: 'card-sjc' });
+    card.appendChild(criar('div', { classe: 'card-sjc__valor', texto: d.valor }));
+    card.appendChild(criar('h4', { classe: 'card-sjc__titulo', texto: d.titulo }));
+    card.appendChild(criar('p', { classe: 'card-sjc__texto', texto: d.texto }));
+    gradeDestaques.appendChild(card);
+  }
+  infoCol.appendChild(gradeDestaques);
+
+  infoCol.appendChild(criar('hr', { classe: 'divisor-lago' }));
+  infoCol.appendChild(botaoPDF('saoJose', S.botaoTexto || 'Saber mais no WhatsApp', 'dourado'));
+  gradeVertical.appendChild(infoCol);
+
+  painel.appendChild(gradeVertical);
+
+  secao.replaceChildren(painel);
+  secao.hidden = false;
+  return secao;
+}
+
+/* --------------------------------------------------------------------------
+ * 11. LOCALIZAÇÃO PRIVILEGIADA (PÁGINA 3 DO PDF)
  * ------------------------------------------------------------------------ */
 export function montarLocalizacao() {
   const secao = $('#localizacao');
@@ -503,6 +620,23 @@ export function montarLocalizacao() {
   // Imagem aérea panorâmica da cidade e relevo com pin "PARAÍSO DAS ÁGUAS"
   if (L.imagemAerea) {
     const mapaCaixa = criar('div', { classe: 'localizacao-mapa-caixa' });
+
+    if (L.videoFundo) {
+      const droneBg = criar('video', {
+        classe: 'localizacao-mapa-video-bg',
+        src: L.videoFundo,
+        autoplay: '',
+        muted: '',
+        loop: '',
+        playsinline: '',
+        preload: 'metadata',
+        'aria-hidden': 'true'
+      });
+      droneBg.muted = true;
+      droneBg.play?.().catch(() => {});
+      mapaCaixa.appendChild(droneBg);
+    }
+
     mapaCaixa.appendChild(criar('img', {
       classe: 'localizacao-mapa-img',
       src: L.imagemAerea,
@@ -541,7 +675,7 @@ export function montarLocalizacao() {
   painel.appendChild(gradeDist);
 
   painel.appendChild(criar('hr', { classe: 'divisor-lago' }));
-  painel.appendChild(botaoPDF('localizacao', L.botaoTexto || 'COMO CHEGAR >', 'dourado', L.mapsLink || '#'));
+  painel.appendChild(botaoPDF('localizacao', L.botaoTexto || 'VER LOCALIZAÇÃO NO GOOGLE MAPS', 'dourado', L.mapsLink || 'https://maps.app.goo.gl/AztxJXPuLWaPUBSWA'));
 
   secao.replaceChildren(painel);
   secao.hidden = false;
@@ -683,8 +817,9 @@ export function montarSecoesMestre() {
     montarPossibilidades(),
     montarAutossuficiencia(),
     montarCompartilhar(),
-    montarLocalizacao(),
+    montarSaoJose(),
     montarAquisicao(),
+    montarLocalizacao(),
     montarContato()
   ];
   return lista;
@@ -698,6 +833,7 @@ export default {
   montarPossibilidades,
   montarAutossuficiencia,
   montarCompartilhar,
+  montarSaoJose,
   montarLocalizacao,
   montarAquisicao,
   montarContato

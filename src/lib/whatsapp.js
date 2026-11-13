@@ -67,6 +67,13 @@ export function ligarBotoesWhatsApp(raiz = document) {
     const gleba = el.dataset.waGleba || '';
     const intencao = el.dataset.waIntencao || '';
 
+    const hrefAtual = el.getAttribute('href') || '';
+    if (hrefAtual.includes('maps.app.goo.gl') || hrefAtual.includes('google.com/maps') || hrefAtual.includes('goo.gl/maps')) {
+      el.setAttribute('target', '_blank');
+      el.setAttribute('rel', 'noopener noreferrer');
+      return;
+    }
+
     el.setAttribute('href', montarLinkWhatsApp(origem, { gleba, intencao }));
     el.setAttribute('target', '_blank');
     el.setAttribute('rel', 'noopener noreferrer');

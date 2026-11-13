@@ -16,7 +16,7 @@ import { clamp } from './utils.js';
 const TOTAL_FRAMES = 94;
 const PREFIXO = '/media/frames/fundo_global/fundo_';
 const EXTENSAO = '.webp';
-const NUM_CICLOS_GLOBAL = 3.5; // Número de voltas completas ao longo do scroll total
+const NUM_CICLOS_GLOBAL = 1; // Scrub 1:1 linear e contínuo ao longo do scroll (sem saltos artificiais)
 
 let canvas = null;
 let ctx = null;
@@ -138,9 +138,9 @@ let rafId = null;
  * @param {number} numCiclos Número de repetições calibradas para a altura da página
  * @returns {number} Progresso normalizado de 0 a 1 dentro do ciclo
  */
-export function calculateLoopedProgress(scrollProgress, numCiclos = 2.5) {
-  const progressoTotal = scrollProgress * numCiclos;
-  return progressoTotal % 1;
+export function calculateLoopedProgress(scrollProgress, numCiclos = 1) {
+  // Progressão linear 1:1 sem saltos ou loops abruptos, acompanhando a rolagem real da página
+  return clamp(scrollProgress, 0, 1);
 }
 
 function renderizarFrameAtual() {
