@@ -33,6 +33,16 @@ export function iniciarHero() {
   if (!headline || !secao) return null;
   ativo = true;
 
+  const heroVideo = document.getElementById('hero-video');
+  if (heroVideo) {
+    heroVideo.muted = true;
+    heroVideo.playsInline = true;
+    heroVideo.play?.().catch(() => {});
+    heroVideo.addEventListener('playing', () => {
+      if (heroBgImg) heroBgImg.style.opacity = '0';
+    }, { once: true });
+  }
+
   montarSelos();
   montarEmblemas();
   base = { headline: null, sub: null, selos: null, emblemas: null, acoes: null, wordmark: null, bg: null };
