@@ -7,8 +7,8 @@
 .secoes {
   position: relative;
   width: 100%;
-  z-index: var(--z-conteudo);
-  background: var(--noite-abissal);
+  z-index: var(--z-conteudo, 10);
+  background: transparent;
 }
 
 /* Painéis de Seção */
@@ -26,15 +26,16 @@
   max-width: 980px;
   margin: 0 auto;
   padding: var(--e5) var(--e4);
-  border: 1px solid var(--cor-borda);
+  border: 1px solid rgba(212, 163, 89, 0.25);
   border-radius: var(--r-organico);
   background: linear-gradient(
     180deg,
-    rgba(4, 25, 31, 0.88) 0%,
-    rgba(6, 36, 39, 0.92) 100%
+    rgba(4, 25, 31, 0.72) 0%,
+    rgba(6, 36, 39, 0.78) 100%
   );
-  box-shadow: var(--sombra-cartao);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.55);
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 @media (max-width: 600px) {
@@ -1384,113 +1385,136 @@
   color: #04191F;
 }
 
-.grade-glebas-pdf {
+/* Página 4: Destaques Comerciais Obrigatórios (7 Glebas, 4 com Casas, a partir de R$ 475 mil) */
+.glebas-painel-comercial {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin: 24px 0;
+  padding: 24px 18px;
+  background: rgba(6, 33, 33, 0.72);
+  border: 1px solid rgba(212, 163, 89, 0.35);
+  border-radius: 18px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+@media (max-width: 768px) {
+  .glebas-painel-comercial {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    padding: 20px 16px;
+  }
+}
+
+.glebas-stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 8px 12px;
+  position: relative;
+}
+
+@media (min-width: 769px) {
+  .glebas-stat-item:not(:last-child) {
+    border-right: 1px solid rgba(212, 163, 89, 0.2);
+  }
+}
+
+@media (max-width: 768px) {
+  .glebas-stat-item:not(:last-child) {
+    border-bottom: 1px solid rgba(212, 163, 89, 0.18);
+    padding-bottom: 16px;
+  }
+}
+
+.glebas-stat-num {
+  font-family: var(--fonte-titulos, 'Cormorant Garamond', serif);
+  font-size: 2.8rem;
+  font-weight: 700;
+  line-height: 1.05;
+  background: linear-gradient(135deg, #FFF 0%, #ECC880 50%, #D4A359 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 4px;
+}
+
+.glebas-stat-preco {
+  font-size: 2.2rem;
+  letter-spacing: -0.02em;
+}
+
+.glebas-stat-rotulo {
+  font-family: var(--fonte-corpo, 'Plus Jakarta Sans', sans-serif);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #ECC880;
+  margin-bottom: 6px;
+}
+
+.glebas-stat-desc {
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: rgba(240, 246, 244, 0.78);
+  max-width: 240px;
+}
+
+/* Galeria Editorial de Fotos Reais da Propriedade (sem cards e-commerce) */
+.glebas-fotos-reais {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
   margin: 28px 0;
 }
 
-.card-gleba-pdf {
-  background: rgba(6, 33, 33, 0.7);
-  border: 1px solid rgba(212, 163, 89, 0.25);
-  border-radius: 18px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+@media (max-width: 768px) {
+  .glebas-fotos-reais {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
 }
 
-.card-gleba-pdf:hover {
-  transform: translateY(-4px);
-  border-color: rgba(212, 163, 89, 0.6);
-  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.5);
-}
-
-.card-gleba-pdf__foto-caixa {
+.glebas-foto-item {
+  margin: 0;
   position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(4, 25, 31, 0.7);
+  border: 1px solid rgba(212, 163, 89, 0.28);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.glebas-foto-item:hover {
+  transform: translateY(-3px);
+  border-color: rgba(212, 163, 89, 0.6);
+}
+
+.glebas-foto-img {
   width: 100%;
   aspect-ratio: 16 / 10;
-  overflow: hidden;
-}
-
-.card-gleba-pdf__foto {
-  width: 100%;
-  height: 100%;
   object-fit: cover;
+  display: block;
   transition: transform 0.4s ease;
 }
 
-.card-gleba-pdf:hover .card-gleba-pdf__foto {
-  transform: scale(1.05);
+.glebas-foto-item:hover .glebas-foto-img {
+  transform: scale(1.04);
 }
 
-.card-gleba-pdf__info {
-  padding: 18px;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-}
-
-.card-gleba-pdf__nome {
-  font-family: var(--fonte-titulos, 'Cormorant Garamond', serif);
-  font-size: 1.4rem;
-  color: #fff;
-  margin: 0 0 4px;
-}
-
-.card-gleba-pdf__area {
-  font-size: 0.95rem;
-  color: #ECC880;
-  font-weight: 600;
-  margin: 0 0 12px;
-}
-
-.card-gleba-pdf__tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 16px;
-}
-
-.tag-gleba-pdf {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.74rem;
-  padding: 4px 10px;
-  border-radius: 999px;
-  background: rgba(101, 184, 141, 0.12);
-  border: 1px solid rgba(101, 184, 141, 0.3);
-  color: #A8F2E6;
-}
-
-.tag-gleba-pdf__ponto {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: #65B88D;
-}
-
-.btn-conhecer-gleba {
-  display: inline-flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 16px;
-  border-radius: 10px;
-  background: rgba(212, 163, 89, 0.15);
-  border: 1px solid rgba(212, 163, 89, 0.4);
-  color: #ECC880;
-  font-size: 0.85rem;
-  font-weight: 600;
-  text-decoration: none;
-  margin-top: auto;
-  transition: background 0.2s, color 0.2s;
-}
-
-.btn-conhecer-gleba:hover {
-  background: #D4A359;
-  color: #04191F;
+.glebas-foto-legenda {
+  padding: 12px 14px;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: rgba(240, 246, 244, 0.85);
+  font-style: italic;
+  border-top: 1px solid rgba(212, 163, 89, 0.15);
+  background: rgba(6, 33, 33, 0.85);
+  text-align: center;
 }
 
 .faixa-comercial-referencia {
@@ -1566,12 +1590,6 @@
   margin: 24px 0;
 }
 
-@media (max-width: 640px) {
-  .galeria-projetos-pdf {
-    grid-template-columns: 1fr;
-  }
-}
-
 .quadro-projeto-pdf {
   position: relative;
   border-radius: 18px;
@@ -1592,9 +1610,33 @@
   grid-column: span 2;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 680px) {
+  .galeria-projetos-pdf {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding: 0 calc(50% - 130px);
+    padding: 20px calc(50% - 130px);
+    gap: 14px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    margin: 20px -16px;
+    perspective: 1000px;
+  }
+  .galeria-projetos-pdf::-webkit-scrollbar {
+    display: none;
+  }
+  .quadro-projeto-pdf {
+    flex: 0 0 260px;
+    scroll-snap-align: center;
+    scroll-snap-stop: normal;
+    transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.35s ease;
+  }
   .quadro-projeto-pdf--principal {
-    grid-column: span 1;
+    grid-column: auto;
+  }
+  .quadro-projeto-pdf--principal .quadro-projeto-pdf__foto-caixa {
+    aspect-ratio: 16 / 10;
   }
 }
 

@@ -92,15 +92,21 @@
   --brilho-acao:  0 0 22px rgba(111, 227, 210, 0.34);
   --brilho-cta:   0 0 26px rgba(217, 168, 60, 0.34);
 
-  /* ---------- Z-index (uma escala só, documentada) ---------------------- */
-  --z-palco:     0;
-  --z-conteudo:  10;
-  --z-dica:      20;
-  --z-nav:       55;
-  --z-progresso: 60;
-  --z-wa:        70;
-  --z-cookies:   80;
-  --z-overlay:   90;
+  /* ---------- Z-index (Arquitetura Técnica do Sistema de Camadas) ------- */
+  --z-global-background: 0;
+  --z-global-glass:      1;
+  --z-palco:             0;
+  --z-section-content:   5;
+  --z-conteudo:          10;
+  --z-section-animation: 10;
+  --z-dica:              20;
+  --z-navigation:        50;
+  --z-nav:               55;
+  --z-progresso:         60;
+  --z-wa:                70;
+  --z-cookies:           80;
+  --z-overlay:           90;
+  --z-modal:             100;
 
   /* ---------- Valores controlados pelo JS (não editar aqui) ------------- */
   --altura-scroll: 780svh;   /* sobrescrito por main.js a partir de config.js */

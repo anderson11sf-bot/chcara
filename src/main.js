@@ -171,10 +171,51 @@ function arrancarInterno() {
    * (e) Assinatura única de progresso de scroll
    * ---------------------------------------------------------------------- */
   const secaoCenas = document.getElementById('secao-cenas');
+  const palcoEl = document.getElementById('palco');
+
+  const atualizarVisibilidadeFundoGlobal = (y, vh) => {
+    if (!palcoEl) return;
+
+    // Fim da Sessão 2: onde a transição da cena 2 termina
+    let fimSessao2 = vh * 2.5;
+    if (secaoCenas) {
+      fimSessao2 = secaoCenas.offsetTop + secaoCenas.offsetHeight;
+    }
+
+    // Intervalo de transição da Sessão 2 para a Sessão 3
+    const margem = vh * 0.35;
+    const inicioFade = fimSessao2 - vh - margem;
+    const fimFade = fimSessao2 - vh * 0.15;
+
+    if (y < inicioFade) {
+      // Sessão 1 e Sessão 2: Fundo global oculto
+      if (palcoEl.dataset.visivel !== 'false') {
+        palcoEl.dataset.visivel = 'false';
+        palcoEl.style.opacity = '0';
+        palcoEl.style.visibility = 'hidden';
+      }
+    } else if (y >= fimFade) {
+      // Sessão 3 em diante: Fundo global visível
+      if (palcoEl.dataset.visivel !== 'true') {
+        palcoEl.dataset.visivel = 'true';
+        palcoEl.style.opacity = '1';
+        palcoEl.style.visibility = 'visible';
+      }
+    } else {
+      // Transição suave
+      const t = Math.min(1, Math.max(0, (y - inicioFade) / (fimFade - inicioFade)));
+      palcoEl.dataset.visivel = 'true';
+      palcoEl.style.opacity = t.toFixed(3);
+      palcoEl.style.visibility = 'visible';
+    }
+  };
 
   const atualizarQuadrosScroll = (pGlobal) => {
     const y = window.scrollY || window.pageYOffset || 0;
     const vh = window.innerHeight || 1;
+
+    // 0. Controle de Visibilidade do Fundo Global (Oculto em 1 e 2, ativo de 3 em diante)
+    atualizarVisibilidadeFundoGlobal(y, vh);
 
     // 1. Progresso do Hero (0 a 1 nos primeiros 85% de vh)
     const pHero = Math.min(1, Math.max(0, y / Math.max(1, vh * 0.85)));
@@ -193,7 +234,7 @@ function arrancarInterno() {
     carrossel.definirProgresso(pCena);
     portal3d.definirProgresso(pCena);
 
-    // 3. Fundo Global contínuo (vídeo sincronizado com o scroll de todo o site)
+    // 3. Fundo Global contínuo (vídeo original sincronizado com o scroll de todo o site)
     controleFundo?.definirProgresso(pGlobal);
     controlePalco?.definirProgresso(pGlobal);
 

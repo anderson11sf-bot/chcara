@@ -139,7 +139,29 @@ export function montarPropriedades() {
     texto: P.subtitulo
   }));
 
-  // Mapa de demarcação oficial de alta definição
+  // Destaques comerciais obrigatórios: 7 Glebas, 4 com Casas, A partir de R$ 475 mil
+  if (P.destaquesComerciais && P.destaquesComerciais.length > 0) {
+    const painelComercial = criar('div', { classe: 'glebas-painel-comercial' });
+    for (const d of P.destaquesComerciais) {
+      const item = criar('div', { classe: 'glebas-stat-item' });
+      item.appendChild(criar('div', {
+        classe: d.numero.includes('R$') ? 'glebas-stat-num glebas-stat-preco' : 'glebas-stat-num',
+        texto: d.numero
+      }));
+      item.appendChild(criar('div', {
+        classe: 'glebas-stat-rotulo',
+        texto: d.rotulo
+      }));
+      item.appendChild(criar('div', {
+        classe: 'glebas-stat-desc',
+        texto: d.descricao
+      }));
+      painelComercial.appendChild(item);
+    }
+    painel.appendChild(painelComercial);
+  }
+
+  // Mapa oficial de demarcação (sem vídeo abaixo)
   if (P.mapaImagem) {
     const mapaCaixa = criar('div', { classe: 'mapa-oficial-caixa' });
     mapaCaixa.appendChild(criar('img', {
@@ -155,7 +177,7 @@ export function montarPropriedades() {
     const barraAcaoMapa = criar('div', { classe: 'mapa-oficial-barra' });
     barraAcaoMapa.appendChild(criar('span', {
       classe: 'mapa-oficial-tag',
-      texto: 'MAPA DAS GLEBAS (A a G)'
+      texto: 'MAPA OFICIAL DE DEMARCAÇÃO'
     }));
     const btnMapa = criar('a', {
       classe: 'btn-mapa-interativo',
@@ -169,60 +191,38 @@ export function montarPropriedades() {
     painel.appendChild(mapaCaixa);
   }
 
-  // Composição elegante de fotografias reais dos terrenos e cards das 7 Glebas
-  // (Vídeo removido conforme instrução do usuário)
-  if (P.glebas && P.glebas.length > 0) {
-    const listaGlebas = criar('div', { classe: 'grade-glebas-pdf' });
-    for (const g of P.glebas) {
-      const cardGleba = criar('div', { classe: 'card-gleba-pdf' });
-
-      // Foto real da gleba
-      const fotoCaixa = criar('div', { classe: 'card-gleba-pdf__foto-caixa' });
-      fotoCaixa.appendChild(criar('img', {
-        classe: 'card-gleba-pdf__foto',
-        src: g.imagem,
-        alt: `${g.nome} - Paraíso das Águas`,
+  // Galeria Editorial de Fotos Reais da Propriedade (sem cards individuais ou fictícios)
+  if (P.fotosReais && P.fotosReais.length > 0) {
+    const galeriaReais = criar('div', { classe: 'glebas-fotos-reais' });
+    for (const f of P.fotosReais) {
+      const fig = criar('figure', { classe: 'glebas-foto-item' });
+      fig.appendChild(criar('img', {
+        classe: 'glebas-foto-img',
+        src: f.imagem,
+        alt: f.alt || 'Paisagem real do Paraíso das Águas',
         loading: 'lazy',
         decoding: 'async',
-        width: '400',
-        height: '260'
+        width: '800',
+        height: '530'
       }));
-      cardGleba.appendChild(fotoCaixa);
-
-      // Informações da gleba
-      const infoCaixa = criar('div', { classe: 'card-gleba-pdf__info' });
-      infoCaixa.appendChild(criar('h3', { classe: 'card-gleba-pdf__nome', texto: g.nome }));
-      infoCaixa.appendChild(criar('p', { classe: 'card-gleba-pdf__area', texto: g.area }));
-
-      // Tags de diferenciais
-      const tagsBox = criar('div', { classe: 'card-gleba-pdf__tags' });
-      for (const t of g.tags) {
-        const tagSpan = criar('span', { classe: 'tag-gleba-pdf' });
-        tagSpan.innerHTML = `<span class="tag-gleba-pdf__ponto"></span>${t}`;
-        tagsBox.appendChild(tagSpan);
+      if (f.legenda) {
+        fig.appendChild(criar('figcaption', {
+          classe: 'glebas-foto-legenda',
+          texto: f.legenda
+        }));
       }
-      infoCaixa.appendChild(tagsBox);
-
-      // Botão Conhecer Gleba
-      const btnGleba = criar('a', {
-        classe: 'btn-conhecer-gleba',
-        href: '#contato',
-        'data-wa-origem': `gleba-${g.nome.toLowerCase()}`
-      });
-      btnGleba.innerHTML = `<span>Conhecer Gleba</span> <span class="seta">&gt;</span>`;
-      infoCaixa.appendChild(btnGleba);
-
-      cardGleba.appendChild(infoCaixa);
-      listaGlebas.appendChild(cardGleba);
+      galeriaReais.appendChild(fig);
     }
-    painel.appendChild(listaGlebas);
+    painel.appendChild(galeriaReais);
   }
 
   // Faixa de valor referencial
-  painel.appendChild(criar('div', {
-    classe: 'faixa-comercial-referencia',
-    texto: P.referenciaComercial
-  }));
+  if (P.referenciaComercial) {
+    painel.appendChild(criar('div', {
+      classe: 'faixa-comercial-referencia',
+      texto: P.referenciaComercial
+    }));
+  }
 
   painel.appendChild(criar('hr', { classe: 'divisor-lago' }));
   painel.appendChild(botaoPDF('propriedades', 'Verificar disponibilidade das glebas no WhatsApp', 'dourado'));

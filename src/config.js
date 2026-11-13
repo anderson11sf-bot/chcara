@@ -126,51 +126,41 @@ export const efeitoParaiso = {
 export const propriedades = {
   rotulo: '04 / PROJETO',
   titulo: 'AS SETE GLEBAS',
-  subtitulo: 'Descubra cada propriedade e suas características.',
+  subtitulo: 'Grandes propriedades rurais com infraestrutura e natureza preservada em São José dos Campos.',
   mapaImagem: '/media/img/mapa-oficial-terreno.webp',
   botaoMapa: 'Ver no Mapa Interativo',
-  glebas: [
+  destaquesComerciais: [
     {
-      nome: 'GLEBA A',
-      area: '20.000 m² de área total',
-      tags: ['Lago Central', 'Privacidade'],
-      imagem: '/media/img/glebas/gleba-a-lago-vista.webp'
+      numero: '7',
+      rotulo: 'GLEBAS DISPONÍVEIS',
+      descricao: 'Propriedades rurais exclusivas a partir de 20.000 m²'
     },
     {
-      nome: 'GLEBA B',
-      area: '20.500 m² de área total',
-      tags: ['Vista Panorâmica', 'Acesso Fácil'],
-      imagem: '/media/img/glebas/gleba-b-estrada-natureza.webp'
+      numero: '4',
+      rotulo: 'COM CASAS',
+      descricao: 'Glebas com residências campestres já implantadas'
     },
     {
-      nome: 'GLEBA C',
-      area: '21.200 m² de área total',
-      tags: ['Margem do Lago', 'Deck Natural'],
-      imagem: '/media/img/glebas/gleba-c-lago-deck.webp'
+      numero: 'R$ 475 mil',
+      rotulo: 'A PARTIR DE',
+      descricao: 'Financiamento facilitado direto com o proprietário'
+    }
+  ],
+  fotosReais: [
+    {
+      imagem: '/media/img/glebas/foto-real-lago-panoramica.webp',
+      legenda: 'Lago central e topografia suave com nascentes preservadas',
+      alt: 'Vista panorâmica do lago central no Paraíso das Águas'
     },
     {
-      nome: 'GLEBA D',
-      area: '22.300 m² de área total',
-      tags: ['Platô Elevado', 'Nascente Próxima'],
-      imagem: '/media/img/glebas/gleba-d-plato-elevado.webp'
+      imagem: '/media/img/glebas/foto-real-casa-campo.webp',
+      legenda: 'Residência campestre pronta integrada à paisagem natural',
+      alt: 'Casa de campo no Paraíso das Águas'
     },
     {
-      nome: 'GLEBA E',
-      area: '20.000 m² de área total',
-      tags: ['Colina Suave', 'Terra Fértil'],
-      imagem: '/media/img/glebas/gleba-e-colina-verde.webp'
-    },
-    {
-      nome: 'GLEBA F',
-      area: '23.830 m² de área total',
-      tags: ['Mata Nativa', 'Máxima Privacidade'],
-      imagem: '/media/img/glebas/gleba-f-mata-nativa.webp'
-    },
-    {
-      nome: 'GLEBA G',
-      area: '20.100 m² de área total',
-      tags: ['Nascente Exclusiva', 'Lago Central'],
-      imagem: '/media/img/glebas/gleba-g-nascente-lago.webp'
+      imagem: '/media/img/glebas/foto-real-colina-verde.webp',
+      legenda: 'Platôs elevados e solo fértil com horizonte aberto',
+      alt: 'Colinas e vegetação nativa do Paraíso das Águas'
     }
   ],
   referenciaComercial: 'Propriedades a partir de R$ 475 mil* com financiamento facilitado direto com o proprietário.'

@@ -10,38 +10,26 @@
 .palco {
   position: fixed;
   inset: 0;
-  z-index: var(--z-palco);
+  z-index: var(--z-global-background, 0);
   /* O palco é só cenário: nunca intercepta toque/clique */
   pointer-events: none;
   overflow: hidden;
   background-color: var(--noite-abissal);
-  /* --------------------------------------------------------------------
-   * FUNDO DE SEGURANÇA (rede de proteção)
-   * --------------------------------------------------------------------
-   * O fundo "de verdade" é o canvas procedural. Este degradê em CSS fica
-   * ATRÁS dele e existe para o caso de o canvas não desenhar — navegador sem
-   * canvas 2D, WebView antiga, erro de runtime. Custo: zero (é estático, não
-   * anima e não usa imagem).
-   *
-   * O resultado é a mesma cena em versão simplificada: céu de amanhecer em
-   * cima, água escura embaixo.
-   * ------------------------------------------------------------------ */
-  background-image:
-    radial-gradient(70% 38% at 62% 30%, rgba(244, 208, 122, 0.20) 0%, rgba(244, 208, 122, 0) 70%),
-    radial-gradient(120% 55% at 50% 8%, rgba(90, 150, 140, 0.55) 0%, rgba(9, 38, 48, 0) 70%),
-    linear-gradient(
-      180deg,
-      #0e3a44 0%,
-      #14545a 32%,
-      #1d6a63 50%,
-      #123f4c 56%,
-      #0a2c37 74%,
-      #061c26 100%
-    );
-  /* isolate: cria um contexto de pintura próprio (não vaza para o conteúdo) */
   isolation: isolate;
-  /* Avisa o navegador que essas camadas vão mudar (ajuda o compositor) */
   contain: strict;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.palco[data-visivel="true"] {
+  opacity: 1;
+  visibility: visible;
+}
+
+.palco[data-visivel="false"] {
+  opacity: 0;
+  visibility: hidden;
 }
 
 .palco__fundo {
@@ -49,18 +37,9 @@
   inset: 0;
   width: 100%;
   height: 100%;
-  /* O canvas é o cenário; a nitidez vem do DPR interno controlado */
   image-rendering: auto;
-  opacity: 0;
-  transition: opacity 900ms var(--curva);
-}
-.palco.pronto .palco__fundo { opacity: 1; }
-
-/* Modo de prova (?prova=1): mostra o canvas na hora, sem transição.
-   Usado só pelas ferramentas de verificação visual. */
-body.prova-sem-fade .palco__fundo {
-  opacity: 1 !important;
-  transition: none !important;
+  opacity: 1;
+  z-index: var(--z-global-background, 0);
 }
 
 /* Reservas para as Fases 2 e 3 (tela de VSL e grade de vídeos no palco) */
@@ -90,14 +69,11 @@ body.prova-sem-fade .palco__fundo {
 .vidro {
   position: absolute;
   inset: 0;
-  background: radial-gradient(
-    130% 100% at 50% 30%,
-    rgba(3, 24, 25, 0.62) 0%,
-    rgba(3, 20, 21, 0.78) 60%,
-    rgba(2, 16, 17, 0.90) 100%
-  );
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  background: rgba(3, 20, 25, 0.42);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  z-index: var(--z-global-glass, 1);
+  pointer-events: none;
   box-shadow: inset 0 0 160px 40px rgba(2, 16, 17, 0.75);
 }
 

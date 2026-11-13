@@ -130,23 +130,20 @@ function desenharFrame(img) {
   ctx.drawImage(img, 0, 0, iw, ih, sx, sy, sw, sh);
 }
 
+let rafId = null;
+
 /**
- * Define o progresso de exibição do fundo com base no scroll global (0 a 1).
- * O cálculo é cíclico, suave e perfeitamente contínuo ao longo de todo o documento.
+ * Calcula o progresso cíclico do vídeo de forma contínua e sem saltos visuais.
+ * @param {number} scrollProgress (0 a 1)
+ * @param {number} numCiclos Número de repetições calibradas para a altura da página
+ * @returns {number} Progresso normalizado de 0 a 1 dentro do ciclo
  */
-export function definirProgresso(pGlobal) {
-  if (!rodando || !ctx) return;
-  const p = clamp(pGlobal, 0, 1);
-  if (Math.abs(p - pUltimo) < 0.0005) return;
-  pUltimo = p;
+export function calculateLoopedProgress(scrollProgress, numCiclos = 2.5) {
+  const progressoTotal = scrollProgress * numCiclos;
+  return progressoTotal % 1;
+}
 
-  // Ciclo infinito suave
-  const progressoCiclo = (p * NUM_CICLOS_GLOBAL) % 1;
-  const alvo = Math.min(TOTAL_FRAMES, Math.max(1, Math.floor(progressoCiclo * TOTAL_FRAMES) + 1));
-
-  if (alvo === frameAtual) return;
-  frameAtual = alvo;
-
+function renderizarFrameAtual() {
   if (cacheFrames.has(frameAtual)) {
     desenharFrame(cacheFrames.get(frameAtual));
   } else {
@@ -165,9 +162,29 @@ export function definirProgresso(pGlobal) {
       desenharFrame(cacheFrames.get(maisProximo));
     }
     carregarFrame(frameAtual, (img) => {
-      if (frameAtual === alvo) desenharFrame(img);
+      if (frameAtual === frameAtual) desenharFrame(img);
     });
   }
+}
+
+/**
+ * Define o progresso de exibição do fundo com base no scroll global (0 a 1).
+ * O cálculo é cíclico, reversível e sincronizado via requestAnimationFrame.
+ */
+export function definirProgresso(pGlobal) {
+  if (!rodando || !ctx) return;
+  const p = clamp(pGlobal, 0, 1);
+  if (Math.abs(p - pUltimo) < 0.0004) return;
+  pUltimo = p;
+
+  const progressoCiclo = calculateLoopedProgress(p, NUM_CICLOS_GLOBAL);
+  const alvo = Math.min(TOTAL_FRAMES, Math.max(1, Math.floor(progressoCiclo * TOTAL_FRAMES) + 1));
+
+  if (alvo === frameAtual) return;
+  frameAtual = alvo;
+
+  if (rafId) cancelAnimationFrame(rafId);
+  rafId = requestAnimationFrame(renderizarFrameAtual);
 }
 
 export function parar() {
