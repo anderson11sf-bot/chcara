@@ -192,15 +192,13 @@ export function montarPropriedades() {
       const droneBg = criar('video', {
         classe: 'mapa-drone-video-bg',
         src: P.mapaVideoFundo,
-        autoplay: '',
         muted: '',
         loop: '',
         playsinline: '',
-        preload: 'metadata',
+        preload: 'none',
         'aria-hidden': 'true'
       });
       droneBg.muted = true;
-      droneBg.play?.().catch(() => {});
       mapaCaixa.appendChild(droneBg);
     }
 
@@ -354,14 +352,12 @@ export function montarPossibilidades() {
         classe: 'ticker-video-player',
         src: vid.src,
         poster: vid.poster,
-        preload: 'metadata',
+        preload: 'none',
         playsinline: '',
         muted: '',
-        loop: '',
-        autoplay: ''
+        loop: ''
       });
       video.muted = true;
-      video.play().catch(() => {});
       itemVid.appendChild(video);
 
       const legenda = criar('span', { classe: 'ticker-video-legenda', texto: vid.titulo });
@@ -549,21 +545,19 @@ export function montarSaoJose() {
 
   const gradeVertical = criar('div', { classe: 'grade-sjc-vertical' });
 
-  // Player vertical contínuo da Ponte Estaiada (autoplay, muted, loop, playsinline, SEM controles, SEM botão de play)
+  // Player vertical contínuo da Ponte Estaiada (autoplay quando visível, muted, loop, playsinline, SEM controles, SEM botão de play)
   const videoCaixa = criar('div', { classe: 'sjc-video-vertical-caixa' });
   const videoMoldura = criar('div', { classe: 'video-moldura video-moldura--9-16' });
   const videoEl = criar('video', {
     classe: 'video-player video-player--autoplay video-player--sao-jose',
     src: S.video.src,
     poster: S.video.poster,
-    autoplay: '',
     muted: '',
     loop: '',
     playsinline: '',
-    preload: 'metadata'
+    preload: 'none'
   });
   videoEl.muted = true;
-  videoEl.play?.().catch(() => {});
   videoMoldura.appendChild(videoEl);
 
   if (S.video.legenda) {
@@ -625,15 +619,13 @@ export function montarLocalizacao() {
       const droneBg = criar('video', {
         classe: 'localizacao-mapa-video-bg',
         src: L.videoFundo,
-        autoplay: '',
         muted: '',
         loop: '',
         playsinline: '',
-        preload: 'metadata',
+        preload: 'none',
         'aria-hidden': 'true'
       });
       droneBg.muted = true;
-      droneBg.play?.().catch(() => {});
       mapaCaixa.appendChild(droneBg);
     }
 

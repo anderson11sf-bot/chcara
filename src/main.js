@@ -28,6 +28,7 @@ import * as carrossel from './lib/carrossel.js';
 import * as portal3d from './lib/portal3d.js';
 import { montarSecoesMestre } from './lib/secoes.js';
 import { iniciarAnimacoesEntrada } from './lib/animacoes.js';
+import { iniciarGerenciadorVideos } from './lib/videoManager.js';
 import { iniciarSeo } from './lib/seo.js';
 import { iniciarCookies, ligarLinkDePreferencias } from './lib/cookies.js';
 import { iniciarWhatsAppFlutuante, ligarBotoesWhatsApp } from './lib/whatsapp.js';
@@ -164,6 +165,7 @@ function arrancarInterno() {
   try { progresso.iniciarProgresso(); } catch (e) { console.warn('[pd] progresso:', e); }
   try { dica.iniciarDica(); } catch (e) { console.warn('[pd] dica:', e); }
   try { hero.iniciarHero(); } catch (e) { console.warn('[pd] hero:', e); }
+  try { iniciarGerenciadorVideos(); } catch (e) { console.warn('[pd] videos:', e); }
   try { iniciarWhatsAppFlutuante(); } catch (e) { console.warn('[pd] wa-flutuante:', e); }
   try { ligarCtasInternos(); } catch (e) { console.warn('[pd] ctas:', e); }
   try { ligarPausaPorVisibilidade(); } catch (e) { console.warn('[pd] pausa:', e); }
@@ -179,7 +181,7 @@ function arrancarInterno() {
     if (!palcoEl) return;
 
     // Fim da Sessão 2: onde a transição da cena 2 termina
-    let fimSessao2 = vh * 2.5;
+    let fimSessao2 = vh * 3.5;
     if (secaoCenas) {
       fimSessao2 = secaoCenas.offsetTop + secaoCenas.offsetHeight;
     }
@@ -244,13 +246,7 @@ function arrancarInterno() {
     progresso.definirProgresso(pGlobal);
   };
 
-  const aoRolarImediato = () => {
-    const rolavel = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-    const p = Math.min(1, Math.max(0, (window.scrollY || window.pageYOffset || 0) / rolavel));
-    atualizarQuadrosScroll(p);
-  };
-  window.addEventListener('scroll', aoRolarImediato, { passive: true });
-
+  // Atualização sincronizada 100% no ticker do GSAP (sem eventos redundantes)
   aoProgredir((p) => {
     atualizarQuadrosScroll(p);
   });

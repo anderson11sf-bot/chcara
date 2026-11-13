@@ -31,12 +31,13 @@ let isMobile = false;
 /* Faixas oficiais da Timeline Coordenada */
 const FASES = {
   zoomInicio:   0.00,
-  zoomFim:      0.60, // Zoom contínuo do cavalo
-  fechaInicio:  0.58, // Introdução e fechamento rápido da porta
-  fechaFim:     0.75, // Porta 100% fechada no centro
-  abreInicio:   0.75, // Início da abertura tridimensional
-  abreFim:      0.94, // Totalmente aberta revelando o drone
-  saidaInicio:  0.95, // Transição suave para a Sessão 3
+  zoomFim:      0.30, // 1. Zoom contínuo do cavalo (~1.4s feel)
+  fechaInicio:  0.28, // 2. Introdução e fechamento das duas metades do portal
+  fechaFim:     0.54, // Encontro central e brilho máximo na costura (~2.2s feel)
+  abreInicio:   0.54, // 3. Abertura tridimensional das portas e revelação do drone
+  abreFim:      0.78, // Totalmente abertas em perspectiva (~1.2s feel)
+  holdFim:      0.94, // 4. Tempo amplo para leitura, tags e visualização do drone ao vivo
+  saidaInicio:  0.94, // Transição suave para a Sessão 3
   saidaFim:     1.00
 };
 
@@ -77,7 +78,6 @@ export function iniciarPortal3d() {
     horseVideo.playsInline = true;
     horseVideo.setAttribute('playsinline', '');
     horseVideo.setAttribute('muted', '');
-    horseVideo.play?.().catch(() => {});
   }
 
   // Alternância de áudio no vídeo do drone
@@ -106,28 +106,37 @@ export function definirProgresso(p) {
   const prog = clamp(p, 0, 1);
 
   // -------------------------------------------------------------------------
-  // FASE 1: ZOOM PROGRESSIVO DO VÍDEO DO CAVALO (0% a 60%)
+  // FASE 1: ZOOM PROGRESSIVO DO VÍDEO DO CAVALO (0% a 30%)
   // -------------------------------------------------------------------------
   if (horseVideo) {
     const tZoom = clamp(normalizar(prog, FASES.zoomInicio, FASES.zoomFim), 0, 1);
-    // Escala progressiva diferenciada: desktop 1.0 a 1.35; mobile 1.0 a 1.48 (formato 9:16)
     const escalaMax = isMobile ? 1.48 : 1.35;
     const escalaAtual = 1 + tZoom * (escalaMax - 1);
     horseVideo.style.transform = `scale(${escalaAtual.toFixed(3)})`;
 
-    // O cavalo vai desvanecendo quando o portal fecha completamente
-    if (prog > FASES.fechaFim) {
-      const opCavalo = Math.max(0, 1 - (prog - FASES.fechaFim) / 0.1);
-      if (horseScene) horseScene.style.opacity = opCavalo.toFixed(2);
+    // Reprodução e fade-out eficiente
+    if (prog < FASES.fechaFim) {
+      if (horseVideo.paused && prog > 0.01) {
+        horseVideo.play?.().catch(() => {});
+      }
+      if (horseScene) {
+        if (prog <= FASES.fechaInicio) {
+          horseScene.style.opacity = '1';
+        } else {
+          const opCavalo = Math.max(0, 1 - (prog - FASES.fechaInicio) / (FASES.fechaFim - FASES.fechaInicio));
+          horseScene.style.opacity = opCavalo.toFixed(2);
+        }
+      }
     } else {
-      if (horseScene) horseScene.style.opacity = '1';
+      if (horseScene) horseScene.style.opacity = '0';
+      if (!horseVideo.paused) horseVideo.pause();
     }
   }
 
   // -------------------------------------------------------------------------
-  // ATIVAÇÃO DO CONTAINER DO PORTAL (a partir de ~56% de scroll)
+  // ATIVAÇÃO DO CONTAINER DO PORTAL (a partir de 26% de scroll)
   // -------------------------------------------------------------------------
-  if (prog < 0.56 || prog > 0.99) {
+  if (prog < 0.26 || prog > 0.99) {
     if (container.dataset.ativo === 'true') {
       container.dataset.ativo = 'false';
     }
@@ -153,48 +162,57 @@ export function definirProgresso(p) {
   }
 
   // -------------------------------------------------------------------------
-  // FASES 2 & 3: FECHAMENTO RÁPIDO (60% a 75%) E ABERTURA COM REVELAÇÃO (75% a 100%)
+  // FASES 2 & 3: FECHAMENTO NO CENTRO E ABERTURA 3D REVELANDO DRONE
   // -------------------------------------------------------------------------
   let transX_Esq = -100;
   let transX_Dir = 100;
-  let rotY_Esq = -35;
-  let rotY_Dir = 35;
+  let rotY_Esq = -25;
+  let rotY_Dir = 25;
   let opacidadeCostura = 0;
   let escalaDrone = 0.92;
-  let opacidadeDrone = 0.15;
+  let opacidadeDrone = 0.2;
 
   if (prog <= FASES.fechaFim) {
-    // FECHAMENTO RÁPIDO DO PORTAL (60% a 75%)
+    // FASE 2: FECHAMENTO DAS ASAS NO CENTRO EXATO (28% a 54%)
     const tFecha = clamp(normalizar(prog, FASES.fechaInicio, FASES.fechaFim), 0, 1);
     const easeFecha = tFecha * tFecha * (3 - 2 * tFecha); // smoothstep
 
-    // Portas deslizam e rotacionam rapidamente das bordas (-100%/+100%) até o centro (0%)
+    // Deslizam das laterais até se tocarem no centro exato (0% de deslocamento relativo)
     transX_Esq = -100 * (1 - easeFecha);
     transX_Dir = 100 * (1 - easeFecha);
-    rotY_Esq = -30 * (1 - easeFecha);
-    rotY_Dir = 30 * (1 - easeFecha);
+    rotY_Esq = -25 * (1 - easeFecha);
+    rotY_Dir = 25 * (1 - easeFecha);
 
-    // Brilho na costura central quando as duas portas se tocam perfeitamente
-    opacidadeCostura = easeFecha > 0.85 ? (easeFecha - 0.85) / 0.15 : 0;
+    // Brilho na costura central quando as duas portas se encontram perfeitamente
+    opacidadeCostura = easeFecha > 0.82 ? (easeFecha - 0.82) / 0.18 : 0;
     escalaDrone = 0.92;
     opacidadeDrone = 0.2;
-  } else {
-    // ABERTURA TRIDIMENSIONAL DO PORTAL & REVELAÇÃO DO DRONE (75% a 100%)
+  } else if (prog <= FASES.abreFim) {
+    // FASE 3: ABERTURA TRIDIMENSIONAL DO PORTAL & REVELAÇÃO DO DRONE (54% a 78%)
     const tAbre = clamp(normalizar(prog, FASES.abreInicio, FASES.abreFim), 0, 1);
     const easeAbre = tAbre * tAbre * (3 - 2 * tAbre);
 
-    // Portas abrem em perspectiva tridimensional com eixo nas extremidades
-    transX_Esq = -105 * easeAbre;
-    transX_Dir = 105 * easeAbre;
-    rotY_Esq = -82 * easeAbre;
-    rotY_Dir = 82 * easeAbre;
+    // Asas giram em torno dos eixos das dobradiças externas com rotação 3D suave
+    transX_Esq = -35 * easeAbre;
+    transX_Dir = 35 * easeAbre;
+    rotY_Esq = -84 * easeAbre;
+    rotY_Dir = 84 * easeAbre;
 
-    // Costura luminosa some rapidamente logo que a porta começa a abrir
-    opacidadeCostura = Math.max(0, 1 - easeAbre * 4);
+    // Costura luminosa desaparece logo que as portas se separam
+    opacidadeCostura = Math.max(0, 1 - easeAbre * 3.5);
 
-    // Vídeo de drone ganha escala e opacidade total
+    // Drone ganha escala e nitidez
     escalaDrone = 0.92 + easeAbre * 0.08;
     opacidadeDrone = Math.min(1, 0.2 + easeAbre * 0.8);
+  } else {
+    // FASE 4: PORTAL TOTALMENTE ABERTO — CONTEÚDO E DRONE EM EXIBIÇÃO ESTÁVEL (78% a 94%)
+    transX_Esq = -35;
+    transX_Dir = 35;
+    rotY_Esq = -84;
+    rotY_Dir = 84;
+    opacidadeCostura = 0;
+    escalaDrone = 1.0;
+    opacidadeDrone = 1.0;
   }
 
   // Aplicação nos Grupos Tridimensionais (Porta + Plantas + Tronco)
@@ -205,13 +223,13 @@ export function definirProgresso(p) {
     grupoDir.style.transform = `translate3d(${transX_Dir.toFixed(2)}%, 0, 0) rotateY(${rotY_Dir.toFixed(1)}deg)`;
   }
 
-  // Parallaxes independentes e sutis nas camadas de folhagens
+  // Parallaxes sutis nas folhagens internas
   if (plantasEsq) {
-    const pShift = prog <= FASES.fechaFim ? 0 : (prog - FASES.fechaFim) * 20;
+    const pShift = prog <= FASES.fechaFim ? 0 : (prog - FASES.fechaFim) * 16;
     plantasEsq.style.transform = `translate3d(${(-pShift).toFixed(1)}px, 0, 26px)`;
   }
   if (plantasDir) {
-    const pShift = prog <= FASES.fechaFim ? 0 : (prog - FASES.fechaFim) * 20;
+    const pShift = prog <= FASES.fechaFim ? 0 : (prog - FASES.fechaFim) * 16;
     plantasDir.style.transform = `translate3d(${pShift.toFixed(1)}px, 0, 26px)`;
   }
 
@@ -235,7 +253,7 @@ export function definirProgresso(p) {
   }
 
   // Controle de reprodução inteligente do vídeo de Drone
-  if (prog >= FASES.abreInicio + 0.06 && prog <= FASES.saidaInicio + 0.02) {
+  if (prog >= FASES.abreInicio + 0.04 && prog <= FASES.saidaInicio + 0.02) {
     if (!tocandoDrone && droneVideo) {
       const prom = droneVideo.play();
       if (prom !== undefined) {
@@ -243,7 +261,7 @@ export function definirProgresso(p) {
       }
     }
   } else {
-    if (tocandoDrone && droneVideo && (prog < FASES.abreInicio + 0.02 || prog > FASES.saidaFim)) {
+    if (tocandoDrone && droneVideo && (prog < FASES.abreInicio || prog > FASES.saidaFim)) {
       droneVideo.pause();
       tocandoDrone = false;
     }

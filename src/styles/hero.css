@@ -12,7 +12,7 @@
   align-items: center;
   min-height: 100svh;
   padding-bottom: calc(var(--e8) + 40px + var(--safe-bottom));
-  padding-top: calc(var(--e6) + var(--safe-top));
+  padding-top: calc(clamp(84px, 14vh, 150px) + var(--safe-top));
   padding-left: var(--e4);
   padding-right: var(--e4);
   text-align: center;
@@ -60,11 +60,16 @@
   transition: opacity 0.5s ease;
 }
 
-/* Camada preta transparente (rgba(0,0,0,0.38)) substituindo a camada verde */
+/* Camada escura com contraste aperfeiçoado para máxima legibilidade */
 .hero__bg-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.38);
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.44) 0%,
+    rgba(0, 0, 0, 0.50) 45%,
+    rgba(0, 0, 0, 0.64) 100%
+  );
   z-index: 2;
   pointer-events: none;
 }
@@ -78,7 +83,7 @@
   text-align: center;
   width: 100%;
   max-width: 860px;
-  margin: 0 auto;
+  margin: clamp(16px, 3.5vh, 44px) auto 0;
   z-index: 3;
 }
 

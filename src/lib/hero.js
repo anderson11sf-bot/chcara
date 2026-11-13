@@ -16,6 +16,9 @@ let emblemas = null;
 let acoes = null;
 let wordmark = null;
 let heroBgImg = null;
+let heroVideo = null;
+let cardsGrid = null;
+let transicaoNarrativa = null;
 let ativo = false;
 let base = null;
 let noTopo = false;
@@ -28,12 +31,14 @@ export function iniciarHero() {
   acoes = document.querySelector('.hero__acoes');
   wordmark = document.querySelector('.hero__wordmark-caixa');
   heroBgImg = document.getElementById('hero-bg-img');
+  cardsGrid = document.getElementById('hero-cards-grid');
+  transicaoNarrativa = document.getElementById('hero-transicao-narrativa');
   const secao = document.getElementById('hero');
 
   if (!headline || !secao) return null;
   ativo = true;
 
-  const heroVideo = document.getElementById('hero-video');
+  heroVideo = document.getElementById('hero-video');
   if (heroVideo) {
     heroVideo.muted = true;
     heroVideo.playsInline = true;
@@ -45,7 +50,7 @@ export function iniciarHero() {
 
   montarSelos();
   montarEmblemas();
-  base = { headline: null, sub: null, selos: null, emblemas: null, acoes: null, wordmark: null, bg: null };
+  base = { headline: null, sub: null, selos: null, emblemas: null, acoes: null, wordmark: null, bg: null, cards: null };
 
   return { definirProgresso, destruir };
 }
@@ -111,7 +116,7 @@ export function definirProgresso(p) {
   if (t === 0) {
     if (!noTopo) {
       noTopo = true;
-      for (const el of [headline, sub, selos, emblemas, acoes, wordmark]) {
+      for (const el of [headline, sub, selos, emblemas, acoes, wordmark, cardsGrid]) {
         if (!el) continue;
         el.style.transform = '';
         el.style.opacity = '';
@@ -121,12 +126,24 @@ export function definirProgresso(p) {
         heroBgImg.style.transform = 'scale(1) translate3d(0, 0, 0)';
         heroBgImg.style.opacity = '1';
       }
-      base = { headline: null, sub: null, selos: null, emblemas: null, acoes: null, wordmark: null, bg: null };
+      if (heroVideo && heroVideo.paused) {
+        heroVideo.play?.().catch(() => {});
+      }
+      base = { headline: null, sub: null, selos: null, emblemas: null, acoes: null, wordmark: null, bg: null, cards: null };
     }
     return;
   }
 
   noTopo = false;
+
+  // Pausa inteligente do vídeo de fundo ao rolar além do hero
+  if (heroVideo) {
+    if (t >= 0.98) {
+      if (!heroVideo.paused) heroVideo.pause();
+    } else {
+      if (heroVideo.paused) heroVideo.play?.().catch(() => {});
+    }
+  }
 
   if (heroBgImg) {
     const scaleBg = 1 + t * 0.12;
@@ -140,6 +157,7 @@ export function definirProgresso(p) {
   const opSelos = clamp(1 - t * 1.5, 0, 1);
   const opAcoes = clamp(1 - t * 1.4, 0, 1);
   const opEmblemas = clamp(1 - t * 1.6, 0, 1);
+  const opCards = clamp(1 - t * 1.3, 0, 1);
   const blurTitulo = t > 0.55 ? ((t - 0.55) / 0.45) * 5 : 0;
 
   escrever(wordmark, 'wordmark', -t * 26, opSub, 0, 0.6);
@@ -148,6 +166,7 @@ export function definirProgresso(p) {
   escrever(selos, 'selos', -t * 70, opSelos, 0, 0.8);
   escrever(acoes, 'acoes', -t * 82, opAcoes, 0, 0.8);
   escrever(emblemas, 'emblemas', -t * 94, opEmblemas, 0, 0.8);
+  escrever(cardsGrid, 'cards', -t * 50, opCards, 0, 0.8);
 }
 
 function escrever(el, chave, y, opacity, blur, tolerancia) {
