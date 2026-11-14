@@ -6,11 +6,7 @@
  * portal de abertura do vídeo 3D do terreno.
  * ==========================================================================*/
 
-.secao-cenas {
-  position: relative;
-  height: 350svh;
-  z-index: var(--z-conteudo);
-}
+/* .secao-cenas é definida em portal3d.css */
 
 .cenas-palco {
   position: sticky;

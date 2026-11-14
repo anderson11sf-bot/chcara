@@ -190,43 +190,39 @@ function arrancarInterno() {
       mode: 'section',
       canvas: porteiraCanvas,
       wrapper: secaoCenas,
-      wrapperHeightVh: 180,
-      timelineRange: { start: 0.00, end: 0.70 },
+      wrapperHeightVh: 240,
+      timelineRange: { start: 0.00, end: 0.58 },
       manifestEntry: FRAMES_MANIFEST.porteira,
       fallbackImg: porteiraFallback,
       onUpdate: (prog) => {
-        // (a) Fundo da porteira aberta permanece no último frame (NUNCA tela preta)
+        // (a) Fundo da porteira aberta permanece visível (NUNCA tela preta)
         if (porteiraScene) {
           porteiraScene.style.opacity = '1';
         }
 
-        // (b) Conforme a porteira termina de abrir (prog 0.20 a 0.65), a camada fosca escurece sobre ela
+        // (b) A TV e o fundo fosco só começam a surgir quando a porteira já abriu quase toda (prog >= 0.52)
         if (tvBackdrop) {
           let opBackdrop = 0;
-          if (prog < 0.20) {
-            opBackdrop = 0;
-          } else if (prog <= 0.65) {
-            opBackdrop = (prog - 0.20) / 0.45;
-          } else {
-            opBackdrop = 1;
+          if (prog >= 0.52) {
+            opBackdrop = Math.min(1, (prog - 0.52) / 0.18);
           }
-          tvBackdrop.style.opacity = Math.min(1, Math.max(0, opBackdrop)).toFixed(3);
+          tvBackdrop.style.opacity = opBackdrop.toFixed(3);
         }
 
-        // (c) Televisãozinha 9x16 emerge de dentro da porteira e cresce continuamente conforme o scroll desce
+        // (c) Televisãozinha 9x16 emerge do centro após a porteira abrir (prog >= 0.54) e cresce continuamente
         if (tvFrame) {
           let scale = 0.35;
           let opacity = 0;
 
-          if (prog < 0.15) {
+          if (prog < 0.54) {
             scale = 0.35;
             opacity = 0;
-          } else if (prog <= 0.60) {
-            const p = (prog - 0.15) / 0.45;
-            scale = 0.35 + p * 0.65; // cresce suavemente de 0.35 para 1.00
-            opacity = Math.min(1, p * 1.8);
+          } else if (prog <= 0.72) {
+            const p = (prog - 0.54) / 0.18;
+            scale = 0.38 + p * 0.62; // emerge e cresce suavemente de 0.38 para 1.00
+            opacity = Math.min(1, p * 1.5);
           } else {
-            const p2 = Math.min(1, (prog - 0.60) / 0.40);
+            const p2 = Math.min(1, (prog - 0.72) / 0.28);
             scale = 1.00 + p2 * 0.12; // continua aumentando de tamanho conforme desce (até 1.12)
             opacity = 1.0;
           }

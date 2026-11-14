@@ -63,7 +63,7 @@ export class FrameLayer {
     // Fila de carregamento fino
     this.fetchQueue = [];
     this.activeFetches = 0;
-    this.maxConcurrentFetches = 5;
+    this.maxConcurrentFetches = 8;
     this.coarseLoaded = false;
     this.initialLoadStarted = false;
 
@@ -114,8 +114,8 @@ export class FrameLayer {
       this.draw();
     });
 
-    // Se for Hero ou Global, inicia o pré-carregamento grosso imediatamente
-    if (this.mode === 'global' || this.id === 'hero') {
+    // Se for Porteira, Hero ou Global, inicia o pré-carregamento imediatamente
+    if (this.mode === 'global' || this.id === 'porteira' || this.id === 'hero') {
       this.startInitialLoad();
     }
   }
@@ -145,10 +145,10 @@ export class FrameLayer {
     if (this.initialLoadStarted) return;
     this.initialLoadStarted = true;
 
-    if (this.mode === 'global') {
-      // Para o fundo global contínuo (ping-pong), enfileira todos os frames diretamente
+    if (this.mode === 'global' || this.id === 'porteira') {
+      // Para o fundo global e a porteira, enfileira todos os frames diretamente
       for (let i = 0; i < this.totalFrames; i++) {
-        this.enqueueFrame(i, i < 20);
+        this.enqueueFrame(i, i < 30);
       }
       this.processQueue();
       return;
@@ -300,7 +300,7 @@ export class FrameLayer {
    * Mobile: Limpeza de memória (Sliding Window ±40 frames)
    */
   pruneMemory(currentIndex) {
-    if (!this.isMobile || this.mode === 'global') return;
+    if (!this.isMobile || this.mode === 'global' || this.id === 'porteira') return;
 
     const WINDOW = 40;
     const minKeep = currentIndex - WINDOW;
