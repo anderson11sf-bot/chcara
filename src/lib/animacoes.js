@@ -25,8 +25,6 @@ export function iniciarAnimacoesEntrada() {
     '.card-condicao-pdf',
     '.card-distancia-pdf',
     '.quadro-autossuf__item',
-    '.mapa-oficial-caixa',
-    '.localizacao-mapa-caixa',
     '.video-moldura',
     '.secao__cta'
   ];

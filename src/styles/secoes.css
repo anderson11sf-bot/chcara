@@ -251,6 +251,7 @@
 /* Mapa Oficial em Alta Resolução */
 .mapa-oficial-caixa {
   position: relative;
+  isolation: isolate;
   width: 100%;
   border-radius: var(--r-organico);
   overflow: hidden;
@@ -266,20 +267,23 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  z-index: 0;
+  z-index: 1;
   pointer-events: none;
   opacity: 0.35;
   filter: blur(3px);
+  transform: translateZ(0);
 }
 
 .mapa-oficial-img {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   width: 100%;
   height: auto;
   display: block;
   object-fit: cover;
   pointer-events: auto;
+  opacity: 1 !important;
+  transform: translateZ(0);
 }
 
 .mapa-oficial-tag {
@@ -1415,20 +1419,25 @@
 /* Página 4: Mapa Oficial e Grade das Sete Glebas */
 .mapa-oficial-caixa {
   position: relative;
+  isolation: isolate;
   width: 100%;
   border-radius: 20px;
   overflow: hidden;
-  border: 1px solid rgba(212, 163, 89, 0.3);
+  border: 1px solid rgba(114, 196, 156, 0.45);
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
   margin-bottom: 28px;
   background: #021114;
 }
 
 .mapa-oficial-img {
+  position: relative;
+  z-index: 2;
   width: 100%;
   height: auto;
   display: block;
   object-fit: cover;
+  opacity: 1 !important;
+  transform: translateZ(0);
 }
 
 .mapa-oficial-barra {
@@ -2139,6 +2148,7 @@
 /* Página 3: Localização Privilegiada */
 .localizacao-mapa-caixa {
   position: relative;
+  isolation: isolate;
   width: 100%;
   border-radius: 20px;
   overflow: hidden;
@@ -2154,20 +2164,23 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  z-index: 0;
+  z-index: 1;
   pointer-events: none;
   opacity: 0.35;
   filter: blur(3px);
+  transform: translateZ(0);
 }
 
 .localizacao-mapa-img {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   width: 100%;
   height: auto;
   display: block;
   object-fit: cover;
   max-height: 440px;
+  opacity: 1 !important;
+  transform: translateZ(0);
 }
 
 .pin-paraiso-marcador {

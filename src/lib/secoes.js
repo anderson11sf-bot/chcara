@@ -206,7 +206,7 @@ export function montarPropriedades() {
       classe: 'mapa-oficial-img',
       src: P.mapaImagem,
       alt: 'Mapa oficial de demarcação das Sete Glebas no Paraíso das Águas',
-      loading: 'lazy',
+      loading: 'eager',
       decoding: 'async',
       width: '1400',
       height: '1580'
@@ -633,7 +633,7 @@ export function montarLocalizacao() {
       classe: 'localizacao-mapa-img',
       src: L.imagemAerea,
       alt: 'Localização do Paraíso das Águas próximo a São José dos Campos',
-      loading: 'lazy',
+      loading: 'eager',
       decoding: 'async',
       width: '1200',
       height: '680'
