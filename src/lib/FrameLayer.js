@@ -34,6 +34,7 @@ export class FrameLayer {
     this.fallbackImg = opts.fallbackImg || null;
     this.onUpdate = opts.onUpdate || null;
     this.timelineRange = opts.timelineRange || null;
+    this.transparentBg = opts.transparentBg || false;
 
     this.ctx = null;
     this.totalFrames = this.manifest ? this.manifest.totalFrames : 100;

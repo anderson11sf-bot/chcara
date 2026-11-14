@@ -194,6 +194,7 @@ function arrancarInterno() {
       timelineRange: { start: 0.00, end: 0.58 },
       manifestEntry: FRAMES_MANIFEST.porteira,
       fallbackImg: porteiraFallback,
+      transparentBg: true,
       onUpdate: (prog) => {
         // (a) Fundo da porteira aberta permanece visível (NUNCA tela preta)
         if (porteiraScene) {

@@ -9,6 +9,7 @@
   position: relative;
   min-height: 100vh;
   min-height: 100svh;
+  height: auto;
   width: 100%;
   margin: 0;
   padding: 0;
@@ -20,15 +21,16 @@
   position: relative;
   min-height: 100vh;
   min-height: 100svh;
+  height: auto;
   width: 100%;
-  overflow: hidden;
+  overflow: visible;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   contain: layout style;
-  padding-top: calc(var(--altura-header, 64px) + 20px);
-  padding-bottom: clamp(32px, 5vh, 56px);
+  padding-top: calc(var(--altura-header, 64px) + 14px);
+  padding-bottom: clamp(48px, 6vh, 80px);
   padding-left: var(--e4);
   padding-right: var(--e4);
   text-align: center;
@@ -167,7 +169,7 @@
   margin-left: auto;
   margin-right: auto;
   margin-top: 0;
-  margin-bottom: var(--e3);
+  margin-bottom: var(--e2);
   font-family: var(--fonte-titulo);
   font-size: var(--t-hero);
   font-weight: 600;
@@ -304,7 +306,7 @@
   align-items: center;
   justify-content: center;
   gap: 12px;
-  margin: 0 auto var(--e4);
+  margin: 0 auto var(--e3);
   max-width: 480px;
 }
 
@@ -483,9 +485,9 @@
 .hero__transicao-narrativa {
   position: relative;
   z-index: 3;
-  margin: 0;
-  padding: 36px 40px;
-  max-width: 720px;
+  margin: 28px auto 0;
+  padding: 30px 36px;
+  max-width: 680px;
   width: 100%;
   border-radius: 20px;
   background: rgba(3, 18, 22, 0.78);
@@ -495,13 +497,12 @@
   box-shadow: 0 16px 45px rgba(0, 0, 0, 0.65);
   text-align: center;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 .hero__transicao-narrativa--estatico {
   opacity: 1 !important;
   pointer-events: auto !important;
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
   transform: none !important;
 }
 
@@ -565,8 +566,9 @@
 
 @media (max-width: 640px) {
   .hero__transicao-narrativa {
-    margin-top: 32px;
-    padding: 22px 20px;
+    margin-top: 18px;
+    padding: 18px 16px;
+    border-radius: 16px;
   }
 }
 
@@ -661,10 +663,10 @@
 
 @media (max-width: 768px) {
   .hero-sticky-container {
-    padding-top: calc(var(--altura-header, 54px) + 12px);
-    padding-bottom: clamp(16px, 3vh, 32px);
-    padding-left: 16px;
-    padding-right: 16px;
+    padding-top: calc(var(--altura-header, 54px) + 8px);
+    padding-bottom: 36px;
+    padding-left: 14px;
+    padding-right: 14px;
   }
 }
 

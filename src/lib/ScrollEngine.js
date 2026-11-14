@@ -241,7 +241,7 @@ export class ScrollEngine {
       for (const layer of this.layers) {
         if (layer.mode === 'section') {
           layer.update(scrollY, vh, stableVh);
-          if (layer.isFullyCovering) {
+          if (layer.isFullyCovering && !layer.transparentBg) {
             sectionCobrindoTela = true;
           }
         }
