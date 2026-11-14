@@ -217,30 +217,16 @@ export function montarPropriedades() {
     painel.appendChild(painelComercial);
   }
 
-  // Mapa oficial de demarcação com fundo sutil em vídeo de drone e botão Google Maps
+  // Mapa oficial das Sete Glebas em alta resolução com botão Google Maps
   if (P.mapaImagem) {
     const mapaCaixa = criar('div', { classe: 'mapa-oficial-caixa' });
-
-    if (P.mapaVideoFundo) {
-      const droneBg = criar('video', {
-        classe: 'mapa-drone-video-bg',
-        src: P.mapaVideoFundo,
-        muted: '',
-        loop: '',
-        playsinline: '',
-        preload: 'none',
-        'aria-hidden': 'true'
-      });
-      droneBg.muted = true;
-      mapaCaixa.appendChild(droneBg);
-    }
 
     const pictureMapa = criar('picture', { classe: 'mapa-oficial-picture' });
     const sourceWebp = criar('source', { srcset: '/media/img/mapa-oficial-terreno.webp', type: 'image/webp' });
     const imgMapa = criar('img', {
       classe: 'mapa-oficial-img',
       src: '/media/img/mapa-oficial-terreno.png',
-      alt: 'Mapa oficial de demarcação das Sete Glebas no Paraíso das Águas',
+      alt: 'Mapa das Sete Glebas no Paraíso das Águas',
       loading: 'eager',
       decoding: 'async',
       width: '1193',
@@ -251,10 +237,6 @@ export function montarPropriedades() {
     mapaCaixa.appendChild(pictureMapa);
 
     const barraAcaoMapa = criar('div', { classe: 'mapa-oficial-barra' });
-    barraAcaoMapa.appendChild(criar('span', {
-      classe: 'mapa-oficial-tag',
-      texto: 'MAPA OFICIAL DE DEMARCAÇÃO'
-    }));
     const btnMapa = criar('a', {
       classe: 'btn-mapa-interativo btn-pdf btn-pdf--dourado',
       href: P.mapsLink || 'https://maps.app.goo.gl/AztxJXPuLWaPUBSWA',

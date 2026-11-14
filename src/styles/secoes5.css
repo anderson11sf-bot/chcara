@@ -492,28 +492,7 @@
 
 /* ---------- Rodapé ----------------------------------------------------- */
 
-.rodape {
-  position: relative;
-  z-index: var(--z-conteudo);
-  padding: var(--e7) var(--e4) calc(var(--e6) + var(--safe-bottom));
-  border-top: 1px solid var(--cor-borda);
-  background: linear-gradient(180deg, rgba(3, 20, 25, 0.9) 0%, #021114 100%);
-}
-
-.rodape__dentro {
-  display: grid;
-  gap: var(--e5);
-  max-width: 980px;
-  margin: 0 auto;
-}
-
-.rodape__marca {
-  display: block;
-  margin-bottom: var(--e2);
-  color: var(--palha-forte);
-  font-family: var(--fonte-titulo);
-  font-size: 1.35rem;
-}
+/* O rodapé oficial é governado de forma centralizada por secoes.css */
 
 .rodape__sobre {
   max-width: 46ch;

@@ -262,30 +262,21 @@
   line-height: 1.4;
 }
 
-/* Mapa Oficial em Alta Resolução */
+/* Mapa Oficial das Sete Glebas em Alta Resolução */
 .mapa-oficial-caixa {
   position: relative;
   isolation: isolate;
   width: 100%;
+  max-width: 920px;
+  margin: var(--e4) auto;
   border-radius: var(--r-organico);
   overflow: hidden;
   border: 1.5px solid rgba(114, 196, 156, 0.45);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
-  margin: var(--e4) 0;
-  background: #020c0e;
-}
-
-.mapa-drone-video-bg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 1;
-  pointer-events: none;
-  opacity: 0.35;
-  filter: blur(2px);
-  transform: translateZ(0);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.65);
+  background: rgba(3, 20, 25, 0.95);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .mapa-oficial-picture {
@@ -300,30 +291,26 @@
   z-index: 2;
   width: 100%;
   height: auto;
+  max-height: 85vh;
   display: block;
   object-fit: contain;
   pointer-events: auto;
   opacity: 1 !important;
   visibility: visible !important;
-  transform: translateZ(0);
+  margin: 0 auto;
   filter: drop-shadow(0 4px 18px rgba(0, 0, 0, 0.45));
 }
 
-.mapa-oficial-tag {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  padding: 6px 16px;
-  border-radius: 999px;
-  background: rgba(4, 25, 31, 0.88);
-  border: 1px solid rgba(217, 168, 60, 0.5);
-  font-family: var(--fonte-rotulos, sans-serif);
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  color: var(--ouro);
-  text-transform: uppercase;
-  backdrop-filter: blur(8px);
+.mapa-oficial-barra {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(2, 16, 20, 0.92);
+  border-top: 1px solid rgba(114, 196, 156, 0.3);
 }
 
 .faixa-comercial-referencia {
@@ -766,9 +753,15 @@
   border-top: 1px solid rgba(114, 196, 156, 0.25);
   padding: var(--e6) var(--e4) calc(var(--e6) + 80px + var(--safe-bottom));
   overflow: hidden;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .rodape__faq {
+  width: 100%;
   max-width: 860px;
   margin: 0 auto var(--e6);
 }
@@ -782,38 +775,45 @@
 }
 
 .rodape__corpo {
+  width: 100%;
   max-width: 860px;
   margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
   gap: var(--e3);
   padding-top: var(--e5);
   border-top: 1px solid rgba(114, 196, 156, 0.2);
 }
 
 .rodape__marca {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
+  width: 100%;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
   gap: 8px;
-  margin-bottom: var(--e2);
+  margin: 0 auto var(--e3) auto !important;
 }
 
 .rodape__logo-img {
-  max-width: 190px;
+  max-width: 140px;
+  width: 100%;
   height: auto;
-  margin-bottom: 12px;
+  margin: 0 auto 16px auto !important;
   filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.6));
-  display: block;
+  display: block !important;
 }
 
 .rodape__linha {
   display: block;
+  width: 100%;
+  text-align: center !important;
   line-height: 1.4;
-  margin: 0;
+  margin: 0 auto !important;
   padding: 0;
 }
 
@@ -823,6 +823,7 @@
   font-weight: 700;
   color: #FFFFFF;
   letter-spacing: 0.05em;
+  text-align: center !important;
 }
 
 .rodape__sub {
@@ -833,6 +834,7 @@
   color: #72C49C;
   font-weight: 600;
   margin-top: 2px;
+  text-align: center !important;
 }
 
 .rodape__tel {
@@ -842,6 +844,7 @@
   margin-top: 8px;
   font-weight: 600;
   letter-spacing: 0.03em;
+  text-align: center !important;
 }
 
 .rodape__tel-link {
@@ -1481,53 +1484,7 @@
   letter-spacing: 0.05em;
 }
 
-/* Página 4: Mapa Oficial e Grade das Sete Glebas */
-.mapa-oficial-caixa {
-  position: relative;
-  isolation: isolate;
-  width: 100%;
-  border-radius: 20px;
-  overflow: hidden;
-  border: 1px solid rgba(114, 196, 156, 0.45);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
-  margin-bottom: 28px;
-  background: #021114;
-}
-
-.mapa-oficial-img {
-  position: relative;
-  z-index: 2;
-  width: 100%;
-  height: auto;
-  display: block;
-  object-fit: cover;
-  opacity: 1 !important;
-  transform: translateZ(0);
-}
-
-.mapa-oficial-barra {
-  position: absolute;
-  bottom: 12px;
-  left: 14px;
-  right: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 10px;
-  padding: 10px 16px;
-  border-radius: 12px;
-  background: rgba(4, 25, 31, 0.85);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(212, 163, 89, 0.3);
-}
-
-.mapa-oficial-tag {
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  color: #ECC880;
-}
+/* Página 4: Mapa Oficial e Grade das Sete Glebas gerenciados no bloco principal acima */
 
 .btn-mapa-interativo {
   font-size: 0.82rem;

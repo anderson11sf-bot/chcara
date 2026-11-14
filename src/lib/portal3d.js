@@ -1,13 +1,13 @@
 /* ============================================================================
  * portal3d.js — TIMELINE COORDENADA: CAVALO FULLSCREEN -> PORTEIRA (SCROLL) -> VÍDEO AÉREO
  * ----------------------------------------------------------------------------
- * Ordem exata solicitada:
- * 1. 0.00 a 0.42: Cena do Cavalo da Sessão 2 (TELA INTEIRA, sem portal antes)
- *    - Reprodução sincronizada com a rolagem do visitante
- * 2. 0.40 a 0.74: Abertura da Porteira (No lugar do antigo portal)
- *    - Animação controlada 1:1 pelo scroll (scrubbing de progresso)
+ * Ordem exata:
+ * 1. 0.00 a 0.38: Cena do Cavalo da Sessão 2 (TELA INTEIRA, sem portal antes)
+ *    - Sincronizado com a rolagem do visitante
+ * 2. 0.35 a 0.74: Abertura da Porteira (No lugar do antigo portal)
+ *    - Animação controlada 1:1 pelo scroll com frames instantâneos
  *    - As portas de madeira rústica se abrem conforme o scroll desce
- * 3. 0.64 a 0.94: Vídeo Aéreo do Drone (drone-panorama-terreno.mp4)
+ * 3. 0.62 a 0.94: Vídeo Aéreo do Drone (drone-panorama-terreno.mp4)
  *    - Revelado pela abertura da porteira
  *    - Entra em cena cheia, em alta definição e reprodução contínua
  * 4. 0.94 a 1.00: Transição suave de saída para a Sessão 3
@@ -31,19 +31,18 @@ let tocandoDrone = false;
 const FASES = {
   // 1. Cavalo Fullscreen (Início da Sessão 2)
   cavaloInicio:  0.00,
-  cavaloAuge:    0.06,
-  cavaloFim:     0.38,
-  cavaloFadeFim: 0.45,
+  cavaloFim:     0.34,
+  cavaloFadeFim: 0.40,
 
   // 2. Animação da Porteira (Substitui o antigo portal)
-  porteiraEntra: 0.38,
-  porteiraAbre:  0.44,
-  porteiraTotal: 0.74,
-  porteiraFim:   0.78,
+  porteiraEntra: 0.32,
+  porteiraAbre:  0.38,
+  porteiraTotal: 0.70,
+  porteiraFim:   0.75,
 
   // 3. Vídeo da Visão Aérea do Drone (Revelado atrás da porteira)
-  droneInicio:   0.62,
-  droneAuge:     0.74,
+  droneInicio:   0.58,
+  droneAuge:     0.70,
   droneFim:      0.94,
 
   // 4. Saída suave para a Sessão 3
@@ -73,13 +72,20 @@ export function iniciarPortal3d() {
     horseVideo.removeAttribute('loop');
   }
 
-  // Configurações do vídeo da porteira (controlado por scroll)
+  // Configurações do vídeo da porteira (controlado por scroll com seek ultra-rápido)
   if (porteiraVideo) {
     porteiraVideo.muted = true;
     porteiraVideo.playsInline = true;
     porteiraVideo.setAttribute('playsinline', '');
     porteiraVideo.setAttribute('muted', '');
     porteiraVideo.removeAttribute('loop');
+    porteiraVideo.preload = 'auto';
+    porteiraVideo.load();
+    // Pré-ativa o decodificador de vídeo para eliminar travamentos no primeiro seek
+    porteiraVideo.play().then(() => {
+      porteiraVideo.pause();
+      porteiraVideo.currentTime = 0;
+    }).catch(() => {});
   }
 
   // Configurações do vídeo do drone (reprodução contínua ao ser revelado)
@@ -117,85 +123,81 @@ export function definirProgresso(p) {
   const prog = clamp(p, 0, 1);
 
   // -------------------------------------------------------------------------
-  // 1. CENA DO CAVALO EM TELA INTEIRA (0.00 a 0.45) — SEM PORTAL ANTES
+  // 1. CENA DO CAVALO EM TELA INTEIRA (0.00 a 0.40) — SEM PORTAL ANTES
   // -------------------------------------------------------------------------
   if (horseScene && horseVideo) {
     if (prog <= FASES.cavaloFadeFim) {
-      horseScene.style.visibility = 'visible';
-
-      // Opacidade: 1 até 0.38, depois transiciona para a porteira
+      // Opacidade: 1 até 0.34, depois transiciona para a porteira
       let opCavalo = 1;
       if (prog > FASES.cavaloFim) {
         opCavalo = 1 - normalizar(prog, FASES.cavaloFim, FASES.cavaloFadeFim);
       }
-      horseScene.style.opacity = Math.max(0, Math.min(1, opCavalo)).toFixed(2);
+      horseScene.style.opacity = Math.max(0, Math.min(1, opCavalo)).toFixed(3);
 
       // Scrubbing do vídeo do cavalo com o scroll
-      if (horseVideo.duration) {
-        const tCavalo = normalizar(prog, FASES.cavaloInicio, FASES.cavaloFim);
-        const tempoAlvo = Math.min(horseVideo.duration, tCavalo * horseVideo.duration);
-        if (Math.abs(horseVideo.currentTime - tempoAlvo) > 0.12) {
-          horseVideo.currentTime = tempoAlvo;
-        }
+      const durCavalo = horseVideo.duration || 4.0;
+      const tCavalo = clamp(normalizar(prog, FASES.cavaloInicio, FASES.cavaloFim), 0, 1);
+      const tempoAlvoCavalo = Math.min(durCavalo, tCavalo * durCavalo);
+      if (Math.abs(horseVideo.currentTime - tempoAlvoCavalo) > 0.08 && !horseVideo.seeking) {
+        horseVideo.currentTime = tempoAlvoCavalo;
       }
 
       // Leve aproximação natural
-      const tZoom = clamp(normalizar(prog, FASES.cavaloInicio, FASES.cavaloFim), 0, 1);
-      const escala = 1 + tZoom * 0.05;
+      const escala = 1 + tCavalo * 0.05;
       horseVideo.style.transform = `scale(${escala.toFixed(3)})`;
     } else {
       horseScene.style.opacity = '0';
-      horseScene.style.visibility = 'hidden';
       if (!horseVideo.paused) horseVideo.pause();
     }
   }
 
   // -------------------------------------------------------------------------
-  // 2. ANIMAÇÃO DA PORTEIRA (0.38 a 0.78) — SCROLL-DRIVEN, NO LUGAR DO PORTAL
+  // 2. ANIMAÇÃO DA PORTEIRA (0.32 a 0.75) — SCROLL-DRIVEN, NO LUGAR DO PORTAL
   // -------------------------------------------------------------------------
   if (porteiraScene && porteiraVideo) {
     if (prog >= FASES.porteiraEntra && prog <= FASES.porteiraFim) {
-      porteiraScene.style.visibility = 'visible';
-
-      // Opacidade da porteira: entra suave de 0.38 a 0.44, permanece aberta, e dissolve de 0.72 a 0.78
+      // Opacidade da porteira: entra de 0.32 a 0.38, permanece aberta, e dissolve de 0.68 a 0.75
       let opPorteira = 1;
       if (prog < FASES.porteiraAbre) {
         opPorteira = normalizar(prog, FASES.porteiraEntra, FASES.porteiraAbre);
-      } else if (prog > FASES.droneAuge) {
-        opPorteira = 1 - normalizar(prog, FASES.droneAuge, FASES.porteiraFim);
+      } else if (prog > FASES.droneAuge - 0.02) {
+        opPorteira = 1 - normalizar(prog, FASES.droneAuge - 0.02, FASES.porteiraFim);
       }
-      porteiraScene.style.opacity = Math.max(0, Math.min(1, opPorteira)).toFixed(2);
+      porteiraScene.style.opacity = Math.max(0, Math.min(1, opPorteira)).toFixed(3);
 
-      // Scrubbing do vídeo da porteira com o scroll (portas se abrem!)
-      if (porteiraVideo.duration) {
-        const tPorteira = clamp(normalizar(prog, FASES.porteiraAbre, FASES.porteiraTotal), 0, 1);
-        const tempoAlvo = tPorteira * porteiraVideo.duration;
-        if (Math.abs(porteiraVideo.currentTime - tempoAlvo) > 0.10) {
-          porteiraVideo.currentTime = tempoAlvo;
+      // Scrubbing instantâneo do vídeo da porteira com o scroll (portas se abrem!)
+      const durPorteira = porteiraVideo.duration || 3.916;
+      const tPorteira = clamp(normalizar(prog, FASES.porteiraAbre, FASES.porteiraTotal), 0, 1);
+      const tempoAlvoPorteira = tPorteira * durPorteira;
+
+      if (Math.abs(porteiraVideo.currentTime - tempoAlvoPorteira) > 0.04) {
+        if (!porteiraVideo.seeking) {
+          if ('fastSeek' in porteiraVideo) {
+            try { porteiraVideo.fastSeek(tempoAlvoPorteira); } catch { porteiraVideo.currentTime = tempoAlvoPorteira; }
+          } else {
+            porteiraVideo.currentTime = tempoAlvoPorteira;
+          }
         }
       }
     } else {
       porteiraScene.style.opacity = '0';
-      porteiraScene.style.visibility = 'hidden';
       if (!porteiraVideo.paused) porteiraVideo.pause();
     }
   }
 
   // -------------------------------------------------------------------------
-  // 3. VÍDEO DA VISÃO AÉREA DO DRONE (0.62 a 1.00) — REVELADO PELA PORTEIRA
+  // 3. VÍDEO DA VISÃO AÉREA DO DRONE (0.58 a 1.00) — REVELADO PELA PORTEIRA
   // -------------------------------------------------------------------------
   if (droneScene && droneVideo) {
     if (prog >= FASES.droneInicio && prog <= FASES.saidaFim) {
-      droneScene.style.visibility = 'visible';
-
-      // Opacidade: surge conforme as portas abrem (0.62 a 0.74), mantendo-se até o final
+      // Opacidade: surge conforme as portas abrem (0.58 a 0.70), mantendo-se até o final
       let opDrone = 1;
       if (prog < FASES.droneAuge) {
         opDrone = normalizar(prog, FASES.droneInicio, FASES.droneAuge);
       } else if (prog > FASES.saidaInicio) {
         opDrone = 1 - normalizar(prog, FASES.saidaInicio, FASES.saidaFim);
       }
-      droneScene.style.opacity = Math.max(0, Math.min(1, opDrone)).toFixed(2);
+      droneScene.style.opacity = Math.max(0, Math.min(1, opDrone)).toFixed(3);
 
       // Leve expansão cinematográfica
       const tExp = clamp(normalizar(prog, FASES.droneInicio, FASES.droneAuge), 0, 1);
@@ -213,7 +215,6 @@ export function definirProgresso(p) {
       }
     } else {
       droneScene.style.opacity = '0';
-      droneScene.style.visibility = 'hidden';
       if (tocandoDrone) {
         droneVideo.pause();
         tocandoDrone = false;
