@@ -119,22 +119,26 @@
   top: 0;
   left: 0;
   right: 0;
+  height: var(--altura-header, 64px);
   z-index: var(--z-nav, 55);
   background: rgba(4, 25, 31, 0.76);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid rgba(212, 163, 89, 0.16);
   transition: background 0.3s ease, border-color 0.3s ease;
+  box-sizing: border-box;
 }
 
 .barra-topo__container {
   max-width: 1320px;
+  height: 100%;
   margin: 0 auto;
-  padding: 10px 24px;
+  padding: 0 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 20px;
+  box-sizing: border-box;
 }
 
 .barra-topo__marca {
@@ -242,7 +246,7 @@
     display: none;
   }
   .barra-topo__container {
-    padding: 8px 16px;
+    padding: 0 16px;
   }
   .barra-topo__nome {
     font-size: 1rem;

@@ -13,9 +13,7 @@
   margin: 0;
   padding: 0;
   overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: block;
 }
 
 .hero-sticky-container {
@@ -29,8 +27,8 @@
   justify-content: center;
   align-items: center;
   contain: layout style;
-  padding-top: calc(var(--altura-header, 68px) + 24px);
-  padding-bottom: clamp(36px, 5vh, 60px);
+  padding-top: calc(var(--altura-header, 64px) + 20px);
+  padding-bottom: clamp(32px, 5vh, 56px);
   padding-left: var(--e4);
   padding-right: var(--e4);
   text-align: center;
@@ -40,7 +38,7 @@
 /* Fundo do Hero com Vídeo Automático em Loop faceado com a barra de navegação */
 .hero__bg {
   position: absolute;
-  top: var(--altura-header, 68px);
+  top: var(--altura-header, 64px);
   left: 0;
   right: 0;
   bottom: 0;
@@ -662,8 +660,11 @@
 }
 
 @media (max-width: 768px) {
-  .hero {
-    height: 130vh;
+  .hero-sticky-container {
+    padding-top: calc(var(--altura-header, 54px) + 12px);
+    padding-bottom: clamp(16px, 3vh, 32px);
+    padding-left: 16px;
+    padding-right: 16px;
   }
 }
 
