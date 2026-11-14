@@ -7,6 +7,9 @@
  * ==========================================================================*/
 
 :root {
+  /* ---------- Altura padrão da barra de navegação superior -------------- */
+  --altura-header:   68px;
+
   /* ---------- Verdes e azuis profundos (base da página) ------------------ */
   --noite-abissal:   #04191F;  /* fundo raiz */
   --petroleo-fundo:  #062427;  /* seções alternadas */

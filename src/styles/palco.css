@@ -349,14 +349,12 @@
   100%    { opacity: 0.35; }
 }
 
-/* ---------- WHATSAPP FLUTUANTE ---------------------------- */
+/* ---------- WHATSAPP FLUTUANTE MÓVEL / ARRASTÁVEL ---------- */
 
 .wa-flutuante {
   position: fixed;
   right: 22px;
   bottom: 24px;
-  left: auto !important;
-  top: auto !important;
   z-index: 99999;
   display: flex;
   align-items: center;
@@ -371,11 +369,11 @@
   box-shadow: 0 10px 28px rgba(2, 17, 20, 0.45), 0 0 18px rgba(37, 211, 102, 0.45);
   transition: transform 0.22s var(--curva), box-shadow 0.22s var(--curva), background-color 0.22s ease;
   transform: scale(1);
-  touch-action: manipulation;
+  touch-action: none;
   -webkit-user-select: none;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
-  cursor: pointer;
+  cursor: grab;
 }
 .wa-flutuante:active {
   transform: scale(0.94);
@@ -414,8 +412,16 @@
   100% { transform: scale(1.32); opacity: 0; }
 }
 
-/* Quando a pessoa arrasta, o pulso para (evita confusão visual) */
-.wa-flutuante.arrastando .wa-flutuante__anel { animation: none; opacity: 0; }
+/* Quando a pessoa arrasta, o botão segue o ponteiro em tempo real e o pulso para */
+.wa-flutuante.arrastando {
+  cursor: grabbing;
+  transform: scale(1.08) !important;
+  transition: none !important;
+}
+.wa-flutuante.arrastando .wa-flutuante__anel {
+  animation: none;
+  opacity: 0;
+}
 
 /* Enquanto o hero está visível, o rótulo aparece; depois só o ícone */
 .wa-flutuante__rotulo { display: none; }

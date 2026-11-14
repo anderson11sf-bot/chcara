@@ -88,7 +88,7 @@ export function ligarBotoesWhatsApp(raiz = document) {
 
 const CHAVE_POSICAO = 'pd-wa-pos-v2';
 const LIMIAR_ARRASTE = 6;
-const MARGEM = 16;
+const MARGEM = 12;
 
 let botao = null;
 let arrastando = false;
@@ -104,10 +104,12 @@ export function iniciarWhatsAppFlutuante() {
 
   ligarBotoesWhatsApp();
 
-  // Restaura posição arrastada anterior se existir e for válida
+  // Restaura posição arrastada anterior se existir e for válida dentro da viewport atual
   const salva = lerStorage(CHAVE_POSICAO, null);
   if (salva && typeof salva.x === 'number' && typeof salva.y === 'number') {
-    if (salva.y > 60 && salva.x > 20 && salva.x < window.innerWidth - 60) {
+    const maxW = (window.innerWidth || 1200) - 60 - MARGEM;
+    const maxH = (window.innerHeight || 800) - 60 - MARGEM;
+    if (salva.x >= MARGEM && salva.x <= maxW && salva.y >= MARGEM && salva.y <= maxH) {
       pos = { x: salva.x, y: salva.y };
       aplicarPosicao();
     }
@@ -119,6 +121,18 @@ export function iniciarWhatsAppFlutuante() {
   window.addEventListener('pointercancel', aoSoltar);
   botao.addEventListener('click', aoClicar);
 
+  const aoRedimensionar = () => {
+    if (!pos || !botao) return;
+    const larguraTela = window.innerWidth;
+    const alturaTela = window.innerHeight;
+    const bW = botao.offsetWidth || 60;
+    const bH = botao.offsetHeight || 60;
+    pos.x = clamp(pos.x, MARGEM, larguraTela - bW - MARGEM);
+    pos.y = clamp(pos.y, MARGEM, alturaTela - bH - MARGEM);
+    aplicarPosicao();
+  };
+  window.addEventListener('resize', aoRedimensionar, { passive: true });
+
   return {
     destruir: () => {
       if (!botao) return;
@@ -126,6 +140,7 @@ export function iniciarWhatsAppFlutuante() {
       window.removeEventListener('pointermove', aoMover);
       window.removeEventListener('pointerup', aoSoltar);
       window.removeEventListener('pointercancel', aoSoltar);
+      window.removeEventListener('resize', aoRedimensionar);
       botao.removeEventListener('click', aoClicar);
     }
   };
@@ -133,17 +148,20 @@ export function iniciarWhatsAppFlutuante() {
 
 function aplicarPosicao() {
   if (!botao || !pos) return;
-  botao.style.left = `${pos.x}px`;
-  botao.style.top = `${pos.y}px`;
+  botao.style.left = `${Math.round(pos.x)}px`;
+  botao.style.top = `${Math.round(pos.y)}px`;
   botao.style.right = 'auto';
   botao.style.bottom = 'auto';
-  botao.style.transform = 'none';
 }
 
 function aoPressionar(ev) {
   if (ev.button !== undefined && ev.button !== 0) return;
 
   ponteiroId = ev.pointerId;
+  try {
+    botao.setPointerCapture?.(ev.pointerId);
+  } catch {}
+
   const rect = botao.getBoundingClientRect();
   offset = { x: ev.clientX - rect.left, y: ev.clientY - rect.top };
   inicio = { x: ev.clientX, y: ev.clientY };
@@ -179,6 +197,10 @@ function aoMover(ev) {
 
 function aoSoltar(ev) {
   if (!arrastando || ev.pointerId !== ponteiroId) return;
+
+  try {
+    botao.releasePointerCapture?.(ev.pointerId);
+  } catch {}
 
   arrastando = false;
   ponteiroId = null;

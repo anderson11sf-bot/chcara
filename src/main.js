@@ -171,6 +171,7 @@ function arrancarInterno() {
     const porteiraScene = document.getElementById('sessao2-porteira-scene');
     const porteiraCanvas = document.getElementById('canvas-porteira');
     const porteiraFallback = document.getElementById('fallback-porteira');
+    const tvBackdrop = document.getElementById('sessao2-tv-backdrop-blur');
     const tvFrame = document.getElementById('sessao2-tv-frame');
     const tvVideo = document.getElementById('sessao2-tv-video');
     const tvSomBtn = document.getElementById('tv-video-som');
@@ -194,7 +195,25 @@ function arrancarInterno() {
       manifestEntry: FRAMES_MANIFEST.porteira,
       fallbackImg: porteiraFallback,
       onUpdate: (prog) => {
-        // (a) Conforme a porteira abre (prog 0.15 a 0.65), a TV 9x16 emerge do centro e cresce
+        // (a) Fundo da porteira aberta permanece no último frame (NUNCA tela preta)
+        if (porteiraScene) {
+          porteiraScene.style.opacity = '1';
+        }
+
+        // (b) Conforme a porteira termina de abrir (prog 0.20 a 0.65), a camada fosca escurece sobre ela
+        if (tvBackdrop) {
+          let opBackdrop = 0;
+          if (prog < 0.20) {
+            opBackdrop = 0;
+          } else if (prog <= 0.65) {
+            opBackdrop = (prog - 0.20) / 0.45;
+          } else {
+            opBackdrop = 1;
+          }
+          tvBackdrop.style.opacity = Math.min(1, Math.max(0, opBackdrop)).toFixed(3);
+        }
+
+        // (c) Televisãozinha 9x16 emerge de dentro da porteira e cresce continuamente conforme o scroll desce
         if (tvFrame) {
           let scale = 0.35;
           let opacity = 0;
@@ -202,12 +221,13 @@ function arrancarInterno() {
           if (prog < 0.15) {
             scale = 0.35;
             opacity = 0;
-          } else if (prog <= 0.65) {
-            const p = (prog - 0.15) / 0.50;
+          } else if (prog <= 0.60) {
+            const p = (prog - 0.15) / 0.45;
             scale = 0.35 + p * 0.65; // cresce suavemente de 0.35 para 1.00
-            opacity = Math.min(1, p * 1.6);
+            opacity = Math.min(1, p * 1.8);
           } else {
-            scale = 1.0;
+            const p2 = Math.min(1, (prog - 0.60) / 0.40);
+            scale = 1.00 + p2 * 0.12; // continua aumentando de tamanho conforme desce (até 1.12)
             opacity = 1.0;
           }
 
@@ -222,25 +242,16 @@ function arrancarInterno() {
             }
           }
         }
-
-        // (b) No final da abertura (prog 0.70 a 0.90), a porteira dissolve suavemente
-        if (porteiraScene) {
-          let opPorteira = 1;
-          if (prog >= 0.70) {
-            opPorteira = Math.max(0, 1 - (prog - 0.70) / 0.20);
-          }
-          porteiraScene.style.opacity = opPorteira.toFixed(3);
-        }
       }
     });
 
-    // 2. Layer Global (Modo GLOBAL PING-PONG com GLOBAL_PASS_VH = 200)
+    // 2. Layer Global (Modo GLOBAL PING-PONG com GLOBAL_PASS_VH = 450)
     const globalCanvas = document.getElementById('global-scroll-canvas');
     const globalLayer = new FrameLayer({
       id: 'global',
       mode: 'global',
       canvas: globalCanvas,
-      globalPassVh: 200,
+      globalPassVh: 450,
       manifestEntry: FRAMES_MANIFEST.global
     });
 

@@ -145,6 +145,15 @@ export class FrameLayer {
     if (this.initialLoadStarted) return;
     this.initialLoadStarted = true;
 
+    if (this.mode === 'global') {
+      // Para o fundo global contínuo (ping-pong), enfileira todos os frames diretamente
+      for (let i = 0; i < this.totalFrames; i++) {
+        this.enqueueFrame(i, i < 20);
+      }
+      this.processQueue();
+      return;
+    }
+
     // Passada 1: Coarse (0, 10, 20, 30...)
     const coarseIndices = [];
     for (let i = 0; i < this.totalFrames; i += 10) {
@@ -291,7 +300,7 @@ export class FrameLayer {
    * Mobile: Limpeza de memória (Sliding Window ±40 frames)
    */
   pruneMemory(currentIndex) {
-    if (!this.isMobile) return;
+    if (!this.isMobile || this.mode === 'global') return;
 
     const WINDOW = 40;
     const minKeep = currentIndex - WINDOW;
