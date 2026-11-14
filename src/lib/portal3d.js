@@ -26,6 +26,22 @@ let btnSom = null;
 
 let ativo = false;
 let tocandoDrone = false;
+let targetPorteiraTime = null;
+let porteiraRafId = null;
+
+function agendarSeekPorteira(tempoAlvo) {
+  targetPorteiraTime = tempoAlvo;
+  if (!porteiraRafId) {
+    porteiraRafId = requestAnimationFrame(() => {
+      porteiraRafId = null;
+      if (porteiraVideo && targetPorteiraTime !== null) {
+        try {
+          porteiraVideo.currentTime = targetPorteiraTime;
+        } catch {}
+      }
+    });
+  }
+}
 
 /* Faixas oficiais da Timeline Coordenada */
 const FASES = {
@@ -165,20 +181,12 @@ export function definirProgresso(p) {
       }
       porteiraScene.style.opacity = Math.max(0, Math.min(1, opPorteira)).toFixed(3);
 
-      // Scrubbing instantâneo do vídeo da porteira com o scroll (portas se abrem!)
+      // Scrubbing a 120 FPS do vídeo da porteira sincronizado com o scroll (portas se abrem!)
       const durPorteira = porteiraVideo.duration || 3.916;
       const tPorteira = clamp(normalizar(prog, FASES.porteiraAbre, FASES.porteiraTotal), 0, 1);
       const tempoAlvoPorteira = tPorteira * durPorteira;
 
-      if (Math.abs(porteiraVideo.currentTime - tempoAlvoPorteira) > 0.04) {
-        if (!porteiraVideo.seeking) {
-          if ('fastSeek' in porteiraVideo) {
-            try { porteiraVideo.fastSeek(tempoAlvoPorteira); } catch { porteiraVideo.currentTime = tempoAlvoPorteira; }
-          } else {
-            porteiraVideo.currentTime = tempoAlvoPorteira;
-          }
-        }
-      }
+      agendarSeekPorteira(tempoAlvoPorteira);
     } else {
       porteiraScene.style.opacity = '0';
       if (!porteiraVideo.paused) porteiraVideo.pause();

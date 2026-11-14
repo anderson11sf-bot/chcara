@@ -79,11 +79,14 @@ function criarPainel(classeExtra = '') {
     muted: '',
     loop: '',
     playsinline: '',
-    preload: 'none',
+    autoplay: '',
+    preload: 'auto',
     'aria-hidden': 'true'
   });
   videoCachoeira.muted = true;
   videoCachoeira.playsInline = true;
+  videoCachoeira.autoplay = true;
+  videoCachoeira.loop = true;
 
   // Fontes leves para web (WebM 693 KB e MP4 H.264 1.55 MB)
   const sourceWebm = criar('source', { src: '/media/video/cachoeira-fundo.webm', type: 'video/webm' });
@@ -217,9 +220,27 @@ export function montarPropriedades() {
     painel.appendChild(painelComercial);
   }
 
-  // Mapa oficial das Sete Glebas em alta resolução com botão Google Maps
+  // Mapa oficial das Sete Glebas em alta resolução com fundo em vídeo de drone e botão Google Maps
   if (P.mapaImagem) {
     const mapaCaixa = criar('div', { classe: 'mapa-oficial-caixa' });
+
+    if (P.mapaVideoFundo) {
+      const droneBg = criar('video', {
+        classe: 'mapa-drone-video-bg',
+        src: P.mapaVideoFundo,
+        autoplay: '',
+        muted: '',
+        loop: '',
+        playsinline: '',
+        preload: 'auto',
+        'aria-hidden': 'true'
+      });
+      droneBg.muted = true;
+      droneBg.playsInline = true;
+      droneBg.autoplay = true;
+      droneBg.loop = true;
+      mapaCaixa.appendChild(droneBg);
+    }
 
     const pictureMapa = criar('picture', { classe: 'mapa-oficial-picture' });
     const sourceWebp = criar('source', { srcset: '/media/img/mapa-oficial-terreno.webp', type: 'image/webp' });
@@ -229,8 +250,8 @@ export function montarPropriedades() {
       alt: 'Mapa das Sete Glebas no Paraíso das Águas',
       loading: 'eager',
       decoding: 'async',
-      width: '1193',
-      height: '1319'
+      width: '1123',
+      height: '1418'
     });
     pictureMapa.appendChild(sourceWebp);
     pictureMapa.appendChild(imgMapa);
