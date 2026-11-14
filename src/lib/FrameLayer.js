@@ -33,6 +33,7 @@ export class FrameLayer {
     this.manifest = opts.manifestEntry || null;
     this.fallbackImg = opts.fallbackImg || null;
     this.onUpdate = opts.onUpdate || null;
+    this.timelineRange = opts.timelineRange || null;
 
     this.ctx = null;
     this.totalFrames = this.manifest ? this.manifest.totalFrames : 100;
@@ -75,6 +76,15 @@ export class FrameLayer {
    */
   init() {
     if (!this.canvas) return;
+
+    const isMob = typeof window !== 'undefined' ? window.innerWidth < 768 : false;
+    this.isMobile = isMob;
+    const conf = this.manifest ? (isMob ? this.manifest.mobile : this.manifest.desktop) : null;
+    const imgW = conf?.width || (isMob ? 720 : 1280);
+    const imgH = conf?.height || (isMob ? 1280 : 720);
+    this.canvas.width = imgW;
+    this.canvas.height = imgH;
+    this.drawParams = { dx: 0, dy: 0, drawW: imgW, drawH: imgH };
 
     try {
       this.ctx = this.canvas.getContext('2d', {
@@ -309,30 +319,19 @@ export class FrameLayer {
     this.isMobile = isMobile;
     if (!this.canvas) return;
 
-    // Respeita limites de tamanho interno
-    const maxInternalWidth = isMobile ? 1080 : 1920;
-    const effectiveDpr = Math.min(2, dpr || 1);
-    const targetW = Math.max(1, Math.min(maxInternalWidth, Math.round(cw * effectiveDpr)));
-    const targetH = Math.max(1, Math.round(targetW * (Math.max(1, ch) / Math.max(1, cw))));
-
-    if (this.canvas.width !== targetW || this.canvas.height !== targetH) {
-      this.canvas.width = targetW;
-      this.canvas.height = targetH;
-    }
-
     // Medidas nativas do frame
     const conf = this.manifest ? (isMobile ? this.manifest.mobile : this.manifest.desktop) : null;
     const imgW = conf?.width || (isMobile ? 720 : 1280);
     const imgH = conf?.height || (isMobile ? 1280 : 720);
 
-    // Pré-calcula proporção "cover"
-    const scale = Math.max(targetW / imgW, targetH / imgH);
-    const drawW = Math.round(imgW * scale);
-    const drawH = Math.round(imgH * scale);
-    const dx = Math.round((targetW - drawW) / 2);
-    const dy = Math.round((targetH - drawH) / 2);
+    // Ajusta o buffer interno do canvas para o tamanho nativo do frame (1:1 com os frames WebP)
+    // A renderização proporcional responsiva na tela é garantida via CSS (object-fit: cover)
+    if (this.canvas.width !== imgW || this.canvas.height !== imgH) {
+      this.canvas.width = imgW;
+      this.canvas.height = imgH;
+    }
 
-    this.drawParams = { dx, dy, drawW, drawH };
+    this.drawParams = { dx: 0, dy: 0, drawW: imgW, drawH: imgH };
     this.needsDraw = true;
   }
 
@@ -369,7 +368,14 @@ export class FrameLayer {
       const progress = Math.min(1, Math.max(0, pRaw));
       this.progress = progress;
 
-      const targetFrame = Math.min(this.totalFrames - 1, Math.max(0, Math.round(progress * (this.totalFrames - 1))));
+      // Mapeamento opcional de sub-faixa de timeline dentro da seção
+      let pAnim = progress;
+      if (this.timelineRange) {
+        const { start, end } = this.timelineRange;
+        pAnim = Math.min(1, Math.max(0, (progress - start) / Math.max(0.001, end - start)));
+      }
+
+      const targetFrame = Math.min(this.totalFrames - 1, Math.max(0, Math.round(pAnim * (this.totalFrames - 1))));
 
       if (targetFrame !== this.frameIndex) {
         this.frameIndex = targetFrame;

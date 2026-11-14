@@ -166,7 +166,7 @@ function arrancarInterno() {
   try {
     scrollEngine = new ScrollEngine();
 
-    // 1. Layer Hero (Modo SEÇÃO)
+    // 1. Layer Hero (Modo SEÇÃO - 140vh rápido, 358 frames a 120 FPS)
     const heroCanvas = document.getElementById('hero-canvas');
     const heroWrapper = document.getElementById('hero');
     const heroFallback = document.getElementById('hero-bg-img');
@@ -175,7 +175,7 @@ function arrancarInterno() {
       mode: 'section',
       canvas: heroCanvas,
       wrapper: heroWrapper,
-      wrapperHeightVh: 350,
+      wrapperHeightVh: 140,
       manifestEntry: FRAMES_MANIFEST.hero,
       fallbackImg: heroFallback,
       onUpdate: (prog) => {
@@ -184,51 +184,32 @@ function arrancarInterno() {
       }
     });
 
-    // 2. Layer Pomar (Modo SEÇÃO)
-    const pomarCanvas = document.getElementById('canvas-pomar');
-    const pomarWrapper = document.getElementById('wrapper-pomar');
-    const pomarFallback = document.getElementById('fallback-pomar');
-    const pomarEscurecer = document.getElementById('pomar-escurecer');
-    const pomarLayer = new FrameLayer({
-      id: 'pomar',
-      mode: 'section',
-      canvas: pomarCanvas,
-      wrapper: pomarWrapper,
-      wrapperHeightVh: 350,
-      manifestEntry: FRAMES_MANIFEST.pomar,
-      fallbackImg: pomarFallback,
-      onUpdate: (prog) => {
-        if (pomarEscurecer) {
-          let op = 0;
-          if (prog >= 0.70) {
-            op = Math.min(1, (prog - 0.70) / 0.28);
-          }
-          pomarEscurecer.style.opacity = op.toFixed(3);
-        }
-      }
-    });
-
-    // 3. Layer Porteira (Modo SEÇÃO)
+    // 2. Seção 2: Abertura da Porteira (120 FPS) -> Vídeo Aéreo das Glebas
+    const secaoCenas = document.getElementById('secao-cenas');
+    const porteiraScene = document.getElementById('sessao2-porteira-scene');
     const porteiraCanvas = document.getElementById('canvas-porteira');
-    const porteiraWrapper = document.getElementById('wrapper-porteira');
     const porteiraFallback = document.getElementById('fallback-porteira');
     const droneScene = document.getElementById('sessao2-drone-scene');
     const droneVideo = document.getElementById('sessao2-drone-video');
+
     const porteiraLayer = new FrameLayer({
       id: 'porteira',
       mode: 'section',
       canvas: porteiraCanvas,
-      wrapper: porteiraWrapper,
-      wrapperHeightVh: 350,
+      wrapper: secaoCenas,
+      wrapperHeightVh: 180,
+      timelineRange: { start: 0.00, end: 0.70 },
       manifestEntry: FRAMES_MANIFEST.porteira,
       fallbackImg: porteiraFallback,
       onUpdate: (prog) => {
+        // (a) Conforme a porteira abre (prog >= 0.35 a 0.70), revela o vídeo aéreo do drone
         if (droneScene) {
           let opDrone = 0;
           if (prog >= 0.35) {
-            opDrone = Math.min(1, (prog - 0.35) / 0.30);
+            opDrone = Math.min(1, (prog - 0.35) / 0.35);
           }
           droneScene.style.opacity = opDrone.toFixed(3);
+
           if (droneVideo) {
             if (opDrone > 0.05 && droneVideo.paused) {
               droneVideo.play().catch(() => {});
@@ -237,10 +218,20 @@ function arrancarInterno() {
             }
           }
         }
+
+        // (b) No final da abertura (prog 0.65 a 0.85), a porteira dissolve suavemente
+        // deixando o vídeo aéreo das glebas em tela cheia para seguir para a próxima seção
+        if (porteiraScene) {
+          let opPorteira = 1;
+          if (prog >= 0.65) {
+            opPorteira = Math.max(0, 1 - (prog - 0.65) / 0.20);
+          }
+          porteiraScene.style.opacity = opPorteira.toFixed(3);
+        }
       }
     });
 
-    // 4. Layer Global (Modo GLOBAL PING-PONG com GLOBAL_PASS_VH = 200)
+    // 3. Layer Global (Modo GLOBAL PING-PONG com GLOBAL_PASS_VH = 200)
     const globalCanvas = document.getElementById('global-scroll-canvas');
     const globalLayer = new FrameLayer({
       id: 'global',
@@ -252,7 +243,6 @@ function arrancarInterno() {
 
     scrollEngine.init();
     scrollEngine.addLayer(heroLayer);
-    scrollEngine.addLayer(pomarLayer);
     scrollEngine.addLayer(porteiraLayer);
     scrollEngine.addLayer(globalLayer);
 

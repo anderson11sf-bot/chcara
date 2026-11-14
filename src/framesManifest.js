@@ -1,17 +1,17 @@
 export const FRAMES_MANIFEST = {
   hero: {
-    totalFrames: 119,
+    totalFrames: 358,
     desktop: {
       width: 960,
-      height: 1706,
+      height: 1707,
       path: "/frames/hero/f_%04d.webp",
-      weightMB: 8.67
+      weightMB: 36.75
     },
     mobile: {
       width: 640,
       height: 1138,
       path: "/frames/hero-m/f_%04d.webp",
-      weightMB: 5.21
+      weightMB: 23.43
     },
     filenamePattern: "f_%04d.webp"
   },

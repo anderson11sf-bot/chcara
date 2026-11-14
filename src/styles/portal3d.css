@@ -1,32 +1,19 @@
 /* ============================================================================
- * portal3d.css — SESSÃO 2: POMAR (FULLSCREEN) -> ESCURECE -> PORTEIRA -> VÍDEO AÉREO
+ * portal3d.css — SESSÃO 2: ABERTURA DA PORTEIRA (120 FPS) -> VÍDEO AÉREO DAS GLEBAS
  * ----------------------------------------------------------------------------
- * Modo SEÇÃO com ScrollEngine nativo (120 FPS / 100 Hz).
- * Zero layout thrashing, sem seek de video.currentTime.
+ * Aporteira de madeira abre diretamente na Seção 2 com o scroll.
+ * Revela a visão aérea das glebas e continua para a próxima seção.
+ * Proporções 100% corretas no celular e no desktop (object-fit: cover).
  * ==========================================================================*/
 
 .secao-cenas {
   position: relative;
   width: 100%;
+  height: 180vh;
   margin: 0;
   padding: 0;
   z-index: 2;
-  background: transparent;
-}
-
-.secao-cenas-wrapper {
-  position: relative;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-.wrapper-pomar {
-  height: 350vh;
-}
-
-.wrapper-porteira {
-  height: 350vh;
+  background: #000000;
 }
 
 .cenas-sticky {
@@ -43,108 +30,7 @@
   background: #000000;
 }
 
-/* Canvas da Sequência de Imagens (Pomar e Porteira) */
-.sessao2-canvas {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  display: block;
-  z-index: 2;
-  pointer-events: none;
-}
-
-/* Fallback imediato do frame 0 para evitar tela preta */
-.sessao2-fallback-img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  z-index: 1;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-}
-
-/* Overlays para contraste e legibilidade */
-.sessao2-cavalo-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(2, 16, 20, 0.35) 0%,
-    rgba(0, 0, 0, 0.12) 45%,
-    rgba(2, 16, 20, 0.65) 100%
-  );
-  pointer-events: none;
-  z-index: 3;
-}
-
-.sessao2-porteira-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(2, 16, 20, 0.30) 0%,
-    transparent 45%,
-    rgba(2, 16, 20, 0.55) 100%
-  );
-  pointer-events: none;
-  z-index: 3;
-}
-
-/* Camada de escurecimento total (fade to black) no final do Pomar */
-.sessao2-cavalo-escurecer {
-  position: absolute;
-  inset: 0;
-  background: #000000;
-  opacity: 0;
-  pointer-events: none;
-  z-index: 4;
-  will-change: opacity;
-}
-
-/* Badges elegantes de identificação da cena */
-.sessao2-player-badge,
-.sessao2-drone-badge {
-  position: absolute;
-  top: calc(var(--safe-top, 20px) + 24px);
-  left: 24px;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--fonte-rotulos, 'Quicksand', sans-serif);
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #72C49C;
-  background: rgba(4, 25, 31, 0.85);
-  padding: 8px 18px;
-  border-radius: 999px;
-  border: 1px solid rgba(114, 196, 156, 0.4);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  z-index: 5;
-  pointer-events: none;
-}
-
-.sessao2-player-ponto {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #72C49C;
-  box-shadow: 0 0 10px rgba(114, 196, 156, 0.8);
-  animation: pulso-ponto 2s infinite ease-in-out;
-}
-
-@keyframes pulso-ponto {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.4; transform: scale(0.8); }
-}
-
-/* Vídeo Aéreo do Drone revelado atrás da Porteira */
+/* 1. Cena do Drone Aéreo (Atrás da Porteira) */
 .sessao2-drone-scene {
   position: absolute;
   inset: 0;
@@ -155,7 +41,7 @@
   pointer-events: none;
   background: #000000;
   opacity: 0;
-  transition: opacity 0.4s ease;
+  transition: opacity 0.35s ease;
 }
 
 .sessao2-drone-video {
@@ -181,6 +67,98 @@
   z-index: 2;
 }
 
+/* 2. Cena da Porteira (Canvas 120 FPS que se abre no scroll) */
+.sessao2-porteira-scene {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 2;
+  pointer-events: none;
+  background: #000000;
+  will-change: opacity;
+}
+
+.sessao2-canvas,
+.sessao2-porteira-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Fallback do frame 0 */
+.sessao2-fallback-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: 1;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.sessao2-porteira-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(2, 16, 20, 0.25) 0%,
+    transparent 45%,
+    rgba(2, 16, 20, 0.55) 100%
+  );
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* Badges elegantes */
+.sessao2-player-badge,
+.sessao2-drone-badge {
+  position: absolute;
+  top: calc(var(--safe-top, 20px) + 24px);
+  left: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--fonte-rotulos, 'Quicksand', sans-serif);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #72C49C;
+  background: rgba(4, 25, 31, 0.85);
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(114, 196, 156, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 4;
+  pointer-events: none;
+}
+
+.sessao2-player-ponto {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #72C49C;
+  box-shadow: 0 0 10px rgba(114, 196, 156, 0.8);
+  animation: pulso-ponto 2s infinite ease-in-out;
+}
+
+@keyframes pulso-ponto {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.8); }
+}
+
+/* Botão de som do vídeo aéreo */
 .sessao2-drone-som {
   position: absolute;
   bottom: calc(var(--safe-bottom, 20px) + 24px);
@@ -195,7 +173,7 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  z-index: 6;
+  z-index: 5;
   pointer-events: auto;
   transition: transform 0.2s ease, background 0.2s ease;
 }
@@ -206,9 +184,8 @@
 }
 
 @media (max-width: 768px) {
-  .wrapper-pomar,
-  .wrapper-porteira {
-    height: 320vh;
+  .secao-cenas {
+    height: 160vh;
   }
 
   .sessao2-player-badge,
