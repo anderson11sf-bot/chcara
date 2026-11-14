@@ -1,61 +1,19 @@
 /* ============================================================================
- * portal3d.css — SESSÃO 2: TRANSIÇÃO DA PORTEIRA, VÍDEO FULLSCREEN & PORTAL 3D
+ * portal3d.css — SESSÃO 2: CENA DO CAVALO -> ABERTURA DA PORTEIRA (SCROLL) -> VÍDEO AÉREO
  * ----------------------------------------------------------------------------
- * 1. TRANSIÇÃO DA PORTEIRA (Acontece entre Seção 1 e Seção 2)
- *    - Vídeo da porteira abrindo progressivamente
- *    - Revela a Seção 2 entrando suavemente em tela inteira
- * 2. CENA DO CAVALO EM TELA INTEIRA (Fullscreen background cover)
- *    - Ocupa a área inteira da tela (sem moldura/player frame)
- *    - Controlado pela rolagem da página
- * 3. PORTAL VEGETAL TRIDIMENSIONAL (5 Camadas na Ordem Obrigatória)
- *    - Camada 1: PORTA (Porta de correr — desliza lateralmente com translateX)
- *    - Camada 2: PLANTA (Segunda camada — abre progressivamente sincronizada)
- *    - Camada 3: TRONCO (Grandes troncos laterais em escala proporcional monumental)
- *    - Camada 4: VÍDEO DA VISÃO AÉREA (Drone revelado atrás do portal)
- *    - Camada 5: FOLHAS (Camada de primeiro plano com paralaxe 3D diferencial)
+ * Ordem exata:
+ * 1. CENA DO CAVALO EM TELA INTEIRA (Fullscreen Cover)
+ *    - Ocupa 100% da viewport, sincronizado com o scroll.
+ *    - SEM portal antes dele.
+ * 2. ANIMAÇÃO DA PORTEIRA DE MADEIRA (No lugar do antigo portal)
+ *    - Ocupa a tela cheia.
+ *    - Controlada pelo SCROLL (scrubbing de progresso conforme o visitante rola).
+ *    - As portas de madeira rústica se abrem progressivamente com o scroll.
+ * 3. VÍDEO DA VISÃO AÉREA DO DRONE (drone-panorama-terreno.mp4)
+ *    - Revelado pela abertura da porteira.
+ *    - Entra em cena cheia, em altíssima definição, com reprodução fluida.
+ *    - Transição suave de saída para a Sessão 3.
  * ==========================================================================*/
-
-/* ----------------------------------------------------------------------------
- * 0. TRANSIÇÃO DA PORTEIRA (ENTRE SESSÃO 1 E SESSÃO 2)
- * -------------------------------------------------------------------------- */
-.porteira-transicao {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 15;
-  pointer-events: none;
-  overflow: hidden;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.35s ease, visibility 0.35s ease;
-  background: #020c0e;
-}
-
-.porteira-transicao[data-ativa="true"] {
-  opacity: 1;
-  visibility: visible;
-}
-
-.porteira-video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  display: block;
-}
-
-.porteira-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(2, 16, 20, 0.3) 0%,
-    rgba(0, 0, 0, 0.1) 40%,
-    rgba(2, 16, 20, 0.6) 100%
-  );
-  pointer-events: none;
-}
 
 /* ----------------------------------------------------------------------------
  * 1. CENA DO CAVALO: TOTALMENTE EM TELA INTEIRA (FULLSCREEN COVER)
@@ -68,7 +26,8 @@
   overflow: hidden;
   z-index: 2;
   pointer-events: none;
-  transition: opacity 0.4s ease;
+  transition: opacity 0.35s ease;
+  background: #000;
 }
 
 .sessao2-player-frame {
@@ -135,469 +94,149 @@
   box-shadow: 0 0 8px #22c55e;
 }
 
-@media (max-width: 768px) {
-  .sessao2-player-badge {
-    top: calc(var(--safe-top, 16px) + 16px);
-    left: 16px;
-    font-size: 0.68rem;
-    padding: 6px 12px;
-  }
-}
-
 /* ----------------------------------------------------------------------------
- * 2. PALCO DO PORTAL VEGETAL 3D (PERSPECTIVA & PROFUNDIDADE)
+ * 2. VÍDEO AÉREO DO DRONE (REVELADO PELA ABERTURA DA PORTEIRA)
  * -------------------------------------------------------------------------- */
-.portal-abertura {
+.sessao2-drone-scene {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-  z-index: 20;
-  overflow: visible;
+  overflow: hidden;
+  z-index: 3;
   opacity: 0;
   visibility: hidden;
-  perspective: 1600px;
-  transform-style: preserve-3d;
-  transition: opacity 0.35s ease, visibility 0.35s ease;
-}
-
-.portal-abertura[data-ativo="true"] {
-  opacity: 1;
-  visibility: visible;
-}
-
-/* ----------------------------------------------------------------------------
- * CAMADA 4: VÍDEO DA VISÃO AÉREA DO DRONE (REVELADO ATRÁS DO PORTAL)
- * -------------------------------------------------------------------------- */
-.portal-casa-iris-layer {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 5;
-  transform: translateZ(-60px);
-  transform-style: preserve-3d;
-  will-change: transform, opacity;
-  pointer-events: auto;
-}
-
-.portal-casa-iris-card {
-  display: none !important;
-}
-
-/* Quadro do vídeo de drone da visão aérea */
-.portal-video-frame {
-  position: relative;
-  width: min(780px, 86vw);
-  max-height: 76vh;
-  aspect-ratio: 16 / 9;
-  border-radius: 20px;
-  overflow: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
   background: #020c0e;
-  border: 1.5px solid rgba(114, 196, 156, 0.45);
-  box-shadow:
-    0 24px 70px rgba(0, 0, 0, 0.9),
-    0 0 50px rgba(114, 196, 156, 0.25);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
 }
 
-@media (max-width: 768px) {
-  .portal-video-frame {
-    width: min(340px, 92vw);
-    max-height: 72svh;
-    aspect-ratio: 9 / 16;
-    border-radius: 16px;
-  }
-}
-
-.portal-video {
+.sessao2-drone-video {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
   display: block;
   background: #000;
+  will-change: transform;
 }
 
-.portal-video-overlay {
-  position: relative;
-  z-index: 3;
-  padding: 12px 14px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: linear-gradient(180deg, rgba(2, 16, 20, 0.85) 0%, transparent 100%);
+.sessao2-drone-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(2, 16, 20, 0.45) 0%,
+    transparent 40%,
+    rgba(2, 16, 20, 0.75) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
 }
 
-.portal-video-tag {
-  font-family: var(--fonte-rotulos, 'Quicksand', sans-serif);
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  color: #72C49C;
-  background: rgba(4, 25, 31, 0.85);
-  padding: 4px 10px;
-  border-radius: 999px;
-  border: 1px solid rgba(114, 196, 156, 0.35);
-  backdrop-filter: blur(8px);
-}
-
-.portal-video-status {
+.sessao2-drone-badge {
+  position: absolute;
+  top: calc(var(--safe-top, 20px) + 24px);
+  left: 24px;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   font-family: var(--fonte-rotulos, 'Quicksand', sans-serif);
-  font-size: 0.68rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
   color: #72C49C;
-  background: rgba(3, 20, 25, 0.85);
-  padding: 4px 8px;
+  background: rgba(4, 25, 31, 0.88);
+  padding: 8px 18px;
   border-radius: 999px;
-  border: 1px solid rgba(114, 196, 156, 0.35);
+  border: 1px solid rgba(114, 196, 156, 0.45);
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 2;
 }
 
-.portal-video-status__ponto {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #22c55e;
-  box-shadow: 0 0 8px #22c55e;
-}
-
-.portal-video-rodape {
-  position: relative;
-  z-index: 3;
-  padding: 12px 14px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: linear-gradient(0deg, rgba(2, 16, 20, 0.92) 0%, transparent 100%);
-}
-
-.portal-video-legenda {
-  font-family: var(--fonte-texto, 'Outfit', sans-serif);
-  font-size: 0.78rem;
-  color: #e6f4f1;
-}
-
-.portal-video-som-btn {
+.sessao2-drone-som {
+  position: absolute;
+  bottom: calc(var(--safe-bottom, 20px) + 28px);
+  right: 28px;
   background: rgba(4, 25, 31, 0.85);
   border: 1px solid rgba(114, 196, 156, 0.45);
   color: #72C49C;
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   pointer-events: auto;
+  z-index: 3;
   transition: background 0.2s, transform 0.2s;
 }
 
-.portal-video-som-btn:hover {
+.sessao2-drone-som:hover {
   background: rgba(114, 196, 156, 0.25);
   transform: scale(1.08);
 }
 
-@media (max-width: 900px) {
-  .portal-casa-iris-layer {
-    flex-direction: column;
-    gap: 16px;
-  }
-  .portal-casa-iris-card {
-    width: min(440px, 92vw);
-    max-height: 40vh;
-  }
-  .portal-video-frame {
-    display: none; /* No mobile prioriza a imagem nítida da Casa Íris para economia de GPU */
-  }
-}
-
 /* ----------------------------------------------------------------------------
- * CAMADA 3: TRONCOS (ESCALA MONUMENTAL, PROPORCIONAL NAS LATERAIS)
+ * 3. ANIMAÇÃO DA PORTEIRA (SUBSTITUI O ANTIGO PORTAL 3D)
  * -------------------------------------------------------------------------- */
-.portal-camada-troncos {
+.sessao2-porteira-scene {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
+  overflow: hidden;
+  z-index: 4;
+  opacity: 0;
+  visibility: hidden;
   pointer-events: none;
-  z-index: 7;
-  transform: translateZ(-35px);
-  transform-style: preserve-3d;
+  transition: opacity 0.35s ease, visibility 0.35s ease;
+  background: #020c0e;
 }
 
-.portal-tronco-item {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  height: 100%;
-  width: clamp(280px, 35vw, 560px);
-  will-change: transform;
-}
-
-.portal-tronco--esq {
-  left: 0;
-  transform-origin: left center;
-}
-
-.portal-tronco--dir {
-  right: 0;
-  transform-origin: right center;
-}
-
-.portal-tronco-img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display: block;
-}
-
-.portal-tronco--esq .portal-tronco-img {
-  object-position: left center;
-}
-
-.portal-tronco--dir .portal-tronco-img {
-  object-position: right center;
-}
-
-@media (max-width: 768px) {
-  .portal-tronco-item {
-    width: clamp(180px, 46vw, 260px);
-  }
-}
-
-/* ----------------------------------------------------------------------------
- * CAMADA 2: PLANTAS (SEGUNDA CAMADA — SINCRONIZADA À PORTA)
- * -------------------------------------------------------------------------- */
-.portal-camada-plantas {
+.sessao2-porteira-video {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  pointer-events: none;
-  z-index: 8;
-  transform: translateZ(-15px);
-  transform-style: preserve-3d;
-}
-
-.portal-planta-item {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  height: 100%;
-  width: clamp(300px, 52vh, 48vw);
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  background: #000;
   will-change: transform;
 }
 
-.portal-planta--esq {
-  right: 50%;
-  transform-origin: right center;
-}
-
-.portal-planta--dir {
-  left: 50%;
-  transform-origin: left center;
-}
-
-.portal-planta-img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display: block;
-  filter: drop-shadow(0 14px 30px rgba(0, 0, 0, 0.7));
-}
-
-.portal-planta--esq .portal-planta-img {
-  object-position: right center;
-}
-
-.portal-planta--dir .portal-planta-img {
-  object-position: left center;
-}
-
-@media (max-width: 768px) {
-  .portal-planta-item {
-    width: 50.5vw;
-  }
-  .portal-planta-img {
-    object-fit: cover !important;
-  }
-  .portal-planta--esq .portal-planta-img {
-    object-position: right center !important;
-  }
-  .portal-planta--dir .portal-planta-img {
-    object-position: left center !important;
-  }
-}
-
-/* ----------------------------------------------------------------------------
- * CAMADA 1: PORTA (PORTA DE CORRER — DESLIZA LATERALMENTE COM TRANSLATEX)
- * -------------------------------------------------------------------------- */
-.portal-camada-portas {
+.sessao2-porteira-overlay {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 10;
-  transform: translateZ(0);
-  transform-style: preserve-3d;
-}
-
-.portal-porta-asa {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  height: 100%;
-  width: clamp(280px, 48vh, 46vw);
-  will-change: transform;
-}
-
-.portal-porta--esq {
-  right: 50%;
-  transform-origin: left center;
-}
-
-.portal-porta--dir {
-  left: 50%;
-  transform-origin: right center;
-}
-
-.portal-porta-img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display: block;
-  filter: drop-shadow(4px 0 25px rgba(0, 0, 0, 0.75));
-}
-
-.portal-porta--esq .portal-porta-img {
-  object-position: right center;
-}
-
-.portal-porta--dir .portal-porta-img {
-  object-position: left center;
-}
-
-@media (max-width: 768px) {
-  .portal-porta-asa {
-    width: 50.5vw;
-  }
-  .portal-porta-img {
-    object-fit: cover !important;
-  }
-  .portal-porta--esq .portal-porta-img {
-    object-position: right center !important;
-  }
-  .portal-porta--dir .portal-porta-img {
-    object-position: left center !important;
-  }
-}
-
-/* Linha de costura luminosa botânica sutil no fechamento */
-.portal-costura-brilho {
-  position: absolute;
-  left: 50%;
-  top: 6%;
-  bottom: 6%;
-  width: 3px;
-  transform: translateX(-50%);
   background: linear-gradient(
     180deg,
-    transparent 0%,
-    rgba(114, 196, 156, 0.95) 25%,
-    rgba(217, 168, 60, 0.95) 50%,
-    rgba(114, 196, 156, 0.95) 75%,
-    transparent 100%
+    rgba(2, 16, 20, 0.30) 0%,
+    transparent 45%,
+    rgba(2, 16, 20, 0.55) 100%
   );
-  box-shadow: 0 0 16px rgba(114, 196, 156, 0.9), 0 0 32px rgba(217, 168, 60, 0.6);
-  z-index: 12;
   pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.2s ease;
+  z-index: 1;
 }
 
-/* ----------------------------------------------------------------------------
- * CAMADA 5: FOLHAS (PRIMEIRO PLANO VISUAL COM PARALAXE 3D)
- * -------------------------------------------------------------------------- */
-.portal-camada-folhas-frente {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 25;
-  transform: translateZ(50px);
-  transform-style: preserve-3d;
-}
-
-.portal-folha-frente {
-  position: absolute;
-  top: -5%;
-  bottom: -5%;
-  height: 110%;
-  width: clamp(160px, 24vw, 360px);
-  will-change: transform;
-}
-
-.portal-folha--esq {
-  left: -2%;
-  transform-origin: left top;
-}
-
-.portal-folha--dir {
-  right: -2%;
-  transform-origin: right top;
-}
-
-.portal-folha-frente-img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display: block;
-  opacity: 0.92;
-  filter: drop-shadow(0 16px 36px rgba(0, 0, 0, 0.8));
-}
-
-.portal-folha--esq .portal-folha-frente-img {
-  object-position: left top;
-}
-
-.portal-folha--dir .portal-folha-frente-img {
-  object-position: right top;
-}
-
+/* Responsividade Mobile */
 @media (max-width: 768px) {
-  .portal-folha-frente {
-    width: clamp(110px, 28vw, 180px);
+  .sessao2-player-badge,
+  .sessao2-drone-badge {
+    top: calc(var(--safe-top, 16px) + 16px);
+    left: 16px;
+    font-size: 0.68rem;
+    padding: 6px 14px;
   }
-}
 
-/* ----------------------------------------------------------------------------
- * PREFERS REDUCED MOTION
- * -------------------------------------------------------------------------- */
-@media (prefers-reduced-motion: reduce) {
-  .portal-porta-asa,
-  .portal-planta-item,
-  .portal-tronco-item,
-  .portal-casa-iris-layer,
-  .portal-folha-frente {
-    transition: none !important;
-    transform: none !important;
-  }
-  .portal-costura-brilho {
-    display: none !important;
+  .sessao2-drone-som {
+    bottom: calc(var(--safe-bottom, 16px) + 20px);
+    right: 20px;
+    width: 36px;
+    height: 36px;
   }
 }

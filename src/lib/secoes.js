@@ -75,7 +75,6 @@ function criarPainel(classeExtra = '') {
 
   const videoCachoeira = criar('video', {
     classe: 'painel-fundo-video',
-    src: '/media/video/cachoeira-fundo.mp4',
     poster: '/media/img/cachoeira-poster.webp',
     muted: '',
     loop: '',
@@ -84,6 +83,14 @@ function criarPainel(classeExtra = '') {
     'aria-hidden': 'true'
   });
   videoCachoeira.muted = true;
+  videoCachoeira.playsInline = true;
+
+  // Fontes leves para web (WebM 693 KB e MP4 H.264 1.55 MB)
+  const sourceWebm = criar('source', { src: '/media/video/cachoeira-fundo.webm', type: 'video/webm' });
+  const sourceMp4 = criar('source', { src: '/media/video/cachoeira-fundo.mp4', type: 'video/mp4' });
+  videoCachoeira.appendChild(sourceWebm);
+  videoCachoeira.appendChild(sourceMp4);
+
   painel.appendChild(videoCachoeira);
 
   const overlayCachoeira = criar('div', {
