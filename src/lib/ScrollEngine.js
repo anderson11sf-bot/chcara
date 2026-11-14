@@ -40,6 +40,18 @@ export class ScrollEngine {
 
     // IntersectionObserver para lazy loading de layers de seção
     this.sectionObserver = null;
+
+    // Callbacks adicionais sincronizados no rAF único
+    this.onTickCallbacks = [];
+  }
+
+  /**
+   * Registra um callback para ser executado dentro do tick do rAF único
+   */
+  onTick(fn) {
+    if (typeof fn === 'function') {
+      this.onTickCallbacks.push(fn);
+    }
   }
 
   /**
@@ -258,6 +270,11 @@ export class ScrollEngine {
       // 4. DESENHO: Cada layer desenha se necessário
       for (const layer of this.layers) {
         layer.draw();
+      }
+
+      // 5. Callbacks adicionais sincronizados no rAF único
+      for (const fn of this.onTickCallbacks) {
+        fn(scrollY, vh, stableVh);
       }
 
       // 5. Atualização de métricas do modo debug

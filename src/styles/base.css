@@ -242,14 +242,9 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 
 /* Divisor que lembra a superfície de um lago calmo */
+/* Divisor desativado para garantir fluxo visual contínuo sem riscos de divisa */
 .divisor-lago {
-  height: 1px;
-  margin: var(--e6) auto;
-  border: 0;
-  max-width: 560px;
-  background: linear-gradient(90deg, transparent, var(--petroleo-linha) 15%,
-              var(--turquesa) 50%, var(--petroleo-linha) 85%, transparent);
-  opacity: 0.55;
+  display: none !important;
 }
 
 /* ---------- Movimento reduzido ---------------------------------------- */

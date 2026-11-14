@@ -37,7 +37,7 @@
   box-sizing: border-box;
 }
 
-/* Fundo do Hero com Vídeo Automático em Loop faceado com a barra de navegação */
+/* Fundo do Hero com Vídeo Automático em Loop faceado com a barra de navegação e fusão suave na base */
 .hero__bg {
   position: absolute;
   top: var(--altura-header, 64px);
@@ -47,6 +47,8 @@
   overflow: hidden;
   pointer-events: none;
   z-index: 0;
+  -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 78%, transparent 100%);
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 78%, transparent 100%);
 }
 
 .hero__video {
@@ -92,7 +94,8 @@
     180deg,
     rgba(0, 0, 0, 0.42) 0%,
     rgba(0, 0, 0, 0.48) 50%,
-    rgba(0, 0, 0, 0.65) 100%
+    rgba(0, 0, 0, 0.35) 78%,
+    transparent 100%
   );
   z-index: 2;
   pointer-events: none;

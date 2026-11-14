@@ -170,11 +170,9 @@
 }
 
 /* Divisor elegante */
+/* Divisor desativado para garantir fluxo visual contínuo sem riscos de divisa */
 .divisor-lago {
-  border: none;
-  height: 1px;
-  background: linear-gradient(90deg, transparent 0%, rgba(111, 227, 210, 0.3) 50%, transparent 100%);
-  margin: var(--e5) 0 var(--e4);
+  display: none !important;
 }
 
 /* Players de Vídeo Embutidos nas Seções */

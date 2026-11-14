@@ -168,9 +168,6 @@ function arrancarInterno() {
 
     // 1. Seção 2: Abertura da Porteira (120 FPS) -> Televisãozinha 9x16 Vista do Alto
     const secaoCenas = document.getElementById('secao-cenas');
-    const porteiraScene = document.getElementById('sessao2-porteira-scene');
-    const porteiraCanvas = document.getElementById('canvas-porteira');
-    const porteiraFallback = document.getElementById('fallback-porteira');
     const tvFrame = document.getElementById('sessao2-tv-frame');
     const tvVideo = document.getElementById('sessao2-tv-video');
     const tvSomBtn = document.getElementById('tv-video-som');
@@ -184,53 +181,71 @@ function arrancarInterno() {
       });
     }
 
-    const porteiraLayer = new FrameLayer({
-      id: 'porteira',
-      mode: 'section',
-      canvas: porteiraCanvas,
-      wrapper: secaoCenas,
-      wrapperHeightVh: 240,
-      timelineRange: { start: 0.00, end: 0.58 },
-      manifestEntry: FRAMES_MANIFEST.porteira,
-      fallbackImg: porteiraFallback,
-      transparentBg: true,
-      onUpdate: (prog) => {
-        // (a) Fundo da porteira aberta permanece visível (NUNCA tela preta)
-        if (porteiraScene) {
-          porteiraScene.style.opacity = '1';
+    // 1. Controlador da Televisãozinha 9x16 com Vista Aérea do Terreno (Seção 2)
+    if (secaoCenas && tvFrame) {
+      let secaoTop = 0;
+      let secaoHeight = 0;
+
+      const updateSecaoBounds = () => {
+        secaoTop = secaoCenas.offsetTop || 0;
+        secaoHeight = secaoCenas.offsetHeight || 0;
+      };
+
+      updateSecaoBounds();
+      window.addEventListener('resize', updateSecaoBounds, { passive: true });
+
+      scrollEngine.onTick((scrollY, vh, stableVh) => {
+        const scrollDist = secaoHeight - stableVh;
+        if (scrollDist <= 0) return;
+
+        // Fora da seção: oculta e pausa vídeo
+        if (scrollY < secaoTop - vh || scrollY > secaoTop + secaoHeight) {
+          if (tvFrame.style.opacity !== '0') {
+            tvFrame.style.opacity = '0';
+            tvFrame.style.transform = 'scale(0.35)';
+          }
+          if (tvVideo && !tvVideo.paused) {
+            tvVideo.pause();
+          }
+          return;
         }
 
-        // (b) Televisãozinha 9x16 emerge do centro após a porteira abrir (prog >= 0.54) e cresce continuamente
-        if (tvFrame) {
-          let scale = 0.35;
-          let opacity = 0;
+        const rawP = (scrollY - secaoTop) / scrollDist;
+        const prog = Math.min(1, Math.max(0, rawP));
 
-          if (prog < 0.54) {
-            scale = 0.35;
-            opacity = 0;
-          } else if (prog <= 0.72) {
-            const p = (prog - 0.54) / 0.18;
-            scale = 0.38 + p * 0.62; // emerge e cresce suavemente de 0.38 para 1.00
-            opacity = Math.min(1, p * 1.5);
-          } else {
-            const p2 = Math.min(1, (prog - 0.72) / 0.28);
-            scale = 1.00 + p2 * 0.12; // continua aumentando de tamanho conforme desce (até 1.12)
-            opacity = 1.0;
-          }
+        // Curva suave de entrada, exibição contínua e transição de saída da TV
+        let scale = 0.35;
+        let opacity = 0;
 
-          tvFrame.style.transform = `scale(${scale.toFixed(3)})`;
-          tvFrame.style.opacity = opacity.toFixed(3);
+        if (prog <= 0.35) {
+          // Fase 1: Emerge no centro crescendo de 0.38 para 1.00 sobre o fundo global
+          const p = prog / 0.35;
+          scale = 0.38 + p * 0.62;
+          opacity = Math.min(1, p * 1.3);
+        } else if (prog <= 0.78) {
+          // Fase 2: Destaque total no centro, vídeo aéreo rodando
+          const p = (prog - 0.35) / 0.43;
+          scale = 1.00 + p * 0.06;
+          opacity = 1.0;
+        } else {
+          // Fase 3: Transição suave para a próxima seção
+          const p = (prog - 0.78) / 0.22;
+          scale = 1.06 + p * 0.04;
+          opacity = Math.max(0, 1.0 - p * 1.5);
+        }
 
-          if (tvVideo) {
-            if (opacity > 0.05 && tvVideo.paused) {
-              tvVideo.play().catch(() => {});
-            } else if (opacity <= 0.02 && !tvVideo.paused) {
-              tvVideo.pause();
-            }
+        tvFrame.style.transform = `scale(${scale.toFixed(3)})`;
+        tvFrame.style.opacity = opacity.toFixed(3);
+
+        if (tvVideo) {
+          if (opacity > 0.10 && tvVideo.paused) {
+            tvVideo.play().catch(() => {});
+          } else if (opacity <= 0.05 && !tvVideo.paused) {
+            tvVideo.pause();
           }
         }
-      }
-    });
+      });
+    }
 
     // 2. Layer Global (Modo GLOBAL PING-PONG com GLOBAL_PASS_VH = 450)
     const globalCanvas = document.getElementById('global-scroll-canvas');
@@ -243,7 +258,6 @@ function arrancarInterno() {
     });
 
     scrollEngine.init();
-    scrollEngine.addLayer(porteiraLayer);
     scrollEngine.addLayer(globalLayer);
   } catch (e) {
     console.error('[pd] scrollEngine:', e);
