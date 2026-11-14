@@ -64,7 +64,8 @@ export class FrameLayer {
     // Fila de carregamento fino
     this.fetchQueue = [];
     this.activeFetches = 0;
-    this.maxConcurrentFetches = 8;
+    this.maxConcurrentFetches = 3;
+    this.lastPrioritizedIndex = -999;
     this.coarseLoaded = false;
     this.initialLoadStarted = false;
 
@@ -146,10 +147,19 @@ export class FrameLayer {
     if (this.initialLoadStarted) return;
     this.initialLoadStarted = true;
 
-    if (this.mode === 'global' || this.id === 'porteira') {
-      // Para o fundo global e a porteira, enfileira todos os frames diretamente
+    if (this.mode === 'global') {
+      // Passada 1: Coarse (a cada 5 frames) para ter preview imediato e leve
+      for (let i = 0; i < this.totalFrames; i += 5) {
+        this.enqueueFrame(i, true);
+      }
+      if ((this.totalFrames - 1) % 5 !== 0) {
+        this.enqueueFrame(this.totalFrames - 1, true);
+      }
+      // Passada 2: restante dos frames
       for (let i = 0; i < this.totalFrames; i++) {
-        this.enqueueFrame(i, i < 30);
+        if (i % 5 !== 0 && i !== this.totalFrames - 1) {
+          this.enqueueFrame(i, false);
+        }
       }
       this.processQueue();
       return;
@@ -222,6 +232,8 @@ export class FrameLayer {
    */
   prioritizeNearFrames(centerIndex) {
     if (this.fetchQueue.length === 0) return;
+    if (Math.abs(centerIndex - this.lastPrioritizedIndex) < 3) return;
+    this.lastPrioritizedIndex = centerIndex;
     this.fetchQueue.sort((a, b) => {
       const distA = Math.abs(a - centerIndex);
       const distB = Math.abs(b - centerIndex);

@@ -48,18 +48,18 @@
     "filenamePattern": "f_%04d.webp"
   },
   "global": {
-    "totalFrames": 141,
+    "totalFrames": 75,
     "desktop": {
-      "width": 1080,
-      "height": 1920,
+      "width": 960,
+      "height": 1706,
       "path": "/frames/global/f_%04d.webp",
-      "weightMB": 23.95
+      "weightMB": 7.16
     },
     "mobile": {
-      "width": 720,
-      "height": 1280,
+      "width": 540,
+      "height": 960,
       "path": "/frames/global-m/f_%04d.webp",
-      "weightMB": 12.52
+      "weightMB": 3.2
     },
     "filenamePattern": "f_%04d.webp"
   }

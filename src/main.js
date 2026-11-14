@@ -214,28 +214,36 @@ function arrancarInterno() {
         const prog = Math.min(1, Math.max(0, rawP));
 
         // Curva suave de entrada, exibição contínua e transição de saída da TV
-        let scale = 0.35;
-        let opacity = 0;
+        let scale = 0.75;
+        let opacity = 0.5;
 
-        if (prog <= 0.35) {
-          // Fase 1: Emerge no centro crescendo de 0.38 para 1.00 sobre o fundo global
-          const p = prog / 0.35;
-          scale = 0.38 + p * 0.62;
-          opacity = Math.min(1, p * 1.3);
-        } else if (prog <= 0.78) {
-          // Fase 2: Destaque total no centro, vídeo aéreo rodando
-          const p = (prog - 0.35) / 0.43;
-          scale = 1.00 + p * 0.06;
+        if (prog <= 0.15) {
+          // Fase 1: Emerge rapidamente sem arrasto longo
+          const p = prog / 0.15;
+          scale = 0.75 + p * 0.25;
+          opacity = 0.50 + p * 0.50;
+        } else if (prog <= 0.60) {
+          // Fase 2: Destaque pleno no centro, vídeo aéreo rodando
+          const p = (prog - 0.15) / 0.45;
+          scale = 1.00 + p * 0.05;
           opacity = 1.0;
         } else {
-          // Fase 3: Transição suave para a próxima seção
-          const p = (prog - 0.78) / 0.22;
-          scale = 1.06 + p * 0.04;
+          // Fase 3: Transição suave e direta para Conheça o Paraíso
+          const p = (prog - 0.60) / 0.40;
+          scale = 1.05 + p * 0.04;
           opacity = Math.max(0, 1.0 - p * 1.5);
         }
 
-        tvFrame.style.transform = `scale(${scale.toFixed(3)})`;
-        tvFrame.style.opacity = opacity.toFixed(3);
+        const scaleStr = scale.toFixed(3);
+        const opStr = opacity.toFixed(3);
+        if (tvFrame._lastScale !== scaleStr) {
+          tvFrame._lastScale = scaleStr;
+          tvFrame.style.transform = `scale(${scaleStr})`;
+        }
+        if (tvFrame._lastOpacity !== opStr) {
+          tvFrame._lastOpacity = opStr;
+          tvFrame.style.opacity = opStr;
+        }
 
         if (tvVideo) {
           if (opacity > 0.10 && tvVideo.paused) {
