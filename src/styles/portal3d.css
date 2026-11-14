@@ -30,39 +30,13 @@
   background: transparent;
 }
 
-/* Degradês suaves de transição no topo e base da cena com o fundo global */
+/* Sem degradês nas extremidades para eliminar qualquer margem preta */
 .cenas-sticky::before,
 .cenas-sticky::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: clamp(80px, 12vh, 150px);
-  pointer-events: none;
-  z-index: 2;
+  display: none;
 }
 
-.cenas-sticky::before {
-  top: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(4, 25, 31, 0.85) 0%,
-    rgba(4, 25, 31, 0.40) 50%,
-    transparent 100%
-  );
-}
-
-.cenas-sticky::after {
-  bottom: 0;
-  background: linear-gradient(
-    0deg,
-    rgba(4, 25, 31, 0.85) 0%,
-    rgba(4, 25, 31, 0.40) 50%,
-    transparent 100%
-  );
-}
-
-/* 1. Cena da Porteira (Canvas 120 FPS que se abre no scroll com degradê de separação) */
+/* 1. Cena da Porteira (Canvas 120 FPS faceando nas laterais, sem quadro e sem margem preta) */
 .sessao2-porteira-scene {
   position: absolute;
   inset: 0;
@@ -72,25 +46,10 @@
   z-index: 1;
   pointer-events: none;
   background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
   will-change: opacity;
-  -webkit-mask-image: linear-gradient(
-    180deg,
-    transparent 0%,
-    rgba(0, 0, 0, 0.7) 6%,
-    rgba(0, 0, 0, 1) 14%,
-    rgba(0, 0, 0, 1) 86%,
-    rgba(0, 0, 0, 0.7) 94%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    180deg,
-    transparent 0%,
-    rgba(0, 0, 0, 0.7) 6%,
-    rgba(0, 0, 0, 1) 14%,
-    rgba(0, 0, 0, 1) 86%,
-    rgba(0, 0, 0, 0.7) 94%,
-    transparent 100%
-  );
 }
 
 .sessao2-canvas,
@@ -104,10 +63,13 @@
   display: block;
   z-index: 1;
   pointer-events: none;
+  border: none;
+  outline: none;
 }
 
 /* Fallback do frame 0 */
-.sessao2-fallback-img {
+.sessao2-fallback-img,
+.sessao2-porteira-fallback {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -116,34 +78,17 @@
   object-position: center;
   z-index: 0;
   pointer-events: none;
+  border: none;
   transition: opacity 0.3s ease;
 }
 
 .sessao2-porteira-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(2, 16, 20, 0.30) 0%,
-    transparent 45%,
-    rgba(2, 16, 20, 0.60) 100%
-  );
-  pointer-events: none;
-  z-index: 2;
+  display: none !important;
 }
 
-/* 2. Camada Escura Fosca sobre a Porteira Aberta (Fundo para a TV) */
+/* 2. Camada escura de fundo desativada (elimina a mancha / quadro preto atrás do vídeo aéreo) */
 .sessao2-tv-backdrop-blur {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.62);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  pointer-events: none;
-  z-index: 2;
-  opacity: 0;
-  will-change: opacity;
-  transition: opacity 0.2s ease-out;
+  display: none !important;
 }
 
 /* 3. Container da Televisãozinha 9x16 que emerge da porteira */
@@ -287,47 +232,6 @@
 @media (max-width: 768px) {
   .secao-cenas {
     height: 220vh;
-  }
-
-  /* Porteira no celular em proporção harmoniosa (~4:5), sem ficar esticada nem longa */
-  .sessao2-porteira-scene {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: min(92vw, 420px);
-    aspect-ratio: 4 / 5;
-    max-height: 64vh;
-    border-radius: 24px;
-    overflow: hidden;
-    background: transparent;
-    box-shadow: 0 16px 50px rgba(0, 0, 0, 0.75), 0 0 30px rgba(101, 184, 141, 0.20);
-    border: 1.5px solid rgba(114, 196, 156, 0.35);
-    -webkit-mask-image: linear-gradient(
-      180deg,
-      transparent 0%,
-      rgba(0, 0, 0, 1) 4%,
-      rgba(0, 0, 0, 1) 96%,
-      transparent 100%
-    );
-    mask-image: linear-gradient(
-      180deg,
-      transparent 0%,
-      rgba(0, 0, 0, 1) 4%,
-      rgba(0, 0, 1) 96%,
-      transparent 100%
-    );
-  }
-
-  .sessao2-tv-backdrop-blur {
-    width: min(92vw, 420px);
-    aspect-ratio: 4 / 5;
-    max-height: 64vh;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border-radius: 24px;
-    inset: auto;
   }
 
   .sessao2-tv-frame {

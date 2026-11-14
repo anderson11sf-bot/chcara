@@ -171,7 +171,6 @@ function arrancarInterno() {
     const porteiraScene = document.getElementById('sessao2-porteira-scene');
     const porteiraCanvas = document.getElementById('canvas-porteira');
     const porteiraFallback = document.getElementById('fallback-porteira');
-    const tvBackdrop = document.getElementById('sessao2-tv-backdrop-blur');
     const tvFrame = document.getElementById('sessao2-tv-frame');
     const tvVideo = document.getElementById('sessao2-tv-video');
     const tvSomBtn = document.getElementById('tv-video-som');
@@ -201,16 +200,7 @@ function arrancarInterno() {
           porteiraScene.style.opacity = '1';
         }
 
-        // (b) A TV e o fundo fosco só começam a surgir quando a porteira já abriu quase toda (prog >= 0.52)
-        if (tvBackdrop) {
-          let opBackdrop = 0;
-          if (prog >= 0.52) {
-            opBackdrop = Math.min(1, (prog - 0.52) / 0.18);
-          }
-          tvBackdrop.style.opacity = opBackdrop.toFixed(3);
-        }
-
-        // (c) Televisãozinha 9x16 emerge do centro após a porteira abrir (prog >= 0.54) e cresce continuamente
+        // (b) Televisãozinha 9x16 emerge do centro após a porteira abrir (prog >= 0.54) e cresce continuamente
         if (tvFrame) {
           let scale = 0.35;
           let opacity = 0;
