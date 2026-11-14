@@ -50,6 +50,7 @@ export function iniciarGerenciadorVideos() {
         // Entrou na área visível: inicia se for vídeo com autoplay
         const querAutoplay = video.hasAttribute('autoplay') ||
           video.classList.contains('video-player--autoplay') ||
+          video.classList.contains('painel-fundo-video') ||
           video.classList.contains('mapa-drone-video-bg') ||
           video.classList.contains('localizacao-mapa-video-bg');
 

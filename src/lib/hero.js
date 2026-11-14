@@ -19,6 +19,7 @@ let heroBgImg = null;
 let heroVideo = null;
 let cardsGrid = null;
 let transicaoNarrativa = null;
+let scrollIndicador = null;
 let ativo = false;
 let base = null;
 let noTopo = false;
@@ -33,6 +34,7 @@ export function iniciarHero() {
   heroBgImg = document.getElementById('hero-bg-img');
   cardsGrid = document.getElementById('hero-cards-grid');
   transicaoNarrativa = document.getElementById('hero-transicao-narrativa');
+  scrollIndicador = document.getElementById('scroll-indicador');
   const secao = document.getElementById('hero');
 
   if (!headline || !secao) return null;
@@ -114,6 +116,7 @@ export function definirProgresso(p) {
   const t = clamp(p, 0, 1);
 
   if (t === 0) {
+    if (scrollIndicador) scrollIndicador.classList.remove('oculto');
     if (!noTopo) {
       noTopo = true;
       for (const el of [headline, sub, selos, emblemas, acoes, wordmark, cardsGrid]) {
@@ -135,6 +138,13 @@ export function definirProgresso(p) {
   }
 
   noTopo = false;
+  if (scrollIndicador) {
+    if (t > 0.04) {
+      scrollIndicador.classList.add('oculto');
+    } else {
+      scrollIndicador.classList.remove('oculto');
+    }
+  }
 
   // Pausa inteligente do vídeo de fundo ao rolar além do hero
   if (heroVideo) {

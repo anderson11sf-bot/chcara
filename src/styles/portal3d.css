@@ -1,62 +1,88 @@
 /* ============================================================================
- * portal3d.css — SESSÃO 2: PLAYER CINEMATOGRÁFICO & PORTAL VEGETAL 3D
+ * portal3d.css — SESSÃO 2: TRANSIÇÃO DA PORTEIRA, VÍDEO FULLSCREEN & PORTAL 3D
  * ----------------------------------------------------------------------------
- * 1. CENA NARRATIVA DO CAVALO EM PLAYER CINEMATOGRÁFICO INDEPENDENTE
- *    - Centralizado na tela, proporção nativa de player (16:9), sem esticar
- *    - Sombra suave e degradê escuro ao redor integrados à cena
- *    - Controlado pela rolagem da página (sem reprodução infinita em loop)
- * 2. PORTAL VEGETAL TRIDIMENSIONAL (5 CAMADAS NA ORDEM OBRIGATÓRIA)
+ * 1. TRANSIÇÃO DA PORTEIRA (Acontece entre Seção 1 e Seção 2)
+ *    - Vídeo da porteira abrindo progressivamente
+ *    - Revela a Seção 2 entrando suavemente em tela inteira
+ * 2. CENA DO CAVALO EM TELA INTEIRA (Fullscreen background cover)
+ *    - Ocupa a área inteira da tela (sem moldura/player frame)
+ *    - Controlado pela rolagem da página
+ * 3. PORTAL VEGETAL TRIDIMENSIONAL (5 Camadas na Ordem Obrigatória)
  *    - Camada 1: PORTA (Porta de correr — desliza lateralmente com translateX)
- *    - Camada 2: PLANTA (Segunda camada — abre progressivamente sincronizada à porta)
- *    - Camada 3: TRONCO (Escala correta, monumental e proporcional nas laterais)
- *    - Camada 4: CASA ÍRIS (Arquitetura revelada em profundidade 3D)
- *    - Camada 5: FOLHAS (Camada de primeiro plano com paralaxe diferencial)
+ *    - Camada 2: PLANTA (Segunda camada — abre progressivamente sincronizada)
+ *    - Camada 3: TRONCO (Grandes troncos laterais em escala proporcional monumental)
+ *    - Camada 4: VÍDEO DA VISÃO AÉREA (Drone revelado atrás do portal)
+ *    - Camada 5: FOLHAS (Camada de primeiro plano com paralaxe 3D diferencial)
  * ==========================================================================*/
 
 /* ----------------------------------------------------------------------------
- * 1. CENA DO CAVALO: PLAYER CINEMATOGRÁFICO FLUTUANTE
+ * 0. TRANSIÇÃO DA PORTEIRA (ENTRE SESSÃO 1 E SESSÃO 2)
+ * -------------------------------------------------------------------------- */
+.porteira-transicao {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 15;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s ease, visibility 0.35s ease;
+  background: #020c0e;
+}
+
+.porteira-transicao[data-ativa="true"] {
+  opacity: 1;
+  visibility: visible;
+}
+
+.porteira-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.porteira-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(2, 16, 20, 0.3) 0%,
+    rgba(0, 0, 0, 0.1) 40%,
+    rgba(2, 16, 20, 0.6) 100%
+  );
+  pointer-events: none;
+}
+
+/* ----------------------------------------------------------------------------
+ * 1. CENA DO CAVALO: TOTALMENTE EM TELA INTEIRA (FULLSCREEN COVER)
  * -------------------------------------------------------------------------- */
 .sessao2-cavalo-scene {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   overflow: hidden;
   z-index: 2;
   pointer-events: none;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(2, 12, 14, 0.35) 0%,
-    rgba(2, 12, 14, 0.85) 65%,
-    rgba(2, 12, 14, 0.98) 100%
-  );
   transition: opacity 0.4s ease;
 }
 
-/* Quadro independente do player cinematográfico */
 .sessao2-player-frame {
-  position: relative;
-  width: min(880px, 78vw);
-  max-height: 72vh;
-  aspect-ratio: 16 / 9;
-  border-radius: 18px;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
-  background: #020c0e;
-  border: 1.5px solid rgba(114, 196, 156, 0.38);
-  box-shadow:
-    0 24px 70px rgba(0, 0, 0, 0.85),
-    0 8px 24px rgba(0, 0, 0, 0.6),
-    0 0 40px rgba(114, 196, 156, 0.15),
-    inset 0 0 20px rgba(0, 0, 0, 0.5);
-  pointer-events: auto;
-  will-change: transform, opacity;
-  transition: transform 0.1s linear, opacity 0.3s ease;
+  background: #000;
 }
 
 .sessao2-cavalo-video {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -71,8 +97,8 @@
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(2, 16, 20, 0.4) 0%,
-    rgba(0, 0, 0, 0.15) 50%,
+    rgba(2, 16, 20, 0.35) 0%,
+    rgba(0, 0, 0, 0.12) 45%,
     rgba(2, 16, 20, 0.65) 100%
   );
   pointer-events: none;
@@ -81,22 +107,23 @@
 
 .sessao2-player-badge {
   position: absolute;
-  top: 14px;
-  left: 16px;
+  top: calc(var(--safe-top, 20px) + 24px);
+  left: 24px;
   display: inline-flex;
   align-items: center;
   gap: 8px;
   font-family: var(--fonte-rotulos, 'Quicksand', sans-serif);
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   font-weight: 600;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: #72C49C;
-  background: rgba(4, 25, 31, 0.88);
-  padding: 6px 14px;
+  background: rgba(4, 25, 31, 0.85);
+  padding: 8px 18px;
   border-radius: 999px;
   border: 1px solid rgba(114, 196, 156, 0.4);
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   z-index: 2;
 }
 
@@ -109,18 +136,11 @@
 }
 
 @media (max-width: 768px) {
-  .sessao2-player-frame {
-    width: calc(100vw - 32px);
-    max-width: 480px;
-    max-height: 55vh;
-    aspect-ratio: 16 / 9;
-    border-radius: 14px;
-  }
   .sessao2-player-badge {
-    top: 10px;
-    left: 12px;
-    font-size: 0.65rem;
-    padding: 4px 10px;
+    top: calc(var(--safe-top, 16px) + 16px);
+    left: 16px;
+    font-size: 0.68rem;
+    padding: 6px 12px;
   }
 }
 
@@ -151,7 +171,7 @@
 }
 
 /* ----------------------------------------------------------------------------
- * CAMADA 4: CASA ÍRIS (ARQUITETURA REVELADA EM PROFUNDIDADE 3D)
+ * CAMADA 4: VÍDEO DA VISÃO AÉREA DO DRONE (REVELADO ATRÁS DO PORTAL)
  * -------------------------------------------------------------------------- */
 .portal-casa-iris-layer {
   position: absolute;
@@ -161,79 +181,42 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 24px;
   z-index: 5;
-  transform: translateZ(-80px);
+  transform: translateZ(-60px);
   transform-style: preserve-3d;
   will-change: transform, opacity;
   pointer-events: auto;
 }
 
 .portal-casa-iris-card {
-  position: relative;
-  width: min(560px, 80vw);
-  max-height: 70vh;
-  aspect-ratio: 16 / 10;
-  border-radius: 18px;
-  overflow: hidden;
-  background: #020c0e;
-  border: 1.5px solid rgba(114, 196, 156, 0.45);
-  box-shadow:
-    0 24px 70px rgba(0, 0, 0, 0.9),
-    0 0 50px rgba(114, 196, 156, 0.2);
+  display: none !important;
 }
 
-.portal-casa-iris-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  display: block;
-}
-
-.portal-casa-iris-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 16px 20px;
-  background: linear-gradient(0deg, rgba(2, 16, 20, 0.95) 0%, transparent 100%);
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.portal-casa-iris-tag {
-  font-family: var(--fonte-titulos, 'Cormorant Garamond', serif);
-  font-size: 1.25rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: #ECC880;
-}
-
-.portal-casa-iris-sub {
-  font-family: var(--fonte-texto, 'Outfit', sans-serif);
-  font-size: 0.8rem;
-  color: #72C49C;
-  letter-spacing: 0.04em;
-}
-
-/* Quadro do vídeo de drone complementar */
+/* Quadro do vídeo de drone da visão aérea */
 .portal-video-frame {
   position: relative;
-  width: min(440px, 75vw);
-  max-height: 68vh;
-  aspect-ratio: 9 / 16;
-  border-radius: 18px;
+  width: min(780px, 86vw);
+  max-height: 76vh;
+  aspect-ratio: 16 / 9;
+  border-radius: 20px;
   overflow: hidden;
   background: #020c0e;
   border: 1.5px solid rgba(114, 196, 156, 0.45);
   box-shadow:
     0 24px 70px rgba(0, 0, 0, 0.9),
-    0 0 40px rgba(114, 196, 156, 0.15);
+    0 0 50px rgba(114, 196, 156, 0.25);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+@media (max-width: 768px) {
+  .portal-video-frame {
+    width: min(340px, 92vw);
+    max-height: 72svh;
+    aspect-ratio: 9 / 16;
+    border-radius: 16px;
+  }
 }
 
 .portal-video {

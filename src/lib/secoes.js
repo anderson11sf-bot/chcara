@@ -69,6 +69,32 @@ function criarVideoFrame({ src, poster, legenda, proporcao = '16-9' }) {
   return moldura;
 }
 
+/** Cria painel com fundo dinâmico em vídeo contínuo de cachoeira tropical e overlay fosco elegante */
+function criarPainel(classeExtra = '') {
+  const painel = criar('div', { classe: `painel ${classeExtra}`.trim() });
+
+  const videoCachoeira = criar('video', {
+    classe: 'painel-fundo-video',
+    src: '/media/video/cachoeira-fundo.mp4',
+    poster: '/media/img/cachoeira-poster.webp',
+    muted: '',
+    loop: '',
+    playsinline: '',
+    preload: 'none',
+    'aria-hidden': 'true'
+  });
+  videoCachoeira.muted = true;
+  painel.appendChild(videoCachoeira);
+
+  const overlayCachoeira = criar('div', {
+    classe: 'painel-fundo-overlay',
+    'aria-hidden': 'true'
+  });
+  painel.appendChild(overlayCachoeira);
+
+  return painel;
+}
+
 /* --------------------------------------------------------------------------
  * 03. APRESENTAÇÃO: CONHEÇA O PARAÍSO (PÁGINAS 3 E 7 DO PDF)
  * ------------------------------------------------------------------------ */
@@ -77,7 +103,7 @@ export function montarEfeitoParaiso() {
   if (!secao) return null;
 
   const P = config.efeitoParaiso;
-  const painel = criar('div', { classe: 'painel' });
+  const painel = criarPainel();
 
   painel.appendChild(cabecalho({
     rotulo: P.rotulo,
@@ -154,7 +180,7 @@ export function montarPropriedades() {
   if (!secao) return null;
 
   const P = config.propriedades;
-  const painel = criar('div', { classe: 'painel' });
+  const painel = criarPainel();
 
   painel.appendChild(cabecalho({
     rotulo: P.rotulo,
@@ -202,15 +228,20 @@ export function montarPropriedades() {
       mapaCaixa.appendChild(droneBg);
     }
 
-    mapaCaixa.appendChild(criar('img', {
+    const pictureMapa = criar('picture', { classe: 'mapa-oficial-picture' });
+    const sourceWebp = criar('source', { srcset: '/media/img/mapa-oficial-terreno.webp', type: 'image/webp' });
+    const imgMapa = criar('img', {
       classe: 'mapa-oficial-img',
-      src: P.mapaImagem,
+      src: '/media/img/mapa-oficial-terreno.png',
       alt: 'Mapa oficial de demarcação das Sete Glebas no Paraíso das Águas',
       loading: 'eager',
       decoding: 'async',
-      width: '1400',
-      height: '1580'
-    }));
+      width: '1193',
+      height: '1319'
+    });
+    pictureMapa.appendChild(sourceWebp);
+    pictureMapa.appendChild(imgMapa);
+    mapaCaixa.appendChild(pictureMapa);
 
     const barraAcaoMapa = criar('div', { classe: 'mapa-oficial-barra' });
     barraAcaoMapa.appendChild(criar('span', {
@@ -254,7 +285,7 @@ export function montarInfraestrutura() {
   if (!secao) return null;
 
   const I = config.infraestrutura;
-  const painel = criar('div', { classe: 'painel' });
+  const painel = criarPainel();
 
   painel.appendChild(cabecalho({
     rotulo: I.rotulo,
@@ -295,7 +326,7 @@ export function montarPossibilidades() {
   if (!secao) return null;
 
   const P = config.possibilidades;
-  const painel = criar('div', { classe: 'painel painel--largo' });
+  const painel = criarPainel('painel--largo');
 
   painel.appendChild(cabecalho({
     rotulo: P.rotulo,
@@ -390,7 +421,7 @@ export function montarAutossuficiencia() {
   if (!secao) return null;
 
   const A = config.autossuficiencia;
-  const painel = criar('div', { classe: 'painel painel--largo' });
+  const painel = criarPainel('painel--largo');
 
   // Headline / Banner de transição narrativa da Sessão 6 para a 7 (conforme solicitado)
   const transicaoBanner = criar('div', { classe: 'transicao-s6-s7' });
@@ -476,7 +507,7 @@ export function montarCompartilhar() {
   if (!secao) return null;
 
   const C = config.compartilhar;
-  const painel = criar('div', { classe: 'painel' });
+  const painel = criarPainel();
 
   // Foto de destaque da família no campo (Página 10 do PDF)
   if (C.imagemPrincipal) {
@@ -535,7 +566,7 @@ export function montarSaoJose() {
   const S = config.saoJose;
   if (!S) return secao;
 
-  const painel = criar('div', { classe: 'painel painel--largo' });
+  const painel = criarPainel('painel--largo');
 
   painel.appendChild(cabecalho({
     rotulo: S.rotulo,
@@ -603,7 +634,7 @@ export function montarLocalizacao() {
   if (!secao) return null;
 
   const L = config.localizacao;
-  const painel = criar('div', { classe: 'painel' });
+  const painel = criarPainel();
 
   painel.appendChild(cabecalho({
     rotulo: L.rotulo,
@@ -682,7 +713,7 @@ export function montarAquisicao() {
   if (!secao) return null;
 
   const A = config.aquisicao;
-  const painel = criar('div', { classe: 'painel' });
+  const painel = criarPainel();
 
   painel.appendChild(cabecalho({
     rotulo: A.rotulo,
@@ -722,7 +753,7 @@ export function montarContato() {
   if (!secao) return null;
 
   const C = config.contato;
-  const painel = criar('div', { classe: 'painel painel--largo' });
+  const painel = criarPainel('painel--largo');
 
   painel.appendChild(cabecalho({
     rotulo: C.rotulo,

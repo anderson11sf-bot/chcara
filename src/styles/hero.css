@@ -536,3 +536,92 @@
   .hero__acoes,
   .hero__emblemas { filter: none !important; opacity: 1 !important; transform: none !important; }
 }
+
+/* ============================================================================
+ * INDICADOR VISUAL DE ROLAGEM (SCROLL HINT MINIMALISTA)
+ * ==========================================================================*/
+.scroll-indicador {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  z-index: 10;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.scroll-indicador.oculto {
+  opacity: 0;
+  transform: translateX(-50%) translateY(12px);
+  pointer-events: none;
+}
+
+.scroll-indicador__capsula {
+  width: 22px;
+  height: 36px;
+  border-radius: 999px;
+  border: 1.5px solid rgba(255, 255, 255, 0.75);
+  background: rgba(4, 25, 31, 0.45);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  padding-top: 6px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+}
+
+.scroll-indicador__ponto {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #72C49C;
+  box-shadow: 0 0 8px #72C49C, 0 0 14px rgba(114, 196, 156, 0.6);
+  animation: deslizePontoScroll 1.8s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+@keyframes deslizePontoScroll {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  75% {
+    transform: translateY(14px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(18px);
+    opacity: 0;
+  }
+}
+
+.scroll-indicador__texto {
+  font-family: var(--fonte-rotulos, 'Quicksand', sans-serif);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.88);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
+}
+
+@media (max-width: 600px) {
+  .scroll-indicador {
+    bottom: 16px;
+  }
+  .scroll-indicador__capsula {
+    width: 20px;
+    height: 32px;
+  }
+  .scroll-indicador__texto {
+    font-size: 0.62rem;
+  }
+}
+
