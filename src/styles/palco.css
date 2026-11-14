@@ -17,28 +17,19 @@
   background-color: var(--noite-abissal);
   isolation: isolate;
   contain: strict;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.4s ease, visibility 0.4s ease;
-}
-
-.palco[data-visivel="true"] {
   opacity: 1;
   visibility: visible;
 }
 
-.palco[data-visivel="false"] {
-  opacity: 0;
-  visibility: hidden;
-}
-
-.palco__fundo {
+.palco__fundo,
+.global-scroll-canvas {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   image-rendering: auto;
   opacity: 1;
+  display: block;
   z-index: var(--z-global-background, 0);
 }
 

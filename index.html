@@ -25,6 +25,9 @@
 <!-- Favicon -->
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 
+<!-- Preload do primeiro frame da Hero (LCP Imediato) -->
+<link rel="preload" as="image" href="/frames/hero/f_0001.webp">
+
 <!-- Fontes: Cormorant Garamond + Outfit + Quicksand -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -103,9 +106,7 @@
        PALCO FIXO — Camadas Visuais (Canvas 2D Procedural + Frames WebP)
        ===================================================================== -->
   <div class="palco" id="palco" aria-hidden="true">
-    <canvas class="palco__fundo" id="fundo-canvas"></canvas>
-    <div class="palco__tela-video" id="palco-video"></div>
-    <div class="palco__grade-video" id="palco-grade"></div>
+    <canvas class="palco__fundo global-scroll-canvas" id="global-scroll-canvas"></canvas>
     <div class="palco__vidro vidro" id="vidro"></div>
     <div class="palco__vinheta" id="vinheta"></div>
   </div>
@@ -115,154 +116,159 @@
        ===================================================================== -->
   <main class="conteudo" id="conteudo">
 
-    <!-- 01. HERO CINEMATOGRÁFICA COM VÍDEO DO CAVALO EM LOOP CONTÍNUO -------------------- -->
-    <section class="secao hero" id="hero">
-      <div class="hero__bg" id="hero-bg" aria-hidden="true">
-        <video class="hero__video" id="hero-video" src="/media/video/hero-cavalo.mp4" poster="/media/img/hero-scroll-poster.webp" autoplay muted loop playsinline preload="auto"></video>
-        <img src="/media/img/hero-scroll-poster.webp" alt="Paraíso das Águas em São José dos Campos" class="hero__bg-img" id="hero-bg-img" width="1080" height="1920" fetchpriority="high">
-        <div class="hero__bg-overlay"></div>
-      </div>
-
-      <div class="hero__inner">
-        <h1 class="hero__headline" id="hero-headline">
-          Seu paraíso <br><span class="destaque-verde">de 2 hectares</span>
-        </h1>
-
-        <div class="hero__apoio-container">
-          <span class="hero__linha-ouro" aria-hidden="true"></span>
-          <p class="hero__sub" id="hero-sub">
-            Natureza, liberdade e segurança,<br>a 20 min do centro.
-          </p>
+    <!-- 01. HERO CINEMATOGRÁFICA COM ANIMAÇÃO DE SCROLL NATIVO 1:1 -------------------- -->
+    <section class="secao hero hero-scroll-wrapper" id="hero">
+      <div class="hero-sticky-container" id="hero-sticky">
+        <div class="hero__bg" id="hero-bg" aria-hidden="true">
+          <canvas class="hero__canvas" id="hero-canvas"></canvas>
+          <img src="/frames/hero/f_0001.webp" alt="Paraíso das Águas em São José dos Campos" class="hero__bg-img" id="hero-bg-img" width="960" height="1706" fetchpriority="high">
+          <div class="hero__bg-overlay"></div>
         </div>
 
-        <div class="hero__acoes">
-          <a class="btn-pdf-dourado" id="hero-cta-primario" href="#contato" data-wa-origem="hero">
-            <svg class="btn-pdf__icone" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-              <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zm-7 5h5v5h-5z"/>
-            </svg>
-            <span>Agendar Visita</span>
-            <span class="btn-pdf__seta">&gt;</span>
-          </a>
-          <a class="btn-pdf-vidro" id="hero-cta-secundario" href="#efeito-paraiso">
-            <svg class="btn-pdf__icone" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="9"/>
-              <polygon points="12,7 15,15 12,13 9,15" fill="currentColor"/>
-            </svg>
-            <span>Conhecer o Paraíso</span>
-            <span class="btn-pdf__seta">&gt;</span>
-          </a>
-        </div>
+        <div class="hero__inner" id="hero-inner">
+          <h1 class="hero__headline" id="hero-headline">
+            Seu paraíso <br><span class="destaque-verde">de 2 hectares</span>
+          </h1>
 
-        <!-- Grade 2x2 com os 4 diferenciais da Página 1 do PDF -->
-        <div class="hero__cards-grid" id="hero-cards-grid">
-          <div class="hero-card-pdf">
-            <div class="hero-card-pdf__icone">
-              <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3.5c3.2 0 5.6 2.2 5.6 5 0 1.3-.5 2.4-1.3 3.2 1 .7 1.6 1.8 1.6 3 0 2.2-1.9 3.8-4.3 3.8H10.4C8 18.5 6.1 16.9 6.1 14.7c0-1.2.6-2.3 1.6-3-.8-.8-1.3-1.9-1.3-3.2 0-2.8 2.4-5 5.6-5z"/><path d="M12 18.5V21" opacity=".7"/></svg>
+          <div class="hero__apoio-container">
+            <span class="hero__linha-ouro" aria-hidden="true"></span>
+            <p class="hero__sub" id="hero-sub">
+              Natureza, liberdade e segurança,<br>a 20 min do centro.
+            </p>
+          </div>
+
+          <div class="hero__acoes">
+            <a class="btn-pdf-dourado" id="hero-cta-primario" href="#contato" data-wa-origem="hero">
+              <svg class="btn-pdf__icone" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zm-7 5h5v5h-5z"/>
+              </svg>
+              <span>Agendar Visita</span>
+              <span class="btn-pdf__seta">&gt;</span>
+            </a>
+            <a class="btn-pdf-vidro" id="hero-cta-secundario" href="#efeito-paraiso">
+              <svg class="btn-pdf__icone" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="9"/>
+                <polygon points="12,7 15,15 12,13 9,15" fill="currentColor"/>
+              </svg>
+              <span>Conhecer o Paraíso</span>
+              <span class="btn-pdf__seta">&gt;</span>
+            </a>
+          </div>
+
+          <!-- Grade 2x2 com os 4 diferenciais da Página 1 do PDF -->
+          <div class="hero__cards-grid" id="hero-cards-grid">
+            <div class="hero-card-pdf">
+              <div class="hero-card-pdf__icone">
+                <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3.5c3.2 0 5.6 2.2 5.6 5 0 1.3-.5 2.4-1.3 3.2 1 .7 1.6 1.8 1.6 3 0 2.2-1.9 3.8-4.3 3.8H10.4C8 18.5 6.1 16.9 6.1 14.7c0-1.2.6-2.3 1.6-3-.8-.8-1.3-1.9-1.3-3.2 0-2.8 2.4-5 5.6-5z"/><path d="M12 18.5V21" opacity=".7"/></svg>
+              </div>
+              <div class="hero-card-pdf__textos">
+                <strong class="hero-card-pdf__titulo">20 mil m²</strong>
+                <span class="hero-card-pdf__sub">por chácara</span>
+              </div>
             </div>
-            <div class="hero-card-pdf__textos">
-              <strong class="hero-card-pdf__titulo">20 mil m²</strong>
-              <span class="hero-card-pdf__sub">por chácara</span>
+
+            <div class="hero-card-pdf">
+              <div class="hero-card-pdf__icone">
+                <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9.5c2-1.4 4-1.4 6 0s4 1.4 6 0 4-1.4 6 0"/><path d="M3 13c2-1.4 4-1.4 6 0s4 1.4 6 0 4-1.4 6 0" opacity=".75"/><path d="M3 16.5c2-1.4 4-1.4 6 0s4 1.4 6 0 4-1.4 6 0" opacity=".5"/></svg>
+              </div>
+              <div class="hero-card-pdf__textos">
+                <strong class="hero-card-pdf__titulo">Lago central</strong>
+                <span class="hero-card-pdf__sub">entre os terrenos</span>
+              </div>
+            </div>
+
+            <div class="hero-card-pdf">
+              <div class="hero-card-pdf__icone">
+                <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 4c-8 .6-13 5.4-13 12 0 1.4.2 2.6.6 3.6C14 19 19.4 13.4 20 4z"/><path d="M7.6 19.4C10 14 14 9.8 19.4 5.4" opacity=".55"/></svg>
+              </div>
+              <div class="hero-card-pdf__textos">
+                <strong class="hero-card-pdf__titulo">Natureza preservada</strong>
+                <span class="hero-card-pdf__sub">e ar puro</span>
+              </div>
+            </div>
+
+            <div class="hero-card-pdf">
+              <div class="hero-card-pdf__icone">
+                <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21.5s6.5-6.2 6.5-11a6.5 6.5 0 1 0-13 0c0 4.8 6.5 11 6.5 11z"/><circle cx="12" cy="10.4" r="2.4"/></svg>
+              </div>
+              <div class="hero-card-pdf__textos">
+                <strong class="hero-card-pdf__titulo">20 min do centro</strong>
+                <span class="hero-card-pdf__sub">de São José dos Campos</span>
+              </div>
             </div>
           </div>
 
-          <div class="hero-card-pdf">
-            <div class="hero-card-pdf__icone">
-              <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9.5c2-1.4 4-1.4 6 0s4 1.4 6 0 4-1.4 6 0"/><path d="M3 13c2-1.4 4-1.4 6 0s4 1.4 6 0 4-1.4 6 0" opacity=".75"/><path d="M3 16.5c2-1.4 4-1.4 6 0s4 1.4 6 0 4-1.4 6 0" opacity=".5"/></svg>
-            </div>
-            <div class="hero-card-pdf__textos">
-              <strong class="hero-card-pdf__titulo">Lago central</strong>
-              <span class="hero-card-pdf__sub">entre os terrenos</span>
-            </div>
-          </div>
-
-          <div class="hero-card-pdf">
-            <div class="hero-card-pdf__icone">
-              <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 4c-8 .6-13 5.4-13 12 0 1.4.2 2.6.6 3.6C14 19 19.4 13.4 20 4z"/><path d="M7.6 19.4C10 14 14 9.8 19.4 5.4" opacity=".55"/></svg>
-            </div>
-            <div class="hero-card-pdf__textos">
-              <strong class="hero-card-pdf__titulo">Natureza preservada</strong>
-              <span class="hero-card-pdf__sub">e ar puro</span>
-            </div>
-          </div>
-
-          <div class="hero-card-pdf">
-            <div class="hero-card-pdf__icone">
-              <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21.5s6.5-6.2 6.5-11a6.5 6.5 0 1 0-13 0c0 4.8 6.5 11 6.5 11z"/><circle cx="12" cy="10.4" r="2.4"/></svg>
-            </div>
-            <div class="hero-card-pdf__textos">
-              <strong class="hero-card-pdf__titulo">20 min do centro</strong>
-              <span class="hero-card-pdf__sub">de São José dos Campos</span>
-            </div>
+          <!-- Bloco de Transição Narrativa no final da Seção 1 (Página 2 do PDF) -->
+          <div class="hero__transicao-narrativa" id="hero-transicao-narrativa">
+            <span class="hero__transicao-rotulo">02 / O NOVO LUXO</span>
+            <h2 class="hero__transicao-titulo">
+              O novo luxo é ter <br><span class="destaque-verde">espaço para viver.</span>
+            </h2>
+            <p class="hero__transicao-sub">
+              Um lugar para a sua família, seus projetos e uma vida mais perto da natureza.
+            </p>
           </div>
         </div>
 
-        <!-- Bloco de Transição Narrativa no final da Seção 1 (Página 2 do PDF) -->
-        <div class="hero__transicao-narrativa" id="hero-transicao-narrativa">
-          <span class="hero__transicao-rotulo">02 / O NOVO LUXO</span>
-          <h2 class="hero__transicao-titulo">
-            O novo luxo é ter <br><span class="destaque-verde">espaço para viver.</span>
-          </h2>
-          <p class="hero__transicao-sub">
-            Um lugar para a sua família, seus projetos e uma vida mais perto da natureza.
-          </p>
+        <!-- 6. Aviso Visual de Rolagem (Scroll Hint Indicator Minimalista) -->
+        <div class="scroll-indicador" id="scroll-indicador" aria-label="Role para baixo para explorar">
+          <div class="scroll-indicador__capsula">
+            <span class="scroll-indicador__ponto"></span>
+          </div>
+          <span class="scroll-indicador__texto">Role para explorar</span>
         </div>
-      </div>
 
-      <!-- 6. Aviso Visual de Rolagem (Scroll Hint Indicator Minimalista) -->
-      <div class="scroll-indicador" id="scroll-indicador" aria-label="Role para baixo para explorar">
-        <div class="scroll-indicador__capsula">
-          <span class="scroll-indicador__ponto"></span>
+        <!-- Aviso "Deslize para baixo" -->
+        <div class="dica" id="dica" role="status">
+          <span class="dica__texto" id="dica-texto">Deslize para baixo e descubra o paraíso</span>
+          <span class="dica__gesto" aria-hidden="true">
+            <span class="dica__dedo"></span>
+            <span class="dica__seta"></span>
+          </span>
         </div>
-        <span class="scroll-indicador__texto">Role para explorar</span>
-      </div>
-
-      <!-- Aviso "Deslize para baixo" -->
-      <div class="dica" id="dica" role="status">
-        <span class="dica__texto" id="dica-texto">Deslize para baixo e descubra o paraíso</span>
-        <span class="dica__gesto" aria-hidden="true">
-          <span class="dica__dedo"></span>
-          <span class="dica__seta"></span>
-        </span>
       </div>
     </section>
 
-    <!-- 02. SESSÃO 2: VÍDEO DO CAVALO (SEM PORTAL) -> ESCURECE -> ABERTURA DA PORTEIRA (120 FPS) -> VÍDEO AÉREO -->
+    <!-- 02. SESSÃO 2: POMAR (FULLSCREEN) -> ESCURECENDO -> ABERTURA DA PORTEIRA -> VÍDEO AÉREO -->
     <section class="secao-cenas" id="secao-cenas">
-      <div class="cenas-palco" id="cenas-palco">
-
-        <!-- 1. Cena do Cavalo: Restaurada em TELA INTEIRA (Fullscreen Cover) -->
-        <div class="sessao2-cavalo-scene" id="sessao2-cavalo-scene">
-          <div class="sessao2-player-frame" id="sessao2-player-frame">
-            <video class="sessao2-cavalo-video" id="sessao2-cavalo-video" src="/media/video/animacao-2-nova.mp4" poster="/media/img/animacao-2-nova-poster.webp" muted playsinline preload="metadata"></video>
-            <div class="sessao2-cavalo-overlay"></div>
-            <div class="sessao2-cavalo-escurecer" id="sessao2-cavalo-escurecer"></div>
-            <div class="sessao2-player-badge">
-              <span class="sessao2-player-ponto"></span>
-              <span>PARAÍSO DAS ÁGUAS • O NOVO LUXO</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- 2. Vídeo Aéreo do Drone: Revelado pela Abertura da Porteira -->
-        <div class="sessao2-drone-scene" id="sessao2-drone-scene">
-          <video class="sessao2-drone-video" id="sessao2-drone-video" src="/media/video/drone-panorama-terreno.mp4" poster="/media/img/drone-panorama-terreno-poster.webp" playsinline muted loop preload="none"></video>
-          <div class="sessao2-drone-overlay"></div>
-          <div class="sessao2-drone-badge">
+      <!-- 2.1 Wrapper Pomar (Modo SEÇÃO) -->
+      <div class="secao-cenas-wrapper wrapper-pomar" id="wrapper-pomar">
+        <div class="cenas-sticky" id="pomar-sticky">
+          <canvas class="sessao2-canvas" id="canvas-pomar"></canvas>
+          <img class="sessao2-fallback-img" id="fallback-pomar" src="/frames/pomar/f_0001.webp" alt="Pomar no Paraíso das Águas">
+          <div class="sessao2-cavalo-overlay"></div>
+          <div class="sessao2-cavalo-escurecer" id="pomar-escurecer"></div>
+          <div class="sessao2-player-badge">
             <span class="sessao2-player-ponto"></span>
-            <span>VISTA AÉREA • 2 HECTARES &amp; LAGOS</span>
+            <span>PARAÍSO DAS ÁGUAS • O NOVO LUXO</span>
           </div>
-          <button class="portal-video-som-btn sessao2-drone-som" id="drone-video-som" type="button" aria-label="Ativar som">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
-          </button>
         </div>
+      </div>
 
-        <!-- 3. Animação da Porteira: Canvas Image Sequence 120 FPS / 100Hz ultra-fluida -->
-        <div class="sessao2-porteira-scene" id="sessao2-porteira-scene">
-          <canvas class="sessao2-porteira-canvas" id="sessao2-porteira-canvas" width="1280" height="720"></canvas>
-          <video class="sessao2-porteira-video" id="sessao2-porteira-video" src="/media/video/porteira-abertura.mp4" poster="/media/img/porteira-poster.webp" muted playsinline preload="none" style="display:none;"></video>
+      <!-- 2.2 Wrapper Porteira (Modo SEÇÃO) -->
+      <div class="secao-cenas-wrapper wrapper-porteira" id="wrapper-porteira">
+        <div class="cenas-sticky" id="porteira-sticky">
+          <!-- Vídeo Aéreo do Drone: Revelado pela Abertura da Porteira -->
+          <div class="sessao2-drone-scene" id="sessao2-drone-scene">
+            <video class="sessao2-drone-video" id="sessao2-drone-video" src="/media/video/drone-panorama-terreno.mp4" poster="/media/img/drone-panorama-terreno-poster.webp" playsinline muted loop preload="none"></video>
+            <div class="sessao2-drone-overlay"></div>
+            <div class="sessao2-drone-badge">
+              <span class="sessao2-player-ponto"></span>
+              <span>VISTA AÉREA • 2 HECTARES &amp; LAGOS</span>
+            </div>
+            <button class="portal-video-som-btn sessao2-drone-som" id="drone-video-som" type="button" aria-label="Ativar som">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+            </button>
+          </div>
+
+          <canvas class="sessao2-canvas" id="canvas-porteira"></canvas>
+          <img class="sessao2-fallback-img" id="fallback-porteira" src="/frames/porteira/f_0001.webp" alt="Porteira de entrada">
           <div class="sessao2-porteira-overlay"></div>
+          <div class="sessao2-player-badge">
+            <span class="sessao2-player-ponto"></span>
+            <span>ENTRADA PRINCIPAL • ABERTURA DA PORTEIRA</span>
+          </div>
         </div>
-
       </div>
     </section>
 
@@ -289,7 +295,7 @@
 
 
     <!-- 03. O EFEITO PARAÍSO DAS ÁGUAS & VSL OFICIAL -->
-    <section class="secao secao--painel secao--densa" id="efeito-paraiso"><div class="painel animar-entrada"><video class="painel-fundo-video" poster="/media/img/cachoeira-poster.webp" muted="" loop="" playsinline="" preload="none" aria-hidden="true"><source src="/media/video/cachoeira-fundo.webm" type="video/webm"><source src="/media/video/cachoeira-fundo.mp4" type="video/mp4"></video><div class="painel-fundo-overlay" aria-hidden="true"></div><span class="rotulo-secao animar-entrada">CONHEÇA O PARAÍSO</span><h2 class="secao__titulo animar-entrada">MAIS ESPAÇO. MAIS NATUREZA. <br><span class="destaque-verde">MAIS LIBERDADE.</span></h2><p class="secao__apoio secao__apoio--destaque animar-entrada">Chácaras a partir de 20.000 m² para você viver com a privacidade, o conforto e a liberdade que a sua família merece, cercada de verde por todos os lados.</p><div class="video-moldura video-moldura--16-9 animar-entrada"><video class="video-player" src="/media/video/vsl-oficial.mp4" poster="/media/img/vsl-oficial-poster.webp" preload="none" playsinline="" controls="" muted=""></video><span class="video-legenda-tag">Apresentação oficial do Paraíso das Águas</span></div><div class="carrossel-profundidade"><div class="carrossel-profundidade__grade"><div class="card-profundidade animar-entrada"><img class="card-profundidade__img" src="/media/img/terreno-lago-panorama.webp" alt="Lagos e Espelhos D'água" loading="lazy" decoding="async" width="420" height="560"><div class="card-profundidade__info"><h3 class="card-profundidade__titulo">Lagos e Espelhos D'água</h3><span class="card-profundidade__tag">Água Abundante</span></div></div><div class="card-profundidade animar-entrada"><img class="card-profundidade__img" src="/media/img/terreno-lago-alto.webp" alt="Natureza Preservada" loading="lazy" decoding="async" width="420" height="560"><div class="card-profundidade__info"><h3 class="card-profundidade__titulo">Natureza Preservada</h3><span class="card-profundidade__tag">Mata &amp; Fauna</span></div></div><div class="card-profundidade animar-entrada"><img class="card-profundidade__img" src="/media/img/terreno-pasto-colina.webp" alt="Amplos Terrenos" loading="lazy" decoding="async" width="420" height="560"><div class="card-profundidade__info"><h3 class="card-profundidade__titulo">Amplos Terrenos</h3><span class="card-profundidade__tag">20.000 m² a 23.830 m²</span></div></div></div></div><hr class="divisor-lago"><a class="btn-pdf btn-pdf--dourado secao__cta animar-entrada" href="https://wa.me/5512983208335?text=Ol%C3%A1!%20Assisti%20%C3%A0%20apresenta%C3%A7%C3%A3o%20oficial%20do%20Para%C3%ADso%20das%20%C3%81guas%20e%20gostaria%20de%20tirar%20d%C3%BAvidas%20sobre%20a%20propriedade." data-wa-origem="vsl" rel="noopener noreferrer" data-wa-ligado="1" target="_blank"><span>Explorar os Lotes →</span> <span class="btn-pdf__seta" aria-hidden="true">&gt;</span></a></div></section>
+    <section class="secao secao--painel secao--densa" id="efeito-paraiso"><div class="painel animar-entrada"><picture class="painel-fundo-picture"><source srcset="/images/secao3-bg-m.webp" media="(max-width: 768px)" type="image/webp"><source srcset="/images/secao3-bg.webp" type="image/webp"><img class="painel-fundo-img" src="/images/secao3-bg.webp" alt="Mais espaço, mais natureza" loading="lazy" decoding="async"></picture><div class="painel-fundo-overlay" aria-hidden="true"></div><span class="rotulo-secao animar-entrada">CONHEÇA O PARAÍSO</span><h2 class="secao__titulo animar-entrada">MAIS ESPAÇO. MAIS NATUREZA. <br><span class="destaque-verde">MAIS LIBERDADE.</span></h2><p class="secao__apoio secao__apoio--destaque animar-entrada">Chácaras a partir de 20.000 m² para você viver com a privacidade, o conforto e a liberdade que a sua família merece, cercada de verde por todos os lados.</p><div class="video-moldura video-moldura--16-9 animar-entrada"><video class="video-player" src="/media/video/vsl-oficial.mp4" poster="/media/img/vsl-oficial-poster.webp" preload="none" playsinline="" controls="" muted=""></video><span class="video-legenda-tag">Apresentação oficial do Paraíso das Águas</span></div><div class="carrossel-profundidade"><div class="carrossel-profundidade__grade"><div class="card-profundidade animar-entrada"><img class="card-profundidade__img" src="/media/img/terreno-lago-panorama.webp" alt="Lagos e Espelhos D'água" loading="lazy" decoding="async" width="420" height="560"><div class="card-profundidade__info"><h3 class="card-profundidade__titulo">Lagos e Espelhos D'água</h3><span class="card-profundidade__tag">Água Abundante</span></div></div><div class="card-profundidade animar-entrada"><img class="card-profundidade__img" src="/media/img/terreno-lago-alto.webp" alt="Natureza Preservada" loading="lazy" decoding="async" width="420" height="560"><div class="card-profundidade__info"><h3 class="card-profundidade__titulo">Natureza Preservada</h3><span class="card-profundidade__tag">Mata &amp; Fauna</span></div></div><div class="card-profundidade animar-entrada"><img class="card-profundidade__img" src="/media/img/terreno-pasto-colina.webp" alt="Amplos Terrenos" loading="lazy" decoding="async" width="420" height="560"><div class="card-profundidade__info"><h3 class="card-profundidade__titulo">Amplos Terrenos</h3><span class="card-profundidade__tag">20.000 m² a 23.830 m²</span></div></div></div></div><hr class="divisor-lago"><a class="btn-pdf btn-pdf--dourado secao__cta animar-entrada" href="https://wa.me/5512983208335?text=Ol%C3%A1!%20Assisti%20%C3%A0%20apresenta%C3%A7%C3%A3o%20oficial%20do%20Para%C3%ADso%20das%20%C3%81guas%20e%20gostaria%20de%20tirar%20d%C3%BAvidas%20sobre%20a%20propriedade." data-wa-origem="vsl" rel="noopener noreferrer" data-wa-ligado="1" target="_blank"><span>Explorar os Lotes →</span> <span class="btn-pdf__seta" aria-hidden="true">&gt;</span></a></div></section>
 
     <!-- 04. AS PROPRIEDADES (VISÃO GERAL 2 HECTARES) & MAPA OFICIAL -->
     <section class="secao secao--painel secao--densa" id="propriedades"><div class="painel animar-entrada"><video class="painel-fundo-video" poster="/media/img/cachoeira-poster.webp" muted="" loop="" playsinline="" preload="none" aria-hidden="true"><source src="/media/video/cachoeira-fundo.webm" type="video/webm"><source src="/media/video/cachoeira-fundo.mp4" type="video/mp4"></video><div class="painel-fundo-overlay" aria-hidden="true"></div><span class="rotulo-secao animar-entrada">04 / PROJETO</span><h2 class="secao__titulo animar-entrada">AS SETE GLEBAS</h2><p class="secao__apoio secao__apoio--destaque animar-entrada">Grandes propriedades rurais com infraestrutura e natureza preservada em São José dos Campos.</p><div class="glebas-painel-comercial"><div class="glebas-stat-item"><div class="glebas-stat-num">7</div><div class="glebas-stat-rotulo">GLEBAS DISPONÍVEIS</div><div class="glebas-stat-desc">Propriedades rurais exclusivas a partir de 20.000 m²</div></div><div class="glebas-stat-item"><div class="glebas-stat-num">4</div><div class="glebas-stat-rotulo">COM CASAS</div><div class="glebas-stat-desc">Glebas com residências campestres já implantadas</div></div><div class="glebas-stat-item"><div class="glebas-stat-num glebas-stat-preco">R$ 475 mil</div><div class="glebas-stat-rotulo">A PARTIR DE</div><div class="glebas-stat-desc">Financiamento facilitado direto com o proprietário</div></div></div><div class="mapa-oficial-caixa"><video class="mapa-drone-video-bg" src="/media/video/mapa-drone-bg.mp4" autoplay="" muted="" loop="" playsinline="" preload="none" aria-hidden="true"></video><picture class="mapa-oficial-picture"><source srcset="/media/img/mapa-oficial-terreno.webp" type="image/webp"><img class="mapa-oficial-img" src="/media/img/mapa-oficial-terreno.png" alt="Mapa das Sete Glebas no Paraíso das Águas" loading="eager" decoding="async" width="1123" height="1418"></picture><div class="mapa-oficial-barra"><a class="btn-mapa-interativo btn-pdf btn-pdf--dourado" href="https://maps.app.goo.gl/AztxJXPuLWaPUBSWA" target="_blank" rel="noopener noreferrer"><span>VER LOCALIZAÇÃO NO GOOGLE MAPS</span> <span class="btn-pdf__seta" aria-hidden="true">&gt;</span></a></div></div><div class="faixa-comercial-referencia">Propriedades a partir de R$ 475 mil* com financiamento facilitado direto com o proprietário.</div><hr class="divisor-lago"><a class="btn-pdf btn-pdf--dourado secao__cta animar-entrada" href="https://wa.me/5512983208335?text=Ol%C3%A1!%20Tenho%20interesse%20nas%207%20glebas%20de%202%20hectares%20do%20Para%C3%ADso%20das%20%C3%81guas%20(a%20partir%20de%20R%24%20475%20mil*)." data-wa-origem="propriedades" rel="noopener noreferrer" data-wa-ligado="1" target="_blank"><span>Verificar disponibilidade das glebas no WhatsApp</span> <span class="btn-pdf__seta" aria-hidden="true">&gt;</span></a></div></section>

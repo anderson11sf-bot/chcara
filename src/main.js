@@ -31,6 +31,10 @@ import { iniciarSeo } from './lib/seo.js';
 import { iniciarCookies, ligarLinkDePreferencias } from './lib/cookies.js';
 import { iniciarWhatsAppFlutuante, ligarBotoesWhatsApp } from './lib/whatsapp.js';
 
+import { ScrollEngine } from './lib/ScrollEngine.js';
+import { FrameLayer } from './lib/FrameLayer.js';
+import FRAMES_MANIFEST from './framesManifest.js';
+
 /* --------------------------------------------------------------------------
  * 1. Textos dinâmicos do config.js
  * ------------------------------------------------------------------------ */
@@ -132,11 +136,6 @@ function arrancarInterno() {
   // (b) Palco visual & Fundo procedural
   let controlePalco = null;
   try { controlePalco = palco.iniciarPalco(ambiente); } catch (e) { console.warn('[pd] palco:', e); }
-  let controleFundo = null;
-  try {
-    const canvas = document.getElementById('fundo-canvas');
-    if (canvas) controleFundo = fundo.iniciarFundo(canvas, ambiente);
-  } catch (e) { console.warn('[pd] fundo:', e); }
 
   // (c) Montagem das seções mestres (3 a 13) — CRÍTICO: nunca pode falhar
   let secoes = null;
@@ -147,9 +146,8 @@ function arrancarInterno() {
     console.error('[pd] ERRO FATAL EM SECOES:', e);
   }
 
-  // (c2) Portal 3D coordenado (Cavalo -> Escurece -> Porteira 120 FPS -> Drone)
+  // (c2) Portal 3D coordenado
   try { portal3d.iniciarPortal3d(); } catch (e) { console.warn('[pd] portal3d:', e); }
-
   try { aplicarVariaveisCarrossel(); } catch (e) { console.warn('[pd] var-carrossel:', e); }
   try { carrossel.iniciarCarrossel(); } catch (e) { console.warn('[pd] carrossel:', e); }
 
@@ -163,104 +161,136 @@ function arrancarInterno() {
   try { ligarPausaPorVisibilidade(); } catch (e) { console.warn('[pd] pausa:', e); }
   try { ligarEventosDeScroll(); } catch (e) { console.warn('[pd] eventos-scroll:', e); }
 
-  /* ------------------------------------------------------------------------
-   * (e) Assinatura única de progresso de scroll
-   * ---------------------------------------------------------------------- */
-  const secaoCenas = document.getElementById('secao-cenas');
-  const palcoEl = document.getElementById('palco');
+  // (e) Motor Central de Animação de Scroll 120 FPS (ScrollEngine + FrameLayers)
+  let scrollEngine = null;
+  try {
+    scrollEngine = new ScrollEngine();
 
-  const atualizarVisibilidadeFundoGlobal = (y, vh) => {
-    if (!palcoEl) return;
-
-    // Fim da Sessão 2: onde a transição da cena 2 termina
-    let fimSessao2 = vh * 3.5;
-    if (secaoCenas) {
-      fimSessao2 = secaoCenas.offsetTop + secaoCenas.offsetHeight;
-    }
-
-    // Intervalo de transição da Sessão 2 para a Sessão 3
-    const margem = vh * 0.35;
-    const inicioFade = fimSessao2 - vh - margem;
-    const fimFade = fimSessao2 - vh * 0.15;
-
-    if (y < inicioFade) {
-      // Sessão 1 e Sessão 2: Fundo global oculto
-      if (palcoEl.dataset.visivel !== 'false') {
-        palcoEl.dataset.visivel = 'false';
-        palcoEl.style.opacity = '0';
-        palcoEl.style.visibility = 'hidden';
+    // 1. Layer Hero (Modo SEÇÃO)
+    const heroCanvas = document.getElementById('hero-canvas');
+    const heroWrapper = document.getElementById('hero');
+    const heroFallback = document.getElementById('hero-bg-img');
+    const heroLayer = new FrameLayer({
+      id: 'hero',
+      mode: 'section',
+      canvas: heroCanvas,
+      wrapper: heroWrapper,
+      wrapperHeightVh: 350,
+      manifestEntry: FRAMES_MANIFEST.hero,
+      fallbackImg: heroFallback,
+      onUpdate: (prog) => {
+        hero.definirProgresso(prog);
+        dica.definirProgresso(prog);
       }
-    } else if (y >= fimFade) {
-      // Sessão 3 em diante: Fundo global visível
-      if (palcoEl.dataset.visivel !== 'true') {
-        palcoEl.dataset.visivel = 'true';
-        palcoEl.style.opacity = '1';
-        palcoEl.style.visibility = 'visible';
+    });
+
+    // 2. Layer Pomar (Modo SEÇÃO)
+    const pomarCanvas = document.getElementById('canvas-pomar');
+    const pomarWrapper = document.getElementById('wrapper-pomar');
+    const pomarFallback = document.getElementById('fallback-pomar');
+    const pomarEscurecer = document.getElementById('pomar-escurecer');
+    const pomarLayer = new FrameLayer({
+      id: 'pomar',
+      mode: 'section',
+      canvas: pomarCanvas,
+      wrapper: pomarWrapper,
+      wrapperHeightVh: 350,
+      manifestEntry: FRAMES_MANIFEST.pomar,
+      fallbackImg: pomarFallback,
+      onUpdate: (prog) => {
+        if (pomarEscurecer) {
+          let op = 0;
+          if (prog >= 0.70) {
+            op = Math.min(1, (prog - 0.70) / 0.28);
+          }
+          pomarEscurecer.style.opacity = op.toFixed(3);
+        }
       }
-    } else {
-      // Transição suave
-      const t = Math.min(1, Math.max(0, (y - inicioFade) / (fimFade - inicioFade)));
-      palcoEl.dataset.visivel = 'true';
-      palcoEl.style.opacity = t.toFixed(3);
-      palcoEl.style.visibility = 'visible';
+    });
+
+    // 3. Layer Porteira (Modo SEÇÃO)
+    const porteiraCanvas = document.getElementById('canvas-porteira');
+    const porteiraWrapper = document.getElementById('wrapper-porteira');
+    const porteiraFallback = document.getElementById('fallback-porteira');
+    const droneScene = document.getElementById('sessao2-drone-scene');
+    const droneVideo = document.getElementById('sessao2-drone-video');
+    const porteiraLayer = new FrameLayer({
+      id: 'porteira',
+      mode: 'section',
+      canvas: porteiraCanvas,
+      wrapper: porteiraWrapper,
+      wrapperHeightVh: 350,
+      manifestEntry: FRAMES_MANIFEST.porteira,
+      fallbackImg: porteiraFallback,
+      onUpdate: (prog) => {
+        if (droneScene) {
+          let opDrone = 0;
+          if (prog >= 0.35) {
+            opDrone = Math.min(1, (prog - 0.35) / 0.30);
+          }
+          droneScene.style.opacity = opDrone.toFixed(3);
+          if (droneVideo) {
+            if (opDrone > 0.05 && droneVideo.paused) {
+              droneVideo.play().catch(() => {});
+            } else if (opDrone <= 0.02 && !droneVideo.paused) {
+              droneVideo.pause();
+            }
+          }
+        }
+      }
+    });
+
+    // 4. Layer Global (Modo GLOBAL PING-PONG com GLOBAL_PASS_VH = 200)
+    const globalCanvas = document.getElementById('global-scroll-canvas');
+    const globalLayer = new FrameLayer({
+      id: 'global',
+      mode: 'global',
+      canvas: globalCanvas,
+      globalPassVh: 200,
+      manifestEntry: FRAMES_MANIFEST.global
+    });
+
+    scrollEngine.init();
+    scrollEngine.addLayer(heroLayer);
+    scrollEngine.addLayer(pomarLayer);
+    scrollEngine.addLayer(porteiraLayer);
+    scrollEngine.addLayer(globalLayer);
+
+    // Controle de áudio da cena de drone
+    const droneSomBtn = document.getElementById('drone-video-som');
+    if (droneSomBtn && droneVideo) {
+      droneSomBtn.addEventListener('click', () => {
+        droneVideo.muted = !droneVideo.muted;
+        droneSomBtn.classList.toggle('com-som', !droneVideo.muted);
+      });
     }
-  };
+  } catch (e) {
+    console.error('[pd] scrollEngine:', e);
+  }
 
-  const atualizarQuadrosScroll = (pGlobal) => {
-    const y = window.scrollY || window.pageYOffset || 0;
-    const vh = window.innerHeight || 1;
-
-    // 0. Controle de Visibilidade do Fundo Global (Oculto em 1 e 2, ativo de 3 em diante)
-    atualizarVisibilidadeFundoGlobal(y, vh);
-
-    // 1. Progresso do Hero (0 a 1 nos primeiros 85% de vh)
-    const pHero = Math.min(1, Math.max(0, y / Math.max(1, vh * 0.85)));
-    hero.definirProgresso(pHero);
-    dica.definirProgresso(pHero);
-
-    // 2. Progresso da Sessão 2 (Timeline Coordenada)
-    let pCena = 0;
-    if (secaoCenas) {
-      const topoCena = secaoCenas.offsetTop || vh;
-      const distCena = Math.max(1, secaoCenas.offsetHeight - vh);
-      pCena = Math.min(1, Math.max(0, (y - topoCena) / distCena));
-    }
-    carrossel.definirProgresso(pCena);
-    portal3d.definirProgresso(pCena);
-
-    // 3. Fundo Global contínuo (vídeo original sincronizado com o scroll de todo o site)
-    controleFundo?.definirProgresso(pGlobal);
-    controlePalco?.definirProgresso(pGlobal);
-
-    // 4. Barra de progresso de leitura global (0 a 1 no site inteiro)
+  // (f) Barra de progresso de leitura global e palco
+  aoProgredir((pGlobal) => {
     progresso.definirProgresso(pGlobal);
-  };
-
-  // Atualização sincronizada 100% no ticker do GSAP (sem eventos redundantes)
-  aoProgredir((p) => {
-    atualizarQuadrosScroll(p);
+    controlePalco?.definirProgresso(pGlobal);
   });
 
-  // (f) Revelação do palco
-  controleFundo?.iniciar();
-  document.documentElement.dataset.pdFundo = '1';
+  // (g) Revelação do palco
   palco.mostrarPronto();
   document.documentElement.dataset.pdPronto = '1';
 
-  // (g) Recálculo de medidas após carregamento de fontes
+  // (h) Recálculo de medidas após carregamento de fontes
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(() => setTimeout(() => {
-      atualizarQuadrosScroll(getProgresso());
+      scrollEngine?.scheduleMeasurements(true);
     }, 80));
   }
 
-  // (h) Eventos de WhatsApp e Preferências
+  // (i) Eventos de WhatsApp e Preferências
   ligarBotoesWhatsApp();
   ligarLinkDePreferencias();
 
   window.__PD = {
-    config, ambiente, controleFundo, controlePalco, secoes,
-    atualizar: atualizarQuadrosScroll,
+    config, ambiente, scrollEngine, controlePalco, secoes,
     irPara: (fracao) => {
       const rolavel = document.documentElement.scrollHeight - window.innerHeight;
       window.scrollTo(0, Math.round(rolavel * Math.max(0, Math.min(1, fracao))));

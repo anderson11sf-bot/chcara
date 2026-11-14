@@ -150,39 +150,16 @@ export function iniciarScroll(opcoes = {}) {
   ScrollTrigger.defaults({ anticipatePin: 1 });
 
   /* ------------------------------------------------------------------
-   * 3. Lenis APENAS no desktop, e nunca com "menos movimento".
-   *    No mobile: scroll nativo, sem sequestrar o toque.
+   * 3. Scroll NATIVO em todos os dispositivos (Zero Lenis / Smooth-scroll).
+   *    Garante sincronização 1:1 sem atraso perceptível no toque e no mouse.
    * ---------------------------------------------------------------- */
-  const permitirLenis = opcoes.usarLenis !== undefined
-    ? opcoes.usarLenis
-    : (!ambiente.mobile && !config.__reduzirMovimento);
-
-  if (permitirLenis) {
-    lenis = new Lenis({
-      lerp: config.scroll.lenis.lerpDesktop,
-      wheelMultiplier: config.scroll.lenis.wheelMultiplier,
-      smoothWheel: true,
-      // Nada de suavizar toque: no desktop é mouse, mas mantemos desligado.
-      syncTouch: false,
-      touchMultiplier: config.scroll.lenis.touchMultiplier,
-      // Não intercepta gestos de pinch/zoom
-      gestureOrientation: 'vertical'
-    });
-
-    // Lenis -> ScrollTrigger: uma única fonte de scroll para os dois.
-    lenis.on('scroll', ScrollTrigger.update);
-  }
+  lenis = null;
 
   /* ------------------------------------------------------------------
    * 4. UM ÚNICO LOOP DE ANIMAÇÃO no site inteiro (ticker do GSAP).
-   *    Ele faz duas coisas, nesta ordem:
-   *      a) roda o Lenis (só desktop)
-   *      b) interpola o progresso e avisa os assinantes
-   *    Isso mantém tudo em uma única cadência — sem dois rAF competindo.
+   *    Zero interpolação / LERP artificial. Progresso = posição real crua.
    * ---------------------------------------------------------------- */
-  const usarLenis = !!lenis;
-  tickerFn = (tempo) => {
-    if (usarLenis) lenis.raf(tempo * 1000);
+  tickerFn = () => {
     atualizarProgresso();
   };
   gsap.ticker.add(tickerFn);
@@ -269,15 +246,8 @@ export function iniciarScroll(opcoes = {}) {
  * efeitos de inércia (partículas que se dispersam, neblina que corre).
  */
 function atualizarProgresso() {
-  if (ambiente.mobile) {
-    pSuave = pCru;
-  } else {
-    const diferenca = pCru - pSuave;
-    // Abaixo desse limiar, encosta de vez (evita perseguição infinita).
-    pSuave = Math.abs(diferenca) < 0.00008
-      ? pCru
-      : pSuave + diferenca * LERP_PROGRESSO_DESKTOP;
-  }
+  // Scroll nativo imediato sem lerp artificial
+  pSuave = pCru;
 
   const novo = clamp(pSuave, 0, 1);
 

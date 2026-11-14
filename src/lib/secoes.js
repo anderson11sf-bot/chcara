@@ -69,30 +69,53 @@ function criarVideoFrame({ src, poster, legenda, proporcao = '16-9' }) {
   return moldura;
 }
 
-/** Cria painel com fundo dinâmico em vídeo contínuo de cachoeira tropical e overlay fosco elegante */
-function criarPainel(classeExtra = '') {
+/** Cria painel com fundo dinâmico em vídeo contínuo de cachoeira tropical (ou imagem na Seção 3) e overlay fosco elegante */
+function criarPainel(classeExtra = '', opcoes = {}) {
   const painel = criar('div', { classe: `painel ${classeExtra}`.trim() });
 
-  const videoCachoeira = criar('video', {
-    classe: 'painel-fundo-video',
-    poster: '/media/img/cachoeira-poster.webp',
-    muted: '',
-    loop: '',
-    playsinline: '',
-    preload: 'none',
-    'aria-hidden': 'true'
-  });
-  videoCachoeira.muted = true;
-  videoCachoeira.playsInline = true;
-  videoCachoeira.loop = true;
+  if (opcoes.usarImagem) {
+    const picture = criar('picture', { classe: 'painel-fundo-picture' });
+    if (opcoes.mobileSrc) {
+      picture.appendChild(criar('source', {
+        srcset: opcoes.mobileSrc,
+        media: '(max-width: 768px)',
+        type: 'image/webp'
+      }));
+    }
+    picture.appendChild(criar('source', {
+      srcset: opcoes.desktopSrc || '/images/secao3-bg.webp',
+      type: 'image/webp'
+    }));
+    picture.appendChild(criar('img', {
+      classe: 'painel-fundo-img',
+      src: opcoes.desktopSrc || '/images/secao3-bg.webp',
+      alt: 'Mais espaço, mais natureza',
+      loading: 'lazy',
+      decoding: 'async'
+    }));
+    painel.appendChild(picture);
+  } else {
+    const videoCachoeira = criar('video', {
+      classe: 'painel-fundo-video',
+      poster: '/media/img/cachoeira-poster.webp',
+      muted: '',
+      loop: '',
+      playsinline: '',
+      preload: 'none',
+      'aria-hidden': 'true'
+    });
+    videoCachoeira.muted = true;
+    videoCachoeira.playsInline = true;
+    videoCachoeira.loop = true;
 
-  // Fontes leves para web (WebM 693 KB e MP4 H.264 1.55 MB)
-  const sourceWebm = criar('source', { src: '/media/video/cachoeira-fundo.webm', type: 'video/webm' });
-  const sourceMp4 = criar('source', { src: '/media/video/cachoeira-fundo.mp4', type: 'video/mp4' });
-  videoCachoeira.appendChild(sourceWebm);
-  videoCachoeira.appendChild(sourceMp4);
+    // Fontes leves para web (WebM 693 KB e MP4 H.264 1.55 MB)
+    const sourceWebm = criar('source', { src: '/media/video/cachoeira-fundo.webm', type: 'video/webm' });
+    const sourceMp4 = criar('source', { src: '/media/video/cachoeira-fundo.mp4', type: 'video/mp4' });
+    videoCachoeira.appendChild(sourceWebm);
+    videoCachoeira.appendChild(sourceMp4);
 
-  painel.appendChild(videoCachoeira);
+    painel.appendChild(videoCachoeira);
+  }
 
   const overlayCachoeira = criar('div', {
     classe: 'painel-fundo-overlay',
@@ -111,7 +134,11 @@ export function montarEfeitoParaiso() {
   if (!secao) return null;
 
   const P = config.efeitoParaiso;
-  const painel = criarPainel();
+  const painel = criarPainel('', {
+    usarImagem: true,
+    desktopSrc: '/images/secao3-bg.webp',
+    mobileSrc: '/images/secao3-bg-m.webp'
+  });
 
   painel.appendChild(cabecalho({
     rotulo: P.rotulo,

@@ -6,21 +6,35 @@
  * ==========================================================================*/
 
 .hero {
+  position: relative;
+  height: 350vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  display: block;
+}
+
+.hero-sticky-container {
+  position: sticky;
+  top: 0;
+  height: 100lvh;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 100svh;
-  padding-bottom: calc(var(--e8) + 40px + var(--safe-bottom));
-  padding-top: calc(clamp(84px, 14vh, 150px) + var(--safe-top));
+  contain: strict;
+  padding-bottom: calc(var(--e8) + 20px + var(--safe-bottom));
+  padding-top: calc(clamp(60px, 10vh, 120px) + var(--safe-top));
   padding-left: var(--e4);
   padding-right: var(--e4);
   text-align: center;
-  position: relative;
-  overflow: visible;
 }
 
-/* Fundo do Hero com Vídeo do Cavalo em Loop Contínuo */
+/* Fundo do Hero com Canvas de Sequência de Frames 1:1 */
 .hero__bg {
   position: absolute;
   inset: 0;
@@ -29,23 +43,14 @@
   z-index: 0;
 }
 
-.hero__video {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  z-index: 1;
-}
-
 .hero__canvas {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  display: none;
+  display: block;
   z-index: 1;
+  pointer-events: none;
 }
 
 .hero__bg-img {
@@ -57,7 +62,7 @@
   object-position: center;
   z-index: 0;
   filter: saturate(1.1) brightness(0.9);
-  transition: opacity 0.5s ease;
+  transition: opacity 0.4s ease;
 }
 
 /* Camada escura com contraste aperfeiçoado para máxima legibilidade */
@@ -443,6 +448,8 @@
 .hero__transicao-narrativa {
   position: relative;
   z-index: 3;
+  opacity: 0;
+  pointer-events: none;
   margin-top: clamp(48px, 10vh, 90px);
   margin-bottom: 24px;
   padding: 32px 36px;

@@ -40,16 +40,6 @@ export function iniciarHero() {
   if (!headline || !secao) return null;
   ativo = true;
 
-  heroVideo = document.getElementById('hero-video');
-  if (heroVideo) {
-    heroVideo.muted = true;
-    heroVideo.playsInline = true;
-    heroVideo.play?.().catch(() => {});
-    heroVideo.addEventListener('playing', () => {
-      if (heroBgImg) heroBgImg.style.opacity = '0';
-    }, { once: true });
-  }
-
   montarSelos();
   montarEmblemas();
   base = { headline: null, sub: null, selos: null, emblemas: null, acoes: null, wordmark: null, bg: null, cards: null };
@@ -125,6 +115,11 @@ export function definirProgresso(p) {
         el.style.opacity = '';
         el.style.filter = '';
       }
+      if (transicaoNarrativa) {
+        transicaoNarrativa.style.opacity = '0';
+        transicaoNarrativa.style.pointerEvents = 'none';
+        transicaoNarrativa.style.transform = 'translate3d(0, 30px, 0)';
+      }
       if (heroBgImg) {
         heroBgImg.style.transform = 'scale(1) translate3d(0, 0, 0)';
         heroBgImg.style.opacity = '1';
@@ -132,7 +127,7 @@ export function definirProgresso(p) {
       if (heroVideo && heroVideo.paused) {
         heroVideo.play?.().catch(() => {});
       }
-      base = { headline: null, sub: null, selos: null, emblemas: null, acoes: null, wordmark: null, bg: null, cards: null };
+      base = { headline: null, sub: null, selos: null, emblemas: null, acoes: null, wordmark: null, bg: null, cards: null, transicao: null };
     }
     return;
   }
@@ -146,15 +141,6 @@ export function definirProgresso(p) {
     }
   }
 
-  // Pausa inteligente do vídeo de fundo ao rolar além do hero
-  if (heroVideo) {
-    if (t >= 0.98) {
-      if (!heroVideo.paused) heroVideo.pause();
-    } else {
-      if (heroVideo.paused) heroVideo.play?.().catch(() => {});
-    }
-  }
-
   if (heroBgImg) {
     const scaleBg = 1 + t * 0.12;
     const yBg = t * 24;
@@ -162,13 +148,13 @@ export function definirProgresso(p) {
     heroBgImg.style.opacity = clamp(1 - t * 0.75, 0, 1).toFixed(3);
   }
 
-  const opTitulo = clamp(1 - t * 0.9, 0, 1);
-  const opSub = clamp(1 - t * 1.25, 0, 1);
-  const opSelos = clamp(1 - t * 1.5, 0, 1);
-  const opAcoes = clamp(1 - t * 1.4, 0, 1);
-  const opEmblemas = clamp(1 - t * 1.6, 0, 1);
-  const opCards = clamp(1 - t * 1.3, 0, 1);
-  const blurTitulo = t > 0.55 ? ((t - 0.55) / 0.45) * 5 : 0;
+  const opTitulo = clamp(1 - t * 2.2, 0, 1);
+  const opSub = clamp(1 - t * 2.5, 0, 1);
+  const opSelos = clamp(1 - t * 2.8, 0, 1);
+  const opAcoes = clamp(1 - t * 2.6, 0, 1);
+  const opEmblemas = clamp(1 - t * 3.0, 0, 1);
+  const opCards = clamp(1 - t * 2.4, 0, 1);
+  const blurTitulo = t > 0.3 ? ((t - 0.3) / 0.2) * 5 : 0;
 
   escrever(wordmark, 'wordmark', -t * 26, opSub, 0, 0.6);
   escrever(headline, 'headline', -t * 42, opTitulo, blurTitulo, 0.6);
@@ -177,6 +163,28 @@ export function definirProgresso(p) {
   escrever(acoes, 'acoes', -t * 82, opAcoes, 0, 0.8);
   escrever(emblemas, 'emblemas', -t * 94, opEmblemas, 0, 0.8);
   escrever(cardsGrid, 'cards', -t * 50, opCards, 0, 0.8);
+
+  // Transição Narrativa (Página 2 do PDF: 02 / O NOVO LUXO)
+  let opTrans = 0;
+  let yTrans = 30;
+  if (t >= 0.40 && t <= 0.90) {
+    if (t < 0.60) {
+      const pTrans = (t - 0.40) / 0.20;
+      opTrans = pTrans;
+      yTrans = 30 * (1 - pTrans);
+    } else if (t > 0.78) {
+      const pTrans = (t - 0.78) / 0.12;
+      opTrans = 1 - pTrans;
+      yTrans = -20 * pTrans;
+    } else {
+      opTrans = 1;
+      yTrans = 0;
+    }
+  }
+  if (transicaoNarrativa) {
+    escrever(transicaoNarrativa, 'transicao', yTrans, opTrans, 0, 0.5);
+    transicaoNarrativa.style.pointerEvents = opTrans > 0.1 ? 'auto' : 'none';
+  }
 }
 
 function escrever(el, chave, y, opacity, blur, tolerancia) {
