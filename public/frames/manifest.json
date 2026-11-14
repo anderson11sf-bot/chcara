@@ -34,16 +34,16 @@
   "porteira": {
     "totalFrames": 94,
     "desktop": {
-      "width": 1280,
-      "height": 720,
+      "width": 1920,
+      "height": 1080,
       "path": "/frames/porteira/f_%04d.webp",
-      "weightMB": 3.14
+      "weightMB": 11.49
     },
     "mobile": {
-      "width": 720,
-      "height": 406,
+      "width": 1080,
+      "height": 608,
       "path": "/frames/porteira-m/f_%04d.webp",
-      "weightMB": 1.33
+      "weightMB": 5.00
     },
     "filenamePattern": "f_%04d.webp"
   },

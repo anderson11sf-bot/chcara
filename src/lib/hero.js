@@ -32,8 +32,8 @@ export function iniciarHero() {
   acoes = document.querySelector('.hero__acoes');
   wordmark = document.querySelector('.hero__wordmark-caixa');
   heroBgImg = document.getElementById('hero-bg-img');
+  heroVideo = document.getElementById('hero-video');
   cardsGrid = document.getElementById('hero-cards-grid');
-  transicaoNarrativa = document.getElementById('hero-transicao-narrativa');
   scrollIndicador = document.getElementById('scroll-indicador');
   const secao = document.getElementById('hero');
 
@@ -42,6 +42,22 @@ export function iniciarHero() {
 
   montarSelos();
   montarEmblemas();
+
+  if (heroVideo) {
+    heroVideo.play?.().catch(() => {});
+  }
+
+  // Oculta o indicador de rolagem no primeiro arrasto
+  window.addEventListener('scroll', () => {
+    if (scrollIndicador) {
+      if (window.scrollY > 30) {
+        scrollIndicador.classList.add('oculto');
+      } else {
+        scrollIndicador.classList.remove('oculto');
+      }
+    }
+  }, { passive: true });
+
   base = { headline: null, sub: null, selos: null, emblemas: null, acoes: null, wordmark: null, bg: null, cards: null };
 
   return { definirProgresso, destruir };

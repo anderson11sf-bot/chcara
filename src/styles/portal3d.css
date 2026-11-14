@@ -1,9 +1,9 @@
 /* ============================================================================
- * portal3d.css — SESSÃO 2: ABERTURA DA PORTEIRA (120 FPS) -> VÍDEO AÉREO DAS GLEBAS
+ * portal3d.css — SESSÃO 2: ABERTURA DA PORTEIRA (120 FPS) -> TELEVISÃOZINHA 9x16
  * ----------------------------------------------------------------------------
- * Aporteira de madeira abre diretamente na Seção 2 com o scroll.
- * Revela a visão aérea das glebas e continua para a próxima seção.
- * Proporções 100% corretas no celular e no desktop (object-fit: cover).
+ * A porteira de madeira abre diretamente na Seção 2 com o scroll.
+ * Revela a televisãozinha 9x16 que emerge do centro e cresce elegantemente,
+ * exibindo o vídeo aéreo do terreno em looping contínuo sem cobrir toda a tela.
  * ==========================================================================*/
 
 .secao-cenas {
@@ -30,51 +30,14 @@
   background: #000000;
 }
 
-/* 1. Cena do Drone Aéreo (Atrás da Porteira) */
-.sessao2-drone-scene {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  z-index: 1;
-  pointer-events: none;
-  background: #000000;
-  opacity: 0;
-  transition: opacity 0.35s ease;
-}
-
-.sessao2-drone-video {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  display: block;
-}
-
-.sessao2-drone-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(2, 16, 20, 0.35) 0%,
-    transparent 50%,
-    rgba(2, 16, 20, 0.65) 100%
-  );
-  pointer-events: none;
-  z-index: 2;
-}
-
-/* 2. Cena da Porteira (Canvas 120 FPS que se abre no scroll) */
+/* 1. Cena da Porteira (Canvas 120 FPS que se abre no scroll) */
 .sessao2-porteira-scene {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   overflow: hidden;
-  z-index: 2;
+  z-index: 1;
   pointer-events: none;
   background: #000000;
   will-change: opacity;
@@ -89,7 +52,7 @@
   object-fit: cover;
   object-position: center;
   display: block;
-  z-index: 2;
+  z-index: 1;
   pointer-events: none;
 }
 
@@ -101,7 +64,7 @@
   height: 100%;
   object-fit: cover;
   object-position: center;
-  z-index: 1;
+  z-index: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
 }
@@ -111,17 +74,116 @@
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(2, 16, 20, 0.25) 0%,
+    rgba(2, 16, 20, 0.30) 0%,
     transparent 45%,
-    rgba(2, 16, 20, 0.55) 100%
+    rgba(2, 16, 20, 0.60) 100%
   );
   pointer-events: none;
-  z-index: 3;
+  z-index: 2;
 }
 
-/* Badges elegantes */
-.sessao2-player-badge,
-.sessao2-drone-badge {
+/* 2. Container da Televisãozinha 9x16 que emerge da porteira */
+.sessao2-tv-container {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.sessao2-tv-frame {
+  position: relative;
+  width: clamp(260px, 35vh, 400px);
+  aspect-ratio: 9 / 16;
+  max-height: 78vh;
+  border-radius: 24px;
+  background: #000000;
+  border: 2px solid rgba(212, 163, 89, 0.55);
+  box-shadow:
+    0 25px 70px rgba(0, 0, 0, 0.92),
+    0 0 40px rgba(101, 184, 141, 0.25),
+    inset 0 0 15px rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  pointer-events: auto;
+  transform-origin: center center;
+  transform: scale(0.35);
+  opacity: 0;
+  will-change: transform, opacity;
+  transition: box-shadow 0.3s ease;
+}
+
+.sessao2-tv-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.sessao2-tv-glare {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.15) 0%,
+    rgba(255, 255, 255, 0.03) 40%,
+    transparent 60%,
+    rgba(0, 0, 0, 0.40) 100%
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+.sessao2-tv-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--fonte-rotulos, 'Quicksand', sans-serif);
+  font-size: 0.70rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #E8F5E9;
+  background: rgba(3, 20, 25, 0.85);
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(114, 196, 156, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 4;
+  pointer-events: none;
+}
+
+.sessao2-tv-som {
+  position: absolute;
+  bottom: 14px;
+  right: 14px;
+  z-index: 4;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(4, 25, 31, 0.85);
+  border: 1px solid rgba(212, 163, 89, 0.4);
+  color: #ECC880;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.sessao2-tv-som:hover {
+  transform: scale(1.08);
+  background: rgba(6, 36, 44, 0.95);
+}
+
+/* Badges e animações */
+.sessao2-player-badge {
   position: absolute;
   top: calc(var(--safe-top, 20px) + 24px);
   left: 24px;
@@ -158,48 +220,20 @@
   50% { opacity: 0.4; transform: scale(0.8); }
 }
 
-/* Botão de som do vídeo aéreo */
-.sessao2-drone-som {
-  position: absolute;
-  bottom: calc(var(--safe-bottom, 20px) + 24px);
-  right: 24px;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: rgba(4, 25, 31, 0.85);
-  border: 1px solid rgba(114, 196, 156, 0.4);
-  color: #72C49C;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 5;
-  pointer-events: auto;
-  transition: transform 0.2s ease, background 0.2s ease;
-}
-
-.sessao2-drone-som:hover {
-  transform: scale(1.08);
-  background: rgba(4, 25, 31, 0.95);
-}
-
 @media (max-width: 768px) {
   .secao-cenas {
     height: 160vh;
   }
 
-  .sessao2-player-badge,
-  .sessao2-drone-badge {
+  .sessao2-tv-frame {
+    width: clamp(230px, 50vw, 320px);
+    border-radius: 18px;
+  }
+
+  .sessao2-player-badge {
     top: calc(var(--safe-top, 16px) + 16px);
     left: 16px;
     font-size: 0.68rem;
     padding: 6px 14px;
-  }
-
-  .sessao2-drone-som {
-    bottom: calc(var(--safe-bottom, 16px) + 20px);
-    right: 20px;
-    width: 38px;
-    height: 38px;
   }
 }

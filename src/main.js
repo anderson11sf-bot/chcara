@@ -166,31 +166,23 @@ function arrancarInterno() {
   try {
     scrollEngine = new ScrollEngine();
 
-    // 1. Layer Hero (Modo SEÇÃO - 140vh rápido, 358 frames a 120 FPS)
-    const heroCanvas = document.getElementById('hero-canvas');
-    const heroWrapper = document.getElementById('hero');
-    const heroFallback = document.getElementById('hero-bg-img');
-    const heroLayer = new FrameLayer({
-      id: 'hero',
-      mode: 'section',
-      canvas: heroCanvas,
-      wrapper: heroWrapper,
-      wrapperHeightVh: 140,
-      manifestEntry: FRAMES_MANIFEST.hero,
-      fallbackImg: heroFallback,
-      onUpdate: (prog) => {
-        hero.definirProgresso(prog);
-        dica.definirProgresso(prog);
-      }
-    });
-
-    // 2. Seção 2: Abertura da Porteira (120 FPS) -> Vídeo Aéreo das Glebas
+    // 1. Seção 2: Abertura da Porteira (120 FPS) -> Televisãozinha 9x16 Vista do Alto
     const secaoCenas = document.getElementById('secao-cenas');
     const porteiraScene = document.getElementById('sessao2-porteira-scene');
     const porteiraCanvas = document.getElementById('canvas-porteira');
     const porteiraFallback = document.getElementById('fallback-porteira');
-    const droneScene = document.getElementById('sessao2-drone-scene');
-    const droneVideo = document.getElementById('sessao2-drone-video');
+    const tvFrame = document.getElementById('sessao2-tv-frame');
+    const tvVideo = document.getElementById('sessao2-tv-video');
+    const tvSomBtn = document.getElementById('tv-video-som');
+
+    if (tvSomBtn && tvVideo) {
+      tvSomBtn.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        tvVideo.muted = !tvVideo.muted;
+        tvSomBtn.classList.toggle('com-som', !tvVideo.muted);
+        tvSomBtn.setAttribute('aria-label', tvVideo.muted ? 'Ativar som' : 'Desativar som');
+      });
+    }
 
     const porteiraLayer = new FrameLayer({
       id: 'porteira',
@@ -202,36 +194,47 @@ function arrancarInterno() {
       manifestEntry: FRAMES_MANIFEST.porteira,
       fallbackImg: porteiraFallback,
       onUpdate: (prog) => {
-        // (a) Conforme a porteira abre (prog >= 0.35 a 0.70), revela o vídeo aéreo do drone
-        if (droneScene) {
-          let opDrone = 0;
-          if (prog >= 0.35) {
-            opDrone = Math.min(1, (prog - 0.35) / 0.35);
-          }
-          droneScene.style.opacity = opDrone.toFixed(3);
+        // (a) Conforme a porteira abre (prog 0.15 a 0.65), a TV 9x16 emerge do centro e cresce
+        if (tvFrame) {
+          let scale = 0.35;
+          let opacity = 0;
 
-          if (droneVideo) {
-            if (opDrone > 0.05 && droneVideo.paused) {
-              droneVideo.play().catch(() => {});
-            } else if (opDrone <= 0.02 && !droneVideo.paused) {
-              droneVideo.pause();
+          if (prog < 0.15) {
+            scale = 0.35;
+            opacity = 0;
+          } else if (prog <= 0.65) {
+            const p = (prog - 0.15) / 0.50;
+            scale = 0.35 + p * 0.65; // cresce suavemente de 0.35 para 1.00
+            opacity = Math.min(1, p * 1.6);
+          } else {
+            scale = 1.0;
+            opacity = 1.0;
+          }
+
+          tvFrame.style.transform = `scale(${scale.toFixed(3)})`;
+          tvFrame.style.opacity = opacity.toFixed(3);
+
+          if (tvVideo) {
+            if (opacity > 0.05 && tvVideo.paused) {
+              tvVideo.play().catch(() => {});
+            } else if (opacity <= 0.02 && !tvVideo.paused) {
+              tvVideo.pause();
             }
           }
         }
 
-        // (b) No final da abertura (prog 0.65 a 0.85), a porteira dissolve suavemente
-        // deixando o vídeo aéreo das glebas em tela cheia para seguir para a próxima seção
+        // (b) No final da abertura (prog 0.70 a 0.90), a porteira dissolve suavemente
         if (porteiraScene) {
           let opPorteira = 1;
-          if (prog >= 0.65) {
-            opPorteira = Math.max(0, 1 - (prog - 0.65) / 0.20);
+          if (prog >= 0.70) {
+            opPorteira = Math.max(0, 1 - (prog - 0.70) / 0.20);
           }
           porteiraScene.style.opacity = opPorteira.toFixed(3);
         }
       }
     });
 
-    // 3. Layer Global (Modo GLOBAL PING-PONG com GLOBAL_PASS_VH = 200)
+    // 2. Layer Global (Modo GLOBAL PING-PONG com GLOBAL_PASS_VH = 200)
     const globalCanvas = document.getElementById('global-scroll-canvas');
     const globalLayer = new FrameLayer({
       id: 'global',
@@ -242,18 +245,8 @@ function arrancarInterno() {
     });
 
     scrollEngine.init();
-    scrollEngine.addLayer(heroLayer);
     scrollEngine.addLayer(porteiraLayer);
     scrollEngine.addLayer(globalLayer);
-
-    // Controle de áudio da cena de drone
-    const droneSomBtn = document.getElementById('drone-video-som');
-    if (droneSomBtn && droneVideo) {
-      droneSomBtn.addEventListener('click', () => {
-        droneVideo.muted = !droneVideo.muted;
-        droneSomBtn.classList.toggle('com-som', !droneVideo.muted);
-      });
-    }
   } catch (e) {
     console.error('[pd] scrollEngine:', e);
   }

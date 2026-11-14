@@ -55,19 +55,20 @@
 
 /* ---------- CAMADA DE VIDRO FOSCO (GLASSMORPHISM NATURAL & ELEGANTE) ------
  * Camada de vidro fosco com transparência controlada sobre o vídeo de fundo
- * global. Suaviza as imagens e garante leitura perfeita de todos os textos,
- * preservando a profundidade, a iluminação e as cores naturais.
+ * global em tonalidade verde claro mais fosco (verde botânico / musgo suave).
+ * Suaviza as imagens e garante leitura perfeita de todos os textos,
+ * preservando a profundidade, a iluminação e as cores naturais do paraíso.
  * ---------------------------------------------------------------------- */
 
 .vidro {
   position: absolute;
   inset: 0;
-  background: rgba(3, 20, 25, 0.42);
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
+  background: rgba(14, 38, 28, 0.45);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
   z-index: var(--z-global-glass, 1);
   pointer-events: none;
-  box-shadow: inset 0 0 160px 40px rgba(2, 16, 17, 0.75);
+  box-shadow: inset 0 0 160px 40px rgba(8, 26, 18, 0.75);
 }
 
 .vidro::before {
@@ -76,10 +77,10 @@
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(4, 25, 31, 0.40) 0%,
-    transparent 25%,
-    transparent 75%,
-    rgba(4, 25, 31, 0.65) 100%
+    rgba(16, 42, 30, 0.38) 0%,
+    rgba(22, 54, 38, 0.18) 25%,
+    rgba(22, 54, 38, 0.22) 75%,
+    rgba(12, 32, 22, 0.58) 100%
   );
   pointer-events: none;
 }
