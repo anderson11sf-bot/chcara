@@ -22,8 +22,6 @@ import * as fundo from './lib/fundoCanvas.js';
 import * as progresso from './lib/progresso.js';
 import * as dica from './lib/dica.js';
 import * as hero from './lib/hero.js';
-import * as heroScroll from './lib/heroScroll.js';
-import * as sessao2Scroll from './lib/sessao2Scroll.js';
 import * as carrossel from './lib/carrossel.js';
 import * as portal3d from './lib/portal3d.js';
 import { montarSecoesMestre } from './lib/secoes.js';
@@ -149,13 +147,7 @@ function arrancarInterno() {
     console.error('[pd] ERRO FATAL EM SECOES:', e);
   }
 
-  // (c2) Canvas e animações de scroll
-  let controleHeroScroll = null;
-  try { controleHeroScroll = heroScroll.iniciarHeroScroll(); } catch (e) { console.warn('[pd] heroScroll:', e); }
-  let controleSessao2Scroll = null;
-  try { controleSessao2Scroll = sessao2Scroll.iniciarSessao2Scroll(); } catch (e) { console.warn('[pd] sessao2Scroll:', e); }
-
-  // (c3) Portal 3D de abertura central cinematográfica (Sessão 2)
+  // (c2) Portal 3D coordenado (Cavalo -> Escurece -> Porteira 120 FPS -> Drone)
   try { portal3d.iniciarPortal3d(); } catch (e) { console.warn('[pd] portal3d:', e); }
 
   try { aplicarVariaveisCarrossel(); } catch (e) { console.warn('[pd] var-carrossel:', e); }
@@ -224,17 +216,15 @@ function arrancarInterno() {
     // 1. Progresso do Hero (0 a 1 nos primeiros 85% de vh)
     const pHero = Math.min(1, Math.max(0, y / Math.max(1, vh * 0.85)));
     hero.definirProgresso(pHero);
-    controleHeroScroll?.definirProgresso(pHero);
     dica.definirProgresso(pHero);
 
-    // 2. Progresso da Sessão 2 (Canvas de transição + Carrossel 3D + Abertura Central 3D)
+    // 2. Progresso da Sessão 2 (Timeline Coordenada)
     let pCena = 0;
     if (secaoCenas) {
       const topoCena = secaoCenas.offsetTop || vh;
       const distCena = Math.max(1, secaoCenas.offsetHeight - vh);
       pCena = Math.min(1, Math.max(0, (y - topoCena) / distCena));
     }
-    controleSessao2Scroll?.definirProgresso(pCena);
     carrossel.definirProgresso(pCena);
     portal3d.definirProgresso(pCena);
 

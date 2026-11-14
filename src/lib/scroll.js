@@ -248,18 +248,6 @@ export function iniciarScroll(opcoes = {}) {
   };
   window.addEventListener('scroll', aoRolar, { passive: true });
 
-  let ultimoY = -1;
-  const lerFallback = () => {
-    const y = window.scrollY || window.pageYOffset || 0;
-    if (y !== ultimoY) {
-      ultimoY = y;
-      ScrollTrigger.update();
-      atualizarProgresso();
-    }
-    requestAnimationFrame(lerFallback);
-  };
-  requestAnimationFrame(lerFallback);
-
   // Estado inicial coerente (ninguém começa com progresso "sujo")
   pSuave = 0;
   progresso = 0;

@@ -79,13 +79,11 @@ function criarPainel(classeExtra = '') {
     muted: '',
     loop: '',
     playsinline: '',
-    autoplay: '',
-    preload: 'auto',
+    preload: 'none',
     'aria-hidden': 'true'
   });
   videoCachoeira.muted = true;
   videoCachoeira.playsInline = true;
-  videoCachoeira.autoplay = true;
   videoCachoeira.loop = true;
 
   // Fontes leves para web (WebM 693 KB e MP4 H.264 1.55 MB)

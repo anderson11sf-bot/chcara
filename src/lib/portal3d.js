@@ -1,16 +1,14 @@
 /* ============================================================================
- * portal3d.js — TIMELINE COORDENADA: CAVALO FULLSCREEN -> PORTEIRA (SCROLL) -> VÍDEO AÉREO
+ * portal3d.js — SESSÃO 2: CAVALO -> TERMINA ESCURECENDO -> PORTEIRA (120 FPS) -> VÍDEO AÉREO
  * ----------------------------------------------------------------------------
- * Ordem exata:
- * 1. 0.00 a 0.38: Cena do Cavalo da Sessão 2 (TELA INTEIRA, sem portal antes)
- *    - Sincronizado com a rolagem do visitante
- * 2. 0.35 a 0.74: Abertura da Porteira (No lugar do antigo portal)
- *    - Animação controlada 1:1 pelo scroll com frames instantâneos
- *    - As portas de madeira rústica se abrem conforme o scroll desce
- * 3. 0.62 a 0.94: Vídeo Aéreo do Drone (drone-panorama-terreno.mp4)
- *    - Revelado pela abertura da porteira
- *    - Entra em cena cheia, em alta definição e reprodução contínua
- * 4. 0.94 a 1.00: Transição suave de saída para a Sessão 3
+ * 1. 0.00 a 0.36: Cena do Cavalo (Fullscreen Cover)
+ *    - 0.26 a 0.36: O cavalo TERMINA ESCURECENDO (fade to black total)
+ * 2. 0.36 a 0.42: Entra a Porteira rústica na escuridão
+ * 3. 0.42 a 0.72: Abertura da Porteira via Canvas Image Sequence a 120 FPS / 100 Hz
+ *    - Renderização 2D acelerada por GPU direta, sem travas de seek de vídeo
+ *    - LERP suave com amortecimento inercial orgânico
+ * 4. 0.60 a 0.94: Vídeo Aéreo do Drone revelado atrás da porteira
+ * 5. 0.94 a 1.00: Transição suave de saída para a Sessão 3
  * ==========================================================================*/
 
 import { normalizar, clamp } from './utils.js';
@@ -18,59 +16,108 @@ import { normalizar, clamp } from './utils.js';
 // Elementos DOM
 let horseScene = null;
 let horseVideo = null;
+let horseEscurecer = null;
+
 let porteiraScene = null;
+let porteiraCanvas = null;
+let porteiraCtx = null;
 let porteiraVideo = null;
+
 let droneScene = null;
 let droneVideo = null;
 let btnSom = null;
 
 let ativo = false;
 let tocandoDrone = false;
-let targetPorteiraTime = null;
-let porteiraRafId = null;
 
-function agendarSeekPorteira(tempoAlvo) {
-  targetPorteiraTime = tempoAlvo;
-  if (!porteiraRafId) {
-    porteiraRafId = requestAnimationFrame(() => {
-      porteiraRafId = null;
-      if (porteiraVideo && targetPorteiraTime !== null) {
-        try {
-          porteiraVideo.currentTime = targetPorteiraTime;
-        } catch {}
+// Configuração do Canvas de Imagens da Porteira (120 FPS / 100 Hz)
+const TOTAL_FRAMES_PORTEIRA = 94;
+const porteiraFrames = [];
+let framesCarregados = 0;
+let porteiraProgAlvo = 0;
+let porteiraProgAtual = 0;
+let porteiraLoopId = null;
+
+function preCarregarPorteira() {
+  for (let i = 1; i <= TOTAL_FRAMES_PORTEIRA; i++) {
+    const num = String(i).padStart(3, '0');
+    const img = new Image();
+    img.decoding = 'async';
+    img.src = `/media/porteira/p_${num}.webp`;
+    img.onload = () => {
+      framesCarregados++;
+      if (i === 1 && porteiraCtx) {
+        desenharFramePorteira(0);
       }
-    });
+    };
+    porteiraFrames.push(img);
   }
 }
 
-/* Faixas oficiais da Timeline Coordenada */
+function desenharFramePorteira(idx) {
+  if (!porteiraCanvas || !porteiraCtx) return;
+  const img = porteiraFrames[idx];
+  if (img && img.complete && img.naturalWidth > 0) {
+    porteiraCtx.drawImage(img, 0, 0, porteiraCanvas.width, porteiraCanvas.height);
+  }
+}
+
+function iniciarLoopPorteira() {
+  if (porteiraLoopId) return;
+
+  const loop = () => {
+    if (!ativo) {
+      porteiraLoopId = null;
+      return;
+    }
+
+    // LERP exponencial com amortecimento fluido a 100Hz / 120Hz
+    const diff = porteiraProgAlvo - porteiraProgAtual;
+    if (Math.abs(diff) > 0.0004) {
+      porteiraProgAtual += diff * 0.18;
+    } else {
+      porteiraProgAtual = porteiraProgAlvo;
+    }
+
+    const frameIdx = Math.min(TOTAL_FRAMES_PORTEIRA - 1, Math.max(0, Math.round(porteiraProgAtual * (TOTAL_FRAMES_PORTEIRA - 1))));
+    desenharFramePorteira(frameIdx);
+
+    porteiraLoopId = requestAnimationFrame(loop);
+  };
+
+  porteiraLoopId = requestAnimationFrame(loop);
+}
+
+/* Faixas da Timeline Coordenada */
 const FASES = {
-  // 1. Cavalo Fullscreen (Início da Sessão 2)
-  cavaloInicio:  0.00,
-  cavaloFim:     0.34,
-  cavaloFadeFim: 0.40,
+  // 1. Cavalo Fullscreen: 0.00 a 0.36 (escurecendo de 0.26 a 0.36)
+  cavaloInicio:    0.00,
+  cavaloEscurece: 0.26,
+  cavaloFim:       0.36,
 
-  // 2. Animação da Porteira (Substitui o antigo portal)
-  porteiraEntra: 0.32,
-  porteiraAbre:  0.38,
-  porteiraTotal: 0.70,
-  porteiraFim:   0.75,
+  // 2. Animação da Porteira: surge de 0.36 a 0.42, abre de 0.42 a 0.70, dissolve de 0.68 a 0.75
+  porteiraEntra:   0.36,
+  porteiraAbre:    0.42,
+  porteiraTotal:   0.70,
+  porteiraFim:     0.75,
 
-  // 3. Vídeo da Visão Aérea do Drone (Revelado atrás da porteira)
-  droneInicio:   0.58,
-  droneAuge:     0.70,
-  droneFim:      0.94,
+  // 3. Vídeo Aéreo do Drone: surge de 0.60 a 0.72, auge até 0.94
+  droneInicio:     0.60,
+  droneAuge:       0.72,
+  droneFim:        0.94,
 
   // 4. Saída suave para a Sessão 3
-  saidaInicio:   0.94,
-  saidaFim:      1.00
+  saidaInicio:     0.94,
+  saidaFim:        1.00
 };
 
 export function iniciarPortal3d() {
   horseScene = document.getElementById('sessao2-cavalo-scene');
   horseVideo = document.getElementById('sessao2-cavalo-video');
+  horseEscurecer = document.getElementById('sessao2-cavalo-escurecer');
 
   porteiraScene = document.getElementById('sessao2-porteira-scene');
+  porteiraCanvas = document.getElementById('sessao2-porteira-canvas');
   porteiraVideo = document.getElementById('sessao2-porteira-video');
 
   droneScene = document.getElementById('sessao2-drone-scene');
@@ -79,7 +126,15 @@ export function iniciarPortal3d() {
 
   if (!horseScene && !porteiraScene) return null;
 
-  // Configurações do vídeo do cavalo (controlado por scroll)
+  // Inicializa contexto de alta performance do Canvas 2D
+  if (porteiraCanvas) {
+    porteiraCtx = porteiraCanvas.getContext('2d', { alpha: false, desynchronized: true });
+    porteiraCanvas.width = 1280;
+    porteiraCanvas.height = 720;
+    preCarregarPorteira();
+  }
+
+  // Configurações do vídeo do cavalo
   if (horseVideo) {
     horseVideo.muted = true;
     horseVideo.playsInline = true;
@@ -88,23 +143,7 @@ export function iniciarPortal3d() {
     horseVideo.removeAttribute('loop');
   }
 
-  // Configurações do vídeo da porteira (controlado por scroll com seek ultra-rápido)
-  if (porteiraVideo) {
-    porteiraVideo.muted = true;
-    porteiraVideo.playsInline = true;
-    porteiraVideo.setAttribute('playsinline', '');
-    porteiraVideo.setAttribute('muted', '');
-    porteiraVideo.removeAttribute('loop');
-    porteiraVideo.preload = 'auto';
-    porteiraVideo.load();
-    // Pré-ativa o decodificador de vídeo para eliminar travamentos no primeiro seek
-    porteiraVideo.play().then(() => {
-      porteiraVideo.pause();
-      porteiraVideo.currentTime = 0;
-    }).catch(() => {});
-  }
-
-  // Configurações do vídeo do drone (reprodução contínua ao ser revelado)
+  // Configurações do vídeo do drone
   if (droneVideo) {
     droneVideo.muted = true;
     droneVideo.playsInline = true;
@@ -127,6 +166,7 @@ export function iniciarPortal3d() {
   }
 
   ativo = true;
+  iniciarLoopPorteira();
   return { definirProgresso, destruir };
 }
 
@@ -139,27 +179,31 @@ export function definirProgresso(p) {
   const prog = clamp(p, 0, 1);
 
   // -------------------------------------------------------------------------
-  // 1. CENA DO CAVALO EM TELA INTEIRA (0.00 a 0.40) — SEM PORTAL ANTES
+  // 1. CENA DO CAVALO: AVANÇA E TERMINA ESCURECENDO (0.00 a 0.36)
   // -------------------------------------------------------------------------
   if (horseScene && horseVideo) {
-    if (prog <= FASES.cavaloFadeFim) {
-      // Opacidade: 1 até 0.34, depois transiciona para a porteira
-      let opCavalo = 1;
-      if (prog > FASES.cavaloFim) {
-        opCavalo = 1 - normalizar(prog, FASES.cavaloFim, FASES.cavaloFadeFim);
+    if (prog <= FASES.cavaloFim) {
+      horseScene.style.opacity = '1';
+
+      // Termina escurecendo totalmente para o preto puro de 0.26 a 0.36
+      if (horseEscurecer) {
+        let opEscurecer = 0;
+        if (prog >= FASES.cavaloEscurece) {
+          opEscurecer = normalizar(prog, FASES.cavaloEscurece, FASES.cavaloFim);
+        }
+        horseEscurecer.style.opacity = Math.max(0, Math.min(1, opEscurecer)).toFixed(3);
       }
-      horseScene.style.opacity = Math.max(0, Math.min(1, opCavalo)).toFixed(3);
 
       // Scrubbing do vídeo do cavalo com o scroll
       const durCavalo = horseVideo.duration || 4.0;
-      const tCavalo = clamp(normalizar(prog, FASES.cavaloInicio, FASES.cavaloFim), 0, 1);
+      const tCavalo = clamp(normalizar(prog, FASES.cavaloInicio, FASES.cavaloEscurece), 0, 1);
       const tempoAlvoCavalo = Math.min(durCavalo, tCavalo * durCavalo);
       if (Math.abs(horseVideo.currentTime - tempoAlvoCavalo) > 0.08 && !horseVideo.seeking) {
         horseVideo.currentTime = tempoAlvoCavalo;
       }
 
       // Leve aproximação natural
-      const escala = 1 + tCavalo * 0.05;
+      const escala = 1 + tCavalo * 0.04;
       horseVideo.style.transform = `scale(${escala.toFixed(3)})`;
     } else {
       horseScene.style.opacity = '0';
@@ -168,37 +212,40 @@ export function definirProgresso(p) {
   }
 
   // -------------------------------------------------------------------------
-  // 2. ANIMAÇÃO DA PORTEIRA (0.32 a 0.75) — SCROLL-DRIVEN, NO LUGAR DO PORTAL
+  // 2. ANIMAÇÃO DA PORTEIRA: SURGE DA ESCURIDÃO E ABRE A 120 FPS / 100 HZ (0.36 a 0.75)
   // -------------------------------------------------------------------------
-  if (porteiraScene && porteiraVideo) {
+  if (porteiraScene) {
     if (prog >= FASES.porteiraEntra && prog <= FASES.porteiraFim) {
-      // Opacidade da porteira: entra de 0.32 a 0.38, permanece aberta, e dissolve de 0.68 a 0.75
+      // Opacidade: surge suavemente da escuridão (0.36 a 0.42), abre, e dissolve ao final (0.68 a 0.75)
       let opPorteira = 1;
       if (prog < FASES.porteiraAbre) {
         opPorteira = normalizar(prog, FASES.porteiraEntra, FASES.porteiraAbre);
-      } else if (prog > FASES.droneAuge - 0.02) {
-        opPorteira = 1 - normalizar(prog, FASES.droneAuge - 0.02, FASES.porteiraFim);
+      } else if (prog > FASES.droneAuge - 0.04) {
+        opPorteira = 1 - normalizar(prog, FASES.droneAuge - 0.04, FASES.porteiraFim);
       }
       porteiraScene.style.opacity = Math.max(0, Math.min(1, opPorteira)).toFixed(3);
 
-      // Scrubbing a 120 FPS do vídeo da porteira sincronizado com o scroll (portas se abrem!)
-      const durPorteira = porteiraVideo.duration || 3.916;
+      // Scrubbing da abertura da porteira (0.0 = fechada, 1.0 = totalmente aberta)
       const tPorteira = clamp(normalizar(prog, FASES.porteiraAbre, FASES.porteiraTotal), 0, 1);
-      const tempoAlvoPorteira = tPorteira * durPorteira;
-
-      agendarSeekPorteira(tempoAlvoPorteira);
+      porteiraProgAlvo = tPorteira;
     } else {
       porteiraScene.style.opacity = '0';
-      if (!porteiraVideo.paused) porteiraVideo.pause();
+      if (prog < FASES.porteiraEntra) {
+        porteiraProgAlvo = 0;
+        porteiraProgAtual = 0;
+      } else if (prog > FASES.porteiraFim) {
+        porteiraProgAlvo = 1;
+        porteiraProgAtual = 1;
+      }
     }
   }
 
   // -------------------------------------------------------------------------
-  // 3. VÍDEO DA VISÃO AÉREA DO DRONE (0.58 a 1.00) — REVELADO PELA PORTEIRA
+  // 3. VÍDEO DA VISÃO AÉREA DO DRONE (0.60 a 1.00) — REVELADO PELA PORTEIRA
   // -------------------------------------------------------------------------
   if (droneScene && droneVideo) {
     if (prog >= FASES.droneInicio && prog <= FASES.saidaFim) {
-      // Opacidade: surge conforme as portas abrem (0.58 a 0.70), mantendo-se até o final
+      // Opacidade: surge conforme as portas abrem (0.60 a 0.72)
       let opDrone = 1;
       if (prog < FASES.droneAuge) {
         opDrone = normalizar(prog, FASES.droneInicio, FASES.droneAuge);
@@ -233,8 +280,11 @@ export function definirProgresso(p) {
 
 export function destruir() {
   ativo = false;
+  if (porteiraLoopId) {
+    cancelAnimationFrame(porteiraLoopId);
+    porteiraLoopId = null;
+  }
   if (horseVideo) horseVideo.pause();
-  if (porteiraVideo) porteiraVideo.pause();
   if (droneVideo) droneVideo.pause();
 }
 
