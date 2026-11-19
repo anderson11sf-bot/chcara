@@ -217,13 +217,19 @@ export function montarPropriedades() {
   const P = config.propriedades;
   const painel = criarPainel();
 
+  if (P.escassezDestaque) {
+    const badgeEscassez = criar('div', { classe: 'hero__aviso-escassez' });
+    badgeEscassez.innerHTML = `<span class="hero__aviso-escassez-ponto"></span> ${P.escassezDestaque}`;
+    painel.appendChild(badgeEscassez);
+  }
+
   painel.appendChild(cabecalho({
     rotulo: P.rotulo,
     titulo: P.titulo,
     texto: P.subtitulo
   }));
 
-  // Destaques comerciais obrigatórios: 7 Glebas, 4 com Casas, A partir de R$ 475 mil
+  // Destaques comerciais: 5 Casas Prontas, a partir de 20.000 m², R$ 485 mil
   if (P.destaquesComerciais && P.destaquesComerciais.length > 0) {
     const painelComercial = criar('div', { classe: 'glebas-painel-comercial' });
     for (const d of P.destaquesComerciais) {
@@ -380,7 +386,7 @@ export function montarPossibilidades() {
 
     const fotoCaixa = criar('div', { classe: 'quadro-projeto-pdf__foto-caixa' });
     fotoCaixa.appendChild(criar('img', {
-      classe: 'quadro-projeto-pdf__foto',
+      classe: `quadro-projeto-pdf__foto ${q.id === 'chale-imbuia' ? 'quadro-projeto-pdf__foto--imbuia' : ''}`,
       src: q.imagem,
       alt: q.tituloCompleto,
       loading: 'lazy',
@@ -609,9 +615,42 @@ export function montarSaoJose() {
     texto: S.subtitulo
   }));
 
+  // 1. Grid dos 3 Pilares Obrigatórios de Valorização & Proteção Patrimonial com Hiperlinks Reais
+  if (S.pilares && S.pilares.length > 0) {
+    const gridPilares = criar('div', { classe: 'sjc-pilares-grid' });
+    for (const p of S.pilares) {
+      const cardPilar = criar('article', { classe: 'sjc-pilar-card' });
+
+      if (p.tag) {
+        cardPilar.appendChild(criar('span', { classe: 'sjc-pilar-card__tag', texto: p.tag }));
+      }
+      cardPilar.appendChild(criar('h3', { classe: 'sjc-pilar-card__titulo', texto: p.titulo }));
+      cardPilar.appendChild(criar('p', { classe: 'sjc-pilar-card__texto', texto: p.texto }));
+
+      if (p.links && p.links.length > 0) {
+        const linksCaixa = criar('div', { classe: 'sjc-pilar-card__links' });
+        for (const l of p.links) {
+          const a = criar('a', {
+            classe: 'link-materia-jornal',
+            href: l.url,
+            target: '_blank',
+            rel: 'noopener noreferrer'
+          });
+          a.innerHTML = `<span>${l.texto}</span> <span aria-hidden="true">↗</span>`;
+          linksCaixa.appendChild(a);
+        }
+        cardPilar.appendChild(linksCaixa);
+      }
+
+      gridPilares.appendChild(cardPilar);
+    }
+    painel.appendChild(gridPilares);
+  }
+
+  // 2. Apresentação visual com vídeo vertical de SJC e destaques de mobilidade
   const gradeVertical = criar('div', { classe: 'grade-sjc-vertical' });
 
-  // Player vertical contínuo da Ponte Estaiada (autoplay quando visível, muted, loop, playsinline, SEM controles, SEM botão de play)
+  // Player vertical contínuo da Ponte Estaiada (autoplay quando visível, muted, loop, playsinline, SEM controles)
   const videoCaixa = criar('div', { classe: 'sjc-video-vertical-caixa' });
   const videoMoldura = criar('div', { classe: 'video-moldura video-moldura--9-16' });
   const videoEl = criar('video', {
@@ -632,7 +671,7 @@ export function montarSaoJose() {
   videoCaixa.appendChild(videoMoldura);
   gradeVertical.appendChild(videoCaixa);
 
-  // Coluna de textos e destaques
+  // Coluna de textos e distâncias estratégicas
   const infoCol = criar('div', { classe: 'sjc-info-vertical' });
   if (S.textoApoio) {
     const pApoio = criar('p', { classe: 'secao__apoio secao__apoio--destaque' });
@@ -651,7 +690,7 @@ export function montarSaoJose() {
   infoCol.appendChild(gradeDestaques);
 
   infoCol.appendChild(criar('hr', { classe: 'divisor-lago' }));
-  infoCol.appendChild(botaoPDF('saoJose', S.botaoTexto || 'Saber mais no WhatsApp', 'dourado'));
+  infoCol.appendChild(botaoPDF('saoJose', S.botaoTexto || 'Conversar sobre valorização no WhatsApp', 'dourado'));
   gradeVertical.appendChild(infoCol);
 
   painel.appendChild(gradeVertical);

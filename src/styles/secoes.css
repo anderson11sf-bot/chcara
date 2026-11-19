@@ -434,7 +434,7 @@
   transform: scale(1.05);
 }
 
-/* Selo Obrigatório de Projeto Ilustrativo */
+/* Selo Obrigatório: Sugestão ilustrativa */
 .badge-projeto-ilustrativo {
   position: absolute;
   top: 10px;
@@ -986,7 +986,7 @@
   width: 100%;
 }
 
-.grade-mosaico-rural {
+.grade-mosaico-privativo {
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -1069,7 +1069,7 @@
   margin-bottom: var(--e4);
 }
 
-.faixa-indicadores-rurais {
+.faixa-indicadores-refugio {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 14px;
@@ -1081,24 +1081,24 @@
 }
 
 @media (max-width: 480px) {
-  .faixa-indicadores-rurais {
+  .faixa-indicadores-refugio {
     grid-template-columns: 1fr;
   }
 }
 
-.item-indicador-rural {
+.item-indicador-refugio {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.item-indicador-rural__icone {
+.item-indicador-refugio__icone {
   color: #40e0b4;
   display: inline-flex;
   filter: drop-shadow(0 0 6px rgba(64, 224, 180, 0.5));
 }
 
-.item-indicador-rural__rotulo {
+.item-indicador-refugio__rotulo {
   font-size: 0.88rem;
   font-weight: 600;
   color: #fff;
@@ -1533,7 +1533,7 @@
   color: #04191F;
 }
 
-/* Página 4: Destaques Comerciais Obrigatórios (7 Glebas, 4 com Casas, a partir de R$ 475 mil) */
+/* Página 4: Destaques Comerciais Obrigatórios (7 Glebas, 4 com Casas, a partir de R$ 485 mil) */
 .glebas-painel-comercial {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -2412,4 +2412,144 @@
 .input-agendamento-pdf:focus {
   border-color: #D4A359;
   box-shadow: 0 0 14px rgba(212, 163, 89, 0.25);
+}
+
+
+/* ============================================================================
+ * SEÇÃO: VALORIZAÇÃO IMOBILIÁRIA SJC & PILARES JORNALÍSTICOS
+ * ==========================================================================*/
+.sjc-pilares-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin: 32px 0 24px;
+  width: 100%;
+}
+
+@media (max-width: 900px) {
+  .sjc-pilares-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+.sjc-pilar-card {
+  position: relative;
+  background: rgba(4, 25, 31, 0.82);
+  border: 1px solid rgba(212, 163, 89, 0.35);
+  border-radius: 18px;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.45);
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  box-sizing: border-box;
+}
+
+.sjc-pilar-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(212, 163, 89, 0.7);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.6), 0 0 25px rgba(212, 163, 89, 0.15);
+}
+
+.sjc-pilar-card__tag {
+  display: inline-block;
+  font-family: var(--fonte-rotulos, sans-serif);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #ECC880;
+  background: rgba(212, 163, 89, 0.15);
+  border: 1px solid rgba(212, 163, 89, 0.4);
+  padding: 4px 10px;
+  border-radius: 999px;
+  margin-bottom: 14px;
+  align-self: flex-start;
+}
+
+.sjc-pilar-card__titulo {
+  font-family: var(--fonte-titulos, serif);
+  font-size: 1.25rem;
+  line-height: 1.35;
+  color: #F4EADA;
+  margin: 0 0 12px;
+}
+
+.sjc-pilar-card__texto {
+  font-family: var(--fonte-textos, sans-serif);
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: rgba(232, 245, 233, 0.88);
+  margin: 0 0 20px;
+  flex-grow: 1;
+}
+
+.sjc-pilar-card__links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(212, 163, 89, 0.2);
+}
+
+.link-materia-jornal {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--fonte-rotulos, sans-serif);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #72C49C;
+  text-decoration: none;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.link-materia-jornal:hover {
+  color: #ECC880;
+  transform: translateX(3px);
+  text-decoration: underline;
+}
+
+.hero__aviso-escassez {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  background: rgba(212, 163, 89, 0.16);
+  border: 1px solid rgba(212, 163, 89, 0.55);
+  color: #ECC880;
+  font-family: var(--fonte-rotulos, sans-serif);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  animation: pulso-escassez 3s infinite ease-in-out;
+}
+
+.hero__aviso-escassez-ponto {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ECC880;
+  box-shadow: 0 0 8px #ECC880;
+}
+
+@keyframes pulso-escassez {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(212, 163, 89, 0.4); }
+  50% { box-shadow: 0 0 0 6px rgba(212, 163, 89, 0); }
+}
+
+/* Ajustes e enquadramento perfeito da imagem Madeira Imbuia */
+.quadro-projeto-pdf__foto--imbuia {
+  object-fit: cover !important;
+  object-position: center center !important;
 }
