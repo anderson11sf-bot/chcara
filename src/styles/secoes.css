@@ -2797,9 +2797,9 @@
   }
 }
 
-/* Ajuste vertical da imagem do Parque da Cidade (mostra a parte superior do parque e corta embaixo) */
+/* Ajuste vertical da imagem do Parque da Cidade (mostra mais a parte inferior do parque) */
 .sjc-slide-imagem-box img.sjc-slide-img--parque {
-  object-position: center 15%;
+  object-position: center 75%;
 }
 
 /* Cursor zoom-in em todas as imagens clicáveis */
