@@ -690,13 +690,13 @@
 
 /* Ajuste de enquadramento desktop para não cortar a cabeça das pessoas no vídeo */
 :root {
-  --hero-pos-y: 8%;
+  --hero-pos-y: 22%;
 }
 
 @media (min-width: 1024px) {
   .hero__video,
   .hero__bg-img,
   .hero__canvas {
-    object-position: center var(--hero-pos-y, 8%) !important;
+    object-position: center var(--hero-pos-y, 22%) !important;
   }
 }

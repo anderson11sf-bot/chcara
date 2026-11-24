@@ -308,11 +308,6 @@ export const compartilhar = {
   titulo: 'UM PATRIMÔNIO SÓLIDO <br><span class="destaque-ouro">PARA COMPARTILHAR</span>',
   subtitulo: 'Crie memórias que duram gerações em um refúgio seguro, cercado por natureza e feito para conectar quem você mais ama com alto padrão e tranquilidade.',
   imagemPrincipal: '/media/img/familia-novo-luxo.webp',
-  videoDrone: {
-    src: '/media/video/drone-patrimonio.mp4',
-    poster: '/media/img/drone-patrimonio-poster.webp',
-    legenda: 'Vista Aérea da Propriedade • O Legado da Sua Família'
-  },
   cards: [
     {
       icone: 'coracao',

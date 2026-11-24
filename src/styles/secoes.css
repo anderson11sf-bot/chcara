@@ -2773,3 +2773,26 @@
   border-color: #ECC880;
   box-shadow: 0 0 8px rgba(236, 200, 128, 0.6);
 }
+
+@media (max-width: 640px) {
+  .sjc-slide-imagem-box {
+    aspect-ratio: 4 / 3;
+    min-height: 230px;
+    max-height: none;
+  }
+  .sjc-slide-badge {
+    top: 10px;
+    left: 10px;
+    font-size: 0.65rem;
+    padding: 3px 10px;
+  }
+  .sjc-slide-overlay {
+    padding: 48px 14px 14px;
+  }
+  .sjc-slide-titulo {
+    font-size: 1.15rem;
+  }
+  .sjc-slide-frase {
+    font-size: 0.82rem;
+  }
+}
