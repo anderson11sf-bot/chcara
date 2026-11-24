@@ -25,6 +25,7 @@ import * as hero from './lib/hero.js';
 import * as carrossel from './lib/carrossel.js';
 import * as portal3d from './lib/portal3d.js';
 import { montarSecoesMestre, iniciarCarrosselNoticias } from './lib/secoes.js';
+import { iniciarLightbox } from './lib/lightbox.js';
 import { iniciarAnimacoesEntrada } from './lib/animacoes.js';
 import { iniciarGerenciadorVideos } from './lib/videoManager.js';
 import { iniciarSeo } from './lib/seo.js';
@@ -157,6 +158,7 @@ function arrancarInterno() {
   try { hero.iniciarHero(); } catch (e) { console.warn('[pd] hero:', e); }
   try { iniciarGerenciadorVideos(); } catch (e) { console.warn('[pd] videos:', e); }
   try { iniciarCarrosselNoticias(); } catch (e) { console.warn('[pd] carrossel-noticias:', e); }
+  try { iniciarLightbox(); } catch (e) { console.warn('[pd] lightbox:', e); }
   try { iniciarWhatsAppFlutuante(); } catch (e) { console.warn('[pd] wa-flutuante:', e); }
   try { ligarCtasInternos(); } catch (e) { console.warn('[pd] ctas:', e); }
   try { ligarPausaPorVisibilidade(); } catch (e) { console.warn('[pd] pausa:', e); }

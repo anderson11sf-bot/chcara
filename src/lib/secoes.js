@@ -685,7 +685,8 @@ export function montarSaoJose() {
   const slide2 = criar('article', { classe: 'sjc-carrossel-slide' });
   const imgBox2 = criar('div', { classe: 'sjc-slide-imagem-box' });
   imgBox2.appendChild(criar('img', {
-    src: '/media/img/noticias/noticia-parque.webp',
+    classe: 'sjc-slide-img--parque',
+    src: '/media/img/noticias/noticia-parque.webp?v=20261124b',
     alt: 'Parque da Cidade Roberto Burle Marx',
     loading: 'lazy',
     decoding: 'async',

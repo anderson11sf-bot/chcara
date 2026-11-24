@@ -48,7 +48,7 @@ export const FRAMES_MANIFEST = {
     filenamePattern: "f_%04d.webp"
   },
   global: {
-    totalFrames: 141,
+    totalFrames: 75,
     desktop: {
       width: 1080,
       height: 1920,

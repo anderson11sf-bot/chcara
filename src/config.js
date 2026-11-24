@@ -112,11 +112,6 @@ export const efeitoParaiso = {
       imagem: '/media/img/terreno-lago-alto.webp',
       titulo: 'Natureza Preservada',
       tag: 'Mata & Fauna Nativa'
-    },
-    {
-      imagem: '/media/img/terreno-pasto-colina.webp',
-      titulo: 'Amplos Terrenos',
-      tag: 'A partir de 20.000 m²'
     }
   ],
   ctaTexto: 'Explorar as Propriedades →'
@@ -307,7 +302,7 @@ export const compartilhar = {
   rotulo: 'PATRIMÔNIO FAMILIAR',
   titulo: 'UM PATRIMÔNIO SÓLIDO <br><span class="destaque-ouro">PARA COMPARTILHAR</span>',
   subtitulo: 'Crie memórias que duram gerações em um refúgio seguro, cercado por natureza e feito para conectar quem você mais ama com alto padrão e tranquilidade.',
-  imagemPrincipal: '/media/img/familia-novo-luxo.webp',
+  imagemPrincipal: '/media/img/familia-novo-luxo.webp?v=20261124b',
   cards: [
     {
       icone: 'coracao',
