@@ -610,44 +610,136 @@ export function montarSaoJose() {
   const painel = criarPainel('painel--largo');
 
   painel.appendChild(cabecalho({
-    rotulo: S.rotulo,
-    titulo: S.titulo,
-    texto: S.subtitulo
+    rotulo: S.rotulo || 'VALORIZAÇÃO IMOBILIÁRIA & PROTEÇÃO PATRIMONIAL',
+    titulo: S.titulo || 'São José dos Campos: qualidade de vida em nível Suíça e liderança em valorização',
+    texto: S.subtitulo || 'Valorização consistente, infraestrutura de ponta e grandes projetos que protegem o patrimônio da família.'
   }));
 
-  // 1. Grid dos 3 Pilares Obrigatórios de Valorização & Proteção Patrimonial com Hiperlinks Reais
-  if (S.pilares && S.pilares.length > 0) {
-    const gridPilares = criar('div', { classe: 'sjc-pilares-grid' });
-    for (const p of S.pilares) {
-      const cardPilar = criar('article', { classe: 'sjc-pilar-card' });
+  // 1. Layout de Notícias: Card Compacto (Notícia 1) + Carrossel (Notícias 2 e 3)
+  const layoutNoticias = criar('div', { classe: 'sjc-noticias-layout' });
 
-      if (p.tag) {
-        cardPilar.appendChild(criar('span', { classe: 'sjc-pilar-card__tag', texto: p.tag }));
-      }
-      cardPilar.appendChild(criar('h3', { classe: 'sjc-pilar-card__titulo', texto: p.titulo }));
-      cardPilar.appendChild(criar('p', { classe: 'sjc-pilar-card__texto', texto: p.texto }));
+  // Notícia 1: Card Compacto (sem imagem)
+  const cardCompacto = criar('article', { classe: 'sjc-noticia-compacta' });
+  const corpoCompacto = criar('div');
+  corpoCompacto.appendChild(criar('span', { classe: 'sjc-noticia-compacta__tag', texto: 'VALORIZAÇÃO IMOBILIÁRIA' }));
+  corpoCompacto.appendChild(criar('h3', { classe: 'sjc-noticia-compacta__titulo', texto: '1º lugar no m² do interior de SP' }));
+  corpoCompacto.appendChild(criar('p', {
+    classe: 'sjc-noticia-compacta__texto',
+    texto: 'São José lidera o valor do metro quadrado no interior paulista (Índice FipeZAP), com valorização consistente nos últimos 10 anos.'
+  }));
+  cardCompacto.appendChild(corpoCompacto);
 
-      if (p.links && p.links.length > 0) {
-        const linksCaixa = criar('div', { classe: 'sjc-pilar-card__links' });
-        for (const l of p.links) {
-          const a = criar('a', {
-            classe: 'link-materia-jornal',
-            href: l.url,
-            target: '_blank',
-            rel: 'noopener noreferrer'
-          });
-          a.innerHTML = `<span>${l.texto}</span> <span aria-hidden="true">↗</span>`;
-          linksCaixa.appendChild(a);
-        }
-        cardPilar.appendChild(linksCaixa);
-      }
+  const linksCompacto = criar('div', { classe: 'sjc-slide-links' });
+  const linkG1 = criar('a', {
+    classe: 'link-materia-jornal',
+    href: 'https://g1.globo.com/sp/vale-do-paraiba-regiao/noticia/2026/10/21/preco-do-metro-quadrado-em-sao-jose-dos-campos-chega-a-r-96-mil-e-lidera-ranking-no-interior-de-sp.ghtml',
+    target: '_blank',
+    rel: 'noopener noreferrer'
+  });
+  linkG1.innerHTML = '<span>Ler matéria no G1</span> <span aria-hidden="true">↗</span>';
+  linksCompacto.appendChild(linkG1);
+  cardCompacto.appendChild(linksCompacto);
+  layoutNoticias.appendChild(cardCompacto);
 
-      gridPilares.appendChild(cardPilar);
-    }
-    painel.appendChild(gridPilares);
-  }
+  // Carrossel com Notícias 2 e 3
+  const carrosselContainer = criar('div', { classe: 'sjc-noticias-carrossel', id: 'sjc-noticias-carrossel' });
+  const trilho = criar('div', { classe: 'sjc-carrossel-trilho' });
 
-  // 2. Apresentação visual com vídeo vertical de SJC e destaques de mobilidade
+  // Slide 1 (Notícia 2: Suíça)
+  const slide1 = criar('article', { classe: 'sjc-carrossel-slide' });
+  const imgBox1 = criar('div', { classe: 'sjc-slide-imagem-box' });
+  imgBox1.appendChild(criar('img', {
+    src: '/media/img/noticias/noticia-suica.webp',
+    alt: 'São José dos Campos — Qualidade de vida em nível Suíça',
+    loading: 'lazy',
+    decoding: 'async',
+    width: '896',
+    height: '504'
+  }));
+  imgBox1.appendChild(criar('span', { classe: 'sjc-slide-badge', texto: 'Sugestão ilustrativa' }));
+  const overlay1 = criar('div', { classe: 'sjc-slide-overlay' });
+  overlay1.appendChild(criar('h3', { classe: 'sjc-slide-titulo', texto: 'Nível Suíça em qualidade de vida' }));
+  overlay1.appendChild(criar('p', { classe: 'sjc-slide-frase', texto: 'Primeira cidade do mundo com selo Platina ISO 37125, que avalia 133 indicadores de qualidade de vida e sustentabilidade.' }));
+  imgBox1.appendChild(overlay1);
+  slide1.appendChild(imgBox1);
+
+  const corpo1 = criar('div', { classe: 'sjc-slide-corpo' });
+  corpo1.appendChild(criar('p', {
+    classe: 'sjc-slide-texto',
+    texto: 'Um reconhecimento desse nível atrai moradores e investimentos e valoriza quem tem patrimônio por perto. O IDH da cidade é considerado muito alto.'
+  }));
+  const links1 = criar('div', { classe: 'sjc-slide-links' });
+  const linkGazeta = criar('a', {
+    classe: 'link-materia-jornal',
+    href: 'https://www.gazetasp.com.br/turismo/cidade-em-sp-vence-suica-e-noruega-e-vira-a-1-do-mundo-a-atingir-o/',
+    target: '_blank',
+    rel: 'noopener noreferrer'
+  });
+  linkGazeta.innerHTML = '<span>Ler matéria na Gazeta de SP</span> <span aria-hidden="true">↗</span>';
+  links1.appendChild(linkGazeta);
+  corpo1.appendChild(links1);
+  slide1.appendChild(corpo1);
+  trilho.appendChild(slide1);
+
+  // Slide 2 (Notícia 3: Parque)
+  const slide2 = criar('article', { classe: 'sjc-carrossel-slide' });
+  const imgBox2 = criar('div', { classe: 'sjc-slide-imagem-box' });
+  imgBox2.appendChild(criar('img', {
+    src: '/media/img/noticias/noticia-parque.webp',
+    alt: 'Parque da Cidade Roberto Burle Marx',
+    loading: 'lazy',
+    decoding: 'async',
+    width: '896',
+    height: '504'
+  }));
+  imgBox2.appendChild(criar('span', { classe: 'sjc-slide-badge', texto: 'Sugestão ilustrativa' }));
+  const overlay2 = criar('div', { classe: 'sjc-slide-overlay' });
+  overlay2.appendChild(criar('h3', { classe: 'sjc-slide-titulo', texto: 'Novo Parque da Cidade' }));
+  overlay2.appendChild(criar('p', { classe: 'sjc-slide-frase', texto: 'A concessão do Parque Roberto Burle Marx foi aprovada. O projeto prevê roda-gigante, teleférico, passarelas elevadas, novo teatro e centro de convenções.' }));
+  imgBox2.appendChild(overlay2);
+  slide2.appendChild(imgBox2);
+
+  const corpo2 = criar('div', { classe: 'sjc-slide-corpo' });
+  corpo2.appendChild(criar('p', {
+    classe: 'sjc-slide-texto',
+    texto: 'Novas atrações, turismo e eventos tendem a aquecer toda a região, e o Paraíso das Águas fica a cerca de 6 km do parque.'
+  }));
+  const links2 = criar('div', { classe: 'sjc-slide-links' });
+  const linkMeon = criar('a', {
+    classe: 'link-materia-jornal',
+    href: 'https://www.meon.com.br/noticias/vale-do-paraiba-regiao/sao-jose-dos-campos/aprovada-concessao-parque-da-cidade-sjc-35-anos',
+    target: '_blank',
+    rel: 'noopener noreferrer'
+  });
+  linkMeon.innerHTML = '<span>Ler matéria da concessão</span> <span aria-hidden="true">↗</span>';
+  links2.appendChild(linkMeon);
+
+  const linkPref = criar('a', {
+    classe: 'link-materia-jornal',
+    href: 'https://www.sjc.sp.gov.br/noticias/2026/janeiro/05/retrospectiva-2025-parcerias-e-concessoes-projetam-o-futuro/',
+    target: '_blank',
+    rel: 'noopener noreferrer'
+  });
+  linkPref.innerHTML = '<span>Ver retrospectiva da Prefeitura</span> <span aria-hidden="true">↗</span>';
+  links2.appendChild(linkPref);
+  corpo2.appendChild(links2);
+  slide2.appendChild(corpo2);
+  trilho.appendChild(slide2);
+
+  carrosselContainer.appendChild(trilho);
+
+  // Dots
+  const dotsBox = criar('div', { classe: 'sjc-carrossel-dots' });
+  const dot1 = criar('button', { classe: 'sjc-carrossel-dot ativo', 'data-indice': '0', 'aria-label': 'Ir para notícia 2' });
+  const dot2 = criar('button', { classe: 'sjc-carrossel-dot', 'data-indice': '1', 'aria-label': 'Ir para notícia 3' });
+  dotsBox.appendChild(dot1);
+  dotsBox.appendChild(dot2);
+  carrosselContainer.appendChild(dotsBox);
+
+  layoutNoticias.appendChild(carrosselContainer);
+  painel.appendChild(layoutNoticias);
+
+  // 2. Apresentação visual com vídeo vertical de SJC e destaques de mobilidade (PRESERVADA 100%)
   const gradeVertical = criar('div', { classe: 'grade-sjc-vertical' });
 
   // Player vertical contínuo da Ponte Estaiada (autoplay quando visível, muted, loop, playsinline, SEM controles)
@@ -697,7 +789,90 @@ export function montarSaoJose() {
 
   secao.replaceChildren(painel);
   secao.hidden = false;
+
+  iniciarCarrosselNoticias();
+
   return secao;
+}
+
+/**
+ * Inicializador do Carrossel de Notícias SJC (Auto-rotação ~6s, dots, swipe touch e pause no hover)
+ */
+export function iniciarCarrosselNoticias() {
+  const container = document.getElementById('sjc-noticias-carrossel');
+  if (!container || container.dataset.iniciado === '1') return;
+  container.dataset.iniciado = '1';
+
+  const trilho = container.querySelector('.sjc-carrossel-trilho');
+  const dots = container.querySelectorAll('.sjc-carrossel-dot');
+  if (!trilho || !dots.length) return;
+
+  let indice = 0;
+  const total = dots.length;
+  let timer = null;
+
+  function irPara(idx) {
+    indice = (idx + total) % total;
+    trilho.style.transform = 'translateX(-' + (indice * 50) + '%)';
+    dots.forEach((d, i) => d.classList.toggle('ativo', i === indice));
+  }
+
+  function proximo() {
+    irPara(indice + 1);
+  }
+
+  function iniciarTimer() {
+    pararTimer();
+    timer = setInterval(proximo, 6000);
+  }
+
+  function pararTimer() {
+    if (timer) {
+      clearInterval(timer);
+      timer = null;
+    }
+  }
+
+  dots.forEach(d => {
+    d.addEventListener('click', (e) => {
+      e.preventDefault();
+      const idx = parseInt(d.getAttribute('data-indice') || '0', 10);
+      irPara(idx);
+      iniciarTimer();
+    });
+  });
+
+  // Pausa ao passar o mouse
+  container.addEventListener('mouseenter', pararTimer);
+  container.addEventListener('mouseleave', iniciarTimer);
+
+  // Swipe touch para celulares
+  let startX = 0;
+  let endX = 0;
+
+  container.addEventListener('touchstart', (e) => {
+    pararTimer();
+    startX = e.touches[0].clientX;
+    endX = startX;
+  }, { passive: true });
+
+  container.addEventListener('touchmove', (e) => {
+    endX = e.touches[0].clientX;
+  }, { passive: true });
+
+  container.addEventListener('touchend', () => {
+    const diff = endX - startX;
+    if (Math.abs(diff) > 40) {
+      if (diff < 0) {
+        irPara(indice + 1);
+      } else {
+        irPara(indice - 1);
+      }
+    }
+    iniciarTimer();
+  }, { passive: true });
+
+  iniciarTimer();
 }
 
 /* --------------------------------------------------------------------------

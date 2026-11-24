@@ -24,7 +24,7 @@ import * as dica from './lib/dica.js';
 import * as hero from './lib/hero.js';
 import * as carrossel from './lib/carrossel.js';
 import * as portal3d from './lib/portal3d.js';
-import { montarSecoesMestre } from './lib/secoes.js';
+import { montarSecoesMestre, iniciarCarrosselNoticias } from './lib/secoes.js';
 import { iniciarAnimacoesEntrada } from './lib/animacoes.js';
 import { iniciarGerenciadorVideos } from './lib/videoManager.js';
 import { iniciarSeo } from './lib/seo.js';
@@ -156,6 +156,7 @@ function arrancarInterno() {
   try { dica.iniciarDica(); } catch (e) { console.warn('[pd] dica:', e); }
   try { hero.iniciarHero(); } catch (e) { console.warn('[pd] hero:', e); }
   try { iniciarGerenciadorVideos(); } catch (e) { console.warn('[pd] videos:', e); }
+  try { iniciarCarrosselNoticias(); } catch (e) { console.warn('[pd] carrossel-noticias:', e); }
   try { iniciarWhatsAppFlutuante(); } catch (e) { console.warn('[pd] wa-flutuante:', e); }
   try { ligarCtasInternos(); } catch (e) { console.warn('[pd] ctas:', e); }
   try { ligarPausaPorVisibilidade(); } catch (e) { console.warn('[pd] pausa:', e); }

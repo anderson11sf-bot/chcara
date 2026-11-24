@@ -249,12 +249,7 @@ export const possibilidades = {
       poster: '/media/img/drone-acesso-vale-poster.webp',
       titulo: 'Acesso Pavimentado ao Empreendimento'
     },
-    {
-      src: '/media/video/drone-patrimonio.mp4',
-      poster: '/media/img/drone-patrimonio-poster.webp',
-      titulo: 'Topografia e 2 Lagos (Drone)'
-    },
-    {
+        {
       src: '/media/video/proj-mansao-campo.mp4',
       poster: '/media/img/proj-mansao-campo-poster.webp',
       titulo: 'Mansão de Campo (Sugestão ilustrativa)'
@@ -343,8 +338,8 @@ export const compartilhar = {
  * -------------------------------------------------------------------------*/
 export const saoJose = {
   rotulo: 'VALORIZAÇÃO IMOBILIÁRIA & PROTEÇÃO PATRIMONIAL',
-  titulo: 'São José dos Campos: <br><span class="destaque-verde">A "Suíça Brasileira" e Liderança em Valorização</span>',
-  subtitulo: 'Histórico consistente de valorização, infraestrutura de ponta e investimentos internacionais que protegem e multiplicam o patrimônio da família urbana.',
+  titulo: 'São José dos Campos: qualidade de vida em nível Suíça e liderança em valorização',
+  subtitulo: 'Valorização consistente, infraestrutura de ponta e grandes projetos que protegem o patrimônio da família.',
   video: {
     src: '/media/video/sao-jose-vertical.mp4',
     poster: '/media/img/sao-jose-vertical-poster.webp',
