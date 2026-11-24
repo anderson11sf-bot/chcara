@@ -274,10 +274,10 @@ export function montarPropriedades() {
     }
 
     const pictureMapa = criar('picture', { classe: 'mapa-oficial-picture' });
-    const sourceWebp = criar('source', { srcset: '/media/img/mapa-oficial-terreno.webp', type: 'image/webp' });
+    const sourceWebp = criar('source', { srcset: '/media/img/mapa-oficial-terreno.webp?v=20261124', type: 'image/webp' });
     const imgMapa = criar('img', {
       classe: 'mapa-oficial-img',
-      src: '/media/img/mapa-oficial-terreno.png',
+      src: '/media/img/mapa-oficial-terreno.png?v=20261124',
       alt: 'Mapa das Sete Glebas no Paraíso das Águas',
       loading: 'eager',
       decoding: 'async',

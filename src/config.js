@@ -98,8 +98,8 @@ export const efeitoParaiso = {
   titulo: 'MAIS ESPAÇO. MAIS NATUREZA. <br><span class="destaque-verde">MAIS LIBERDADE.</span>',
   subtitulo: 'Propriedades exclusivas a partir de 20.000 m² planejadas para a família urbana viver com total privacidade, segurança e o conforto que merece, cercada de verde e com 2 lagos compartilhados.',
   video: {
-    src: '/media/video/vsl-oficial.mp4',
-    poster: '/media/img/vsl-oficial-poster.webp',
+    src: '/media/video/vsl-oficial.mp4?v=20261124',
+    poster: '/media/img/vsl-oficial-poster.webp?v=20261124',
     legenda: 'Apresentação oficial do Paraíso das Águas'
   },
   carrosselCards: [
@@ -129,7 +129,7 @@ export const propriedades = {
   rotulo: '04 / O PROJETO',
   titulo: 'AS SETE GLEBAS',
   subtitulo: 'Propriedades exclusivas de alto padrão com infraestrutura instalada e natureza preservada em São José dos Campos.',
-  mapaImagem: '/media/img/mapa-oficial-terreno.webp',
+  mapaImagem: '/media/img/mapa-oficial-terreno.webp?v=20261124',
   mapaVideoFundo: '/media/video/mapa-drone-bg.mp4',
   botaoMapa: 'VER LOCALIZAÇÃO NO GOOGLE MAPS',
   mapsLink: 'https://maps.app.goo.gl/AztxJXPuLWaPUBSWA',
@@ -200,7 +200,7 @@ export const possibilidades = {
       numero: '01',
       titulo: 'CASA DE CAMPO',
       tituloCompleto: 'CASA DE CAMPO CONTEMPORÂNEA',
-      imagem: '/media/img/possibilidades/casa-campo-nova.webp',
+      imagem: '/media/img/possibilidades/casa-campo-nova.webp?v=20261124',
       badge: 'Sugestão ilustrativa'
     },
     {
@@ -288,7 +288,7 @@ export const autossuficiencia = {
       icone: 'area',
       titulo: 'Criação Natural',
       sub: 'Galinheiro caipira e espaço amplo para convivência animal',
-      imagem: '/media/img/autossuficiencia/criacao-natural.webp'
+      imagem: '/media/img/autossuficiencia/criacao-natural.webp?v=20261124'
     },
     {
       icone: 'raio',
@@ -403,7 +403,7 @@ export const localizacao = {
   rotulo: '09. LOCALIZAÇÃO',
   titulo: 'PERTO DA CIDADE. <br><span class="destaque-verde">CONECTADO À NATUREZA.</span>',
   subtitulo: 'A perfeita integração entre o silêncio da natureza preservada e a conveniência de São José dos Campos.',
-  imagemAerea: '/media/img/localizacao/sao-jose-campos.webp',
+  imagemAerea: '/media/img/localizacao/sao-jose-campos.webp?v=20261124',
   videoFundo: '/media/video/mapa-drone-bg.mp4',
   distancias: [
     { valor: '20 min', destino: 'Centro de S. J. dos Campos', icone: 'carro' },
